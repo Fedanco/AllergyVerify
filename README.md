@@ -33,6 +33,8 @@ Stack: Vite · React · TypeScript · Tailwind CSS 4 · react-router · @zxing/b
 
 ## Deploy
 
-Push su `main` → GitHub Actions builda e pubblica automaticamente su GitHub Pages (`.github/workflows/deploy.yml`).
+Il sito è pubblicato su **Vercel**: https://allergyscan-web.vercel.app
+
+Deploy manuale dalla cartella del progetto: `npx vercel --prod`. Con la Git integration di Vercel attiva, ogni push su `main` viene pubblicato automaticamente.
 
 Le decisioni di progetto sono documentate in [PROJECT_PLAN.md](PROJECT_PLAN.md).
