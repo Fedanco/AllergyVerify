@@ -10,7 +10,7 @@ Versione web dell'app iOS **AllergyScan**: scansione/ricerca di prodotti aliment
 | Design | **Nuovo, dark-first / tech** — nessun riuso del vecchio look iOS |
 | Backend | Nessuno per la v1: tutto lato client, persistenza in `localStorage` |
 | Scanner | Incluso fin dalla v1 (fotocamera via browser, libreria `@zxing/browser`) |
-| Hosting | GitHub Pages (gratuito), deploy automatico via GitHub Actions |
+| Hosting | Vercel (gratuito, supporta repo private) — https://allergyscan-web.vercel.app |
 
 ## Fonte dati: Open Food Facts
 
@@ -62,4 +62,4 @@ Endpoint prodotto: `GET https://world.openfoodfacts.org/api/v0/product/<barcode>
 
 ## Deploy
 
-Repo GitHub pubblica + GitHub Actions (`.github/workflows/deploy.yml`): build Vite e pubblicazione su GitHub Pages a ogni push su `main`.
+Repo GitHub **privata** + hosting su **Vercel** (piano gratuito, funziona anche con repo private, a differenza di GitHub Pages). Deploy manuale con `npx vercel --prod`; con la Git integration attivata dal dashboard Vercel il deploy avviene a ogni push su `main`.
