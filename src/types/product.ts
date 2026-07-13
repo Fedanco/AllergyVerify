@@ -22,6 +22,8 @@ export interface NutrientLevels {
 
 export interface Product {
   code: string
+  /** lingua principale del prodotto su OFF, es. "fr" (lingua dell'etichetta) */
+  lang?: string
   product_name?: string
   brands?: string
   quantity?: string
@@ -32,6 +34,7 @@ export interface Product {
   additives_tags?: string[]
   ingredients_analysis_tags?: string[]
   ingredients_text_it?: string
+  ingredients_text_en?: string
   ingredients_text?: string
   categories_tags?: string[]
   nutriments?: Nutriments

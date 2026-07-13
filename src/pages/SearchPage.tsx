@@ -5,14 +5,8 @@ import PageHeader from '../components/PageHeader'
 import ProductCard from '../components/ProductCard'
 import { SearchIcon } from '../components/Icons'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
+import { useLang } from '../i18n/useLang'
 import { LookupError, type Product } from '../types/product'
-
-const ERROR_MESSAGES: Record<string, string> = {
-  'not-found': 'Nessun prodotto trovato. Controlla il codice o prova con il nome.',
-  offline: 'Sei offline: connettiti a internet e riprova.',
-  timeout: 'La richiesta ha impiegato troppo tempo. Riprova.',
-  error: 'Si è verificato un errore. Riprova tra poco.',
-}
 
 export default function SearchPage() {
   const [query, setQuery] = useState('')
@@ -20,6 +14,7 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { activeProfile } = useAllergyProfile()
+  const { t } = useLang()
   const navigate = useNavigate()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -36,12 +31,12 @@ export default function SearchPage() {
         navigate(`/product/${q}`)
       } else {
         const products = await searchProducts(q)
-        if (products.length === 0) setError(ERROR_MESSAGES['not-found'])
+        if (products.length === 0) setError(t.search.errors['not-found'])
         else setResults(products)
       }
     } catch (err) {
       const kind = err instanceof LookupError ? err.kind : 'error'
-      setError(ERROR_MESSAGES[kind])
+      setError(t.search.errors[kind])
     } finally {
       setLoading(false)
     }
@@ -49,10 +44,7 @@ export default function SearchPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Cerca un prodotto"
-        subtitle="Inserisci un codice a barre o il nome di un prodotto"
-      />
+      <PageHeader title={t.search.title} subtitle={t.search.subtitle} />
 
       <form onSubmit={handleSubmit} className="mb-6 flex gap-2">
         <div className="relative flex-1">
@@ -62,16 +54,16 @@ export default function SearchPage() {
             inputMode="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="es. 8076809513753 o «biscotti»"
+            placeholder={t.search.placeholder}
             className="w-full rounded-2xl border border-edge bg-surface py-3 pl-11 pr-4 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
           />
         </div>
         <button
           type="submit"
           disabled={loading || !query.trim()}
-          className="rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-opacity disabled:opacity-40"
+          className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-opacity disabled:opacity-40"
         >
-          {loading ? '…' : 'Cerca'}
+          {loading ? '…' : t.search.submit}
         </button>
       </form>
 
@@ -87,7 +79,7 @@ export default function SearchPage() {
             <li key={p.code}>
               <ProductCard
                 code={p.code}
-                name={p.product_name ?? 'Prodotto senza nome'}
+                name={p.product_name ?? t.common.unnamedProduct}
                 brands={p.brands}
                 imageUrl={p.image_front_url}
                 allergensTags={p.allergens_tags}
@@ -102,9 +94,9 @@ export default function SearchPage() {
         <div className="card mt-4 px-5 py-6 text-center">
           <p className="text-3xl">🔍</p>
           <p className="mt-2 text-sm text-ink-dim">
-            Cerca per codice a barre per un risultato esatto,
+            {t.search.emptyHint1}
             <br />
-            oppure per nome per esplorare i prodotti.
+            {t.search.emptyHint2}
           </p>
         </div>
       )}

@@ -1,5 +1,7 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { translateIngredients } from '../api/translate'
 import { normalizeTag } from '../data/allergenCatalog'
+import { useLang } from '../i18n/useLang'
 import type { AllergyProfile, Product } from '../types/product'
 
 // parole da evidenziare nel testo ingredienti per ciascun tag del catalogo
@@ -20,14 +22,14 @@ const HIGHLIGHT_WORDS: Record<string, string[]> = {
   molluscs: ['molluschi', 'mollusco', 'vongole', 'cozze', 'seppia', 'calamaro', 'polpo', 'molluscs', 'clam', 'mussel', 'squid', 'octopus'],
 }
 
-const ANALYSIS_BADGES: { tag: string; label: string; emoji: string }[] = [
-  { tag: 'vegan', label: 'Vegano', emoji: '🌱' },
-  { tag: 'non-vegan', label: 'Non vegano', emoji: '🥩' },
-  { tag: 'vegetarian', label: 'Vegetariano', emoji: '🥚' },
-  { tag: 'non-vegetarian', label: 'Non vegetariano', emoji: '🍖' },
-  { tag: 'palm-oil-free', label: 'Senza olio di palma', emoji: '🌴' },
-  { tag: 'palm-oil', label: 'Con olio di palma', emoji: '🌴' },
-]
+const ANALYSIS_BADGES = [
+  { tag: 'vegan', emoji: '🌱' },
+  { tag: 'non-vegan', emoji: '🥩' },
+  { tag: 'vegetarian', emoji: '🥚' },
+  { tag: 'non-vegetarian', emoji: '🍖' },
+  { tag: 'palm-oil-free', emoji: '🌴' },
+  { tag: 'palm-oil', emoji: '🌴' },
+] as const
 
 interface Props {
   product: Product
@@ -35,11 +37,44 @@ interface Props {
 }
 
 export default function IngredientsCard({ product, profile }: Props) {
+  const { lang, t } = useLang()
   const [expanded, setExpanded] = useState(false)
   // il testo eccede davvero le 4 righe del clamp? (misurato, non stimato)
   const [clamped, setClamped] = useState(false)
   const textRef = useRef<HTMLParagraphElement>(null)
-  const text = product.ingredients_text_it?.trim() || product.ingredients_text?.trim()
+
+  // Testo già nella lingua dell'app: l'etichetta originale se il prodotto
+  // è di quel mercato (product.lang), oppure il campo _it (storicamente
+  // affidabile). Il campo _en dei prodotti non anglofoni è spesso OCR di
+  // bassa qualità su OFF: meglio tradurre dall'originale.
+  const nativeText =
+    (product.lang === lang ? product.ingredients_text?.trim() : undefined) ||
+    (lang === 'it' ? product.ingredients_text_it?.trim() : undefined)
+  // sorgente per la traduzione: il testo originale, poi gli altri campi
+  const fallbackText =
+    product.ingredients_text?.trim() ||
+    product.ingredients_text_it?.trim() ||
+    product.ingredients_text_en?.trim()
+  const text = nativeText || fallbackText
+
+  const [displayText, setDisplayText] = useState(text)
+  const [translating, setTranslating] = useState(false)
+
+  useEffect(() => {
+    setDisplayText(text)
+    if (!text || nativeText) return
+    let cancelled = false
+    setTranslating(true)
+    translateIngredients(product.code, text, lang).then((res) => {
+      if (cancelled) return
+      setTranslating(false)
+      if (res.translated) setDisplayText(res.text)
+    })
+    return () => {
+      cancelled = true
+      setTranslating(false)
+    }
+  }, [text, nativeText, lang, product.code])
 
   useLayoutEffect(() => {
     const el = textRef.current
@@ -52,7 +87,7 @@ export default function IngredientsCard({ product, profile }: Props) {
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [text, expanded])
+  }, [displayText, expanded])
 
   const additives = (product.additives_tags ?? []).map((t) =>
     normalizeTag(t).toUpperCase(),
@@ -66,9 +101,9 @@ export default function IngredientsCard({ product, profile }: Props) {
 
   return (
     <section className="card p-4">
-      <h2 className="mb-3 text-sm font-semibold text-ink-dim">Ingredienti</h2>
+      <h2 className="mb-3 text-sm font-semibold text-ink-dim">{t.ingredients.title}</h2>
 
-      {text ? (
+      {displayText ? (
         <>
           <p
             ref={textRef}
@@ -76,22 +111,25 @@ export default function IngredientsCard({ product, profile }: Props) {
               expanded ? '' : 'line-clamp-4'
             }`}
           >
-            {highlightAllergens(text, profile)}
+            {highlightAllergens(displayText, profile)}
           </p>
+          {translating && (
+            <p className="mt-1 text-[0.65rem] text-ink-dim/60">
+              {t.ingredients.translating}
+            </p>
+          )}
           {(clamped || expanded) && (
             <button
               type="button"
               onClick={() => setExpanded((e) => !e)}
-              className="mt-2 text-xs font-medium text-accent"
+              className="focus-ring mt-2 rounded text-xs font-medium text-accent"
             >
-              {expanded ? 'Mostra meno' : 'Mostra tutto'}
+              {expanded ? t.ingredients.showLess : t.ingredients.showAll}
             </button>
           )}
         </>
       ) : (
-        <p className="text-sm text-ink-dim">
-          Elenco ingredienti non disponibile per questo prodotto.
-        </p>
+        <p className="text-sm text-ink-dim">{t.ingredients.unavailable}</p>
       )}
 
       {badges.length > 0 && (
@@ -101,14 +139,14 @@ export default function IngredientsCard({ product, profile }: Props) {
               key={b.tag}
               className="rounded-full border border-edge bg-surface-2 px-3 py-1 text-xs text-ink-dim"
             >
-              {b.emoji} {b.label}
+              {b.emoji} {t.ingredients.badges[b.tag]}
             </span>
           ))}
         </div>
       )}
 
       <div className="mt-4 border-t border-edge pt-3">
-        <h3 className="mb-2 text-xs font-semibold text-ink-dim">Additivi</h3>
+        <h3 className="mb-2 text-xs font-semibold text-ink-dim">{t.ingredients.additivesTitle}</h3>
         {additives.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {additives.map((a) => (
@@ -121,7 +159,7 @@ export default function IngredientsCard({ product, profile }: Props) {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-ink-dim">Nessun additivo segnalato.</p>
+          <p className="text-xs text-ink-dim">{t.ingredients.noAdditives}</p>
         )}
       </div>
     </section>

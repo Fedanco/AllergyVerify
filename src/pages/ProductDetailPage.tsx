@@ -8,8 +8,11 @@ import ProfilesVerdict from '../components/ProfilesVerdict'
 import ScoreStrip from '../components/ScoreStrip'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useScanHistory } from '../hooks/useScanHistory'
+import { useLang } from '../i18n/useLang'
+import type { Translations } from '../i18n/translations'
 import {
   LookupError,
+  type LookupErrorKind,
   type NutrientLevels,
   type Nutriments,
   type Product,
@@ -17,34 +20,27 @@ import {
 
 const NUTRIMENT_ROWS: {
   key: keyof Nutriments
-  label: string
+  labelKey: keyof Translations['productDetail']['nutriments']
   emoji: string
   unit: string
   /** chiave in nutrient_levels, se OFF fornisce il livello per questo valore */
   levelKey?: keyof NutrientLevels
 }[] = [
-  { key: 'energy-kcal_100g', label: 'Energia', emoji: '⚡', unit: 'kcal' },
-  { key: 'carbohydrates_100g', label: 'Carboidrati', emoji: '🍞', unit: 'g' },
-  { key: 'sugars_100g', label: 'Zuccheri', emoji: '🍬', unit: 'g', levelKey: 'sugars' },
-  { key: 'fat_100g', label: 'Grassi', emoji: '🧈', unit: 'g', levelKey: 'fat' },
-  { key: 'saturated-fat_100g', label: 'Grassi saturi', emoji: '🥓', unit: 'g', levelKey: 'saturated-fat' },
-  { key: 'proteins_100g', label: 'Proteine', emoji: '💪', unit: 'g' },
-  { key: 'fiber_100g', label: 'Fibre', emoji: '🌿', unit: 'g' },
-  { key: 'salt_100g', label: 'Sale', emoji: '🧂', unit: 'g', levelKey: 'salt' },
-  { key: 'sodium_100g', label: 'Sodio', emoji: '⚗️', unit: 'g' },
+  { key: 'energy-kcal_100g', labelKey: 'energy', emoji: '⚡', unit: 'kcal' },
+  { key: 'carbohydrates_100g', labelKey: 'carbohydrates', emoji: '🍞', unit: 'g' },
+  { key: 'sugars_100g', labelKey: 'sugars', emoji: '🍬', unit: 'g', levelKey: 'sugars' },
+  { key: 'fat_100g', labelKey: 'fat', emoji: '🧈', unit: 'g', levelKey: 'fat' },
+  { key: 'saturated-fat_100g', labelKey: 'saturatedFat', emoji: '🥓', unit: 'g', levelKey: 'saturated-fat' },
+  { key: 'proteins_100g', labelKey: 'proteins', emoji: '💪', unit: 'g' },
+  { key: 'fiber_100g', labelKey: 'fiber', emoji: '🌿', unit: 'g' },
+  { key: 'salt_100g', labelKey: 'salt', emoji: '🧂', unit: 'g', levelKey: 'salt' },
+  { key: 'sodium_100g', labelKey: 'sodium', emoji: '⚗️', unit: 'g' },
 ]
 
-const LEVEL_DOTS = {
-  low: { dot: 'bg-accent', label: 'basso' },
-  moderate: { dot: 'bg-warn', label: 'moderato' },
-  high: { dot: 'bg-danger', label: 'alto' },
-}
-
-const ERROR_MESSAGES: Record<string, string> = {
-  'not-found': 'Prodotto non presente nel database Open Food Facts.',
-  offline: 'Sei offline: connettiti a internet e riprova.',
-  timeout: 'La richiesta ha impiegato troppo tempo. Riprova.',
-  error: 'Si è verificato un errore nel caricamento del prodotto.',
+const LEVEL_DOTS: Record<'low' | 'moderate' | 'high', string> = {
+  low: 'bg-accent',
+  moderate: 'bg-warn',
+  high: 'bg-danger',
 }
 
 export default function ProductDetailPage() {
@@ -53,8 +49,9 @@ export default function ProductDetailPage() {
   const navigate = useNavigate()
   const { activeProfile } = useAllergyProfile()
   const { addEntry } = useScanHistory()
+  const { t } = useLang()
   const [product, setProduct] = useState<Product | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [errorKind, setErrorKind] = useState<LookupErrorKind | null>(null)
   const savedRef = useRef(false)
 
   useEffect(() => {
@@ -72,8 +69,7 @@ export default function ProductDetailPage() {
       })
       .catch((err) => {
         if (cancelled) return
-        const kind = err instanceof LookupError ? err.kind : 'error'
-        setError(ERROR_MESSAGES[kind])
+        setErrorKind(err instanceof LookupError ? err.kind : 'error')
       })
     return () => {
       cancelled = true
@@ -85,22 +81,22 @@ export default function ProductDetailPage() {
       <button
         type="button"
         onClick={() => navigate(-1)}
-        className="mb-4 flex items-center gap-1 text-sm text-ink-dim transition-colors hover:text-ink"
+        className="focus-ring mb-4 flex items-center gap-1 rounded text-sm text-ink-dim transition-colors hover:text-ink"
       >
-        <BackIcon className="h-4 w-4" /> Indietro
+        <BackIcon className="h-4 w-4" /> {t.productDetail.back}
       </button>
 
-      {error && (
+      {errorKind && (
         <div className="card px-5 py-6 text-center">
           <p className="text-3xl">🤷</p>
-          <p className="mt-2 text-sm text-ink-dim">{error}</p>
+          <p className="mt-2 text-sm text-ink-dim">{t.productDetail.errors[errorKind]}</p>
           <p className="mt-1 font-mono text-xs text-ink-dim/60">{code}</p>
         </div>
       )}
 
-      {!product && !error && (
+      {!product && !errorKind && (
         <div className="card px-5 py-10 text-center text-sm text-ink-dim">
-          Caricamento prodotto…
+          {t.productDetail.loading}
         </div>
       )}
 
@@ -120,7 +116,7 @@ export default function ProductDetailPage() {
             </div>
             <div className="min-w-0">
               <h1 className="text-lg font-bold leading-tight">
-                {product.product_name ?? 'Prodotto senza nome'}
+                {product.product_name ?? t.common.unnamedProduct}
               </h1>
               {product.brands && (
                 <p className="mt-0.5 text-sm text-ink-dim">{product.brands}</p>
@@ -144,7 +140,8 @@ export default function ProductDetailPage() {
 
           <section className="card p-4">
             <h2 className="mb-3 text-sm font-semibold text-ink-dim">
-              Valori nutrizionali <span className="font-normal">/ 100 g</span>
+              {t.productDetail.nutrimentsTitle}{' '}
+              <span className="font-normal">{t.productDetail.per100g}</span>
             </h2>
             <NutrimentTable
               nutriments={product.nutriments}
@@ -166,12 +163,13 @@ function NutrimentTable({
   nutriments?: Nutriments
   levels?: NutrientLevels
 }) {
+  const { t } = useLang()
   const rows = NUTRIMENT_ROWS.filter((r) => typeof nutriments?.[r.key] === 'number')
 
   if (rows.length === 0) {
     return (
       <p className="py-4 text-center text-sm text-ink-dim">
-        Valori nutrizionali non disponibili per questo prodotto.
+        {t.productDetail.nutrimentsUnavailable}
       </p>
     )
   }
@@ -181,16 +179,16 @@ function NutrimentTable({
   return (
     <>
       <ul className="divide-y divide-edge">
-        {rows.map(({ key, label, emoji, unit, levelKey }) => {
+        {rows.map(({ key, labelKey, emoji, unit, levelKey }) => {
           const level = levelKey ? levels?.[levelKey] : undefined
           return (
             <li key={key} className="flex items-center justify-between py-2.5">
               <span className="flex items-center gap-2.5 text-sm">
-                <span aria-hidden>{emoji}</span> {label}
+                <span aria-hidden>{emoji}</span> {t.productDetail.nutriments[labelKey]}
                 {level && (
                   <span
-                    title={`Livello ${LEVEL_DOTS[level].label}`}
-                    className={`h-2 w-2 rounded-full ${LEVEL_DOTS[level].dot}`}
+                    title={t.productDetail.levelTitle(t.productDetail.levels[level])}
+                    className={`h-2 w-2 rounded-full ${LEVEL_DOTS[level]}`}
                   />
                 )}
               </span>
@@ -206,15 +204,12 @@ function NutrimentTable({
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {(Object.keys(LEVEL_DOTS) as (keyof typeof LEVEL_DOTS)[]).map((l) => (
               <span key={l} className="flex items-center gap-1">
-                <span className={`h-1.5 w-1.5 rounded-full ${LEVEL_DOTS[l].dot}`} />
-                {LEVEL_DOTS[l].label}
+                <span className={`h-1.5 w-1.5 rounded-full ${LEVEL_DOTS[l]}`} />
+                {t.productDetail.levels[l]}
               </span>
             ))}
           </p>
-          <p className="mt-1 opacity-80">
-            Il pallino indica se la quantità per 100 g è bassa, moderata o alta
-            rispetto alle soglie nutrizionali di riferimento europee.
-          </p>
+          <p className="mt-1 opacity-80">{t.productDetail.levelLegend}</p>
         </div>
       )}
     </>

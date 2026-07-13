@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { labelForTag, matchAllergens } from '../data/allergenCatalog'
+import { useLang } from '../i18n/useLang'
 import type { AllergyProfile } from '../types/product'
 import { AlertIcon, ChevronRightIcon } from './Icons'
 
@@ -23,6 +24,7 @@ export default function ProductCard({
   profile,
   subtitle,
 }: Props) {
+  const { lang } = useLang()
   const detected = profile ? matchAllergens(allergensTags, profile.allergens) : []
 
   return (
@@ -44,7 +46,7 @@ export default function ProductCard({
         {detected.length > 0 && (
           <p className="mt-0.5 flex items-center gap-1 text-xs font-medium text-danger">
             <AlertIcon className="h-3.5 w-3.5" />
-            {detected.map(labelForTag).join(', ')}
+            {detected.map((tag) => labelForTag(tag, lang)).join(', ')}
           </p>
         )}
       </div>

@@ -36,6 +36,12 @@ html {
   color-scheme: dark;
 }
 
+/* Niente flash/anello di focus nativo del browser al tap su mobile
+   (Safari iOS disegna una riga blu sui bottoni toccati) */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -48,4 +54,16 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-edge);
   border-radius: var(--radius-card);
+}
+
+/* Elementi interattivi: sopprime l'outline nativo (blu su Safari iOS)
+   e lo sostituisce con un anello a tema, solo per navigazione da tastiera */
+@utility focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: inherit;
+  }
 }

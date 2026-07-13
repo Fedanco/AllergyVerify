@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import TabBar from './components/TabBar'
+import { useLang } from './i18n/useLang'
 import HistoryPage from './pages/HistoryPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import ProfilePage from './pages/ProfilePage'
@@ -11,6 +12,7 @@ import SettingsPage from './pages/SettingsPage'
 const ScanPage = lazy(() => import('./pages/ScanPage'))
 
 export default function App() {
+  const { t } = useLang()
   return (
     <HashRouter>
       <div className="min-h-dvh bg-bg pb-20 md:pb-0 md:pl-20">
@@ -23,7 +25,7 @@ export default function App() {
                 <Suspense
                   fallback={
                     <p className="py-10 text-center text-sm text-ink-dim">
-                      Caricamento scanner…
+                      {t.app.loadingScanner}
                     </p>
                   }
                 >
