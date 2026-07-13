@@ -6,6 +6,11 @@ export default function SettingsPage() {
       <PageHeader title="Info" subtitle="AllergyScan Web" />
 
       <div className="flex flex-col gap-3">
+        <img
+          src="./logo.png"
+          alt="Logo AllergyScan"
+          className="mx-auto h-24 w-24"
+        />
         <section className="card p-4">
           <h2 className="mb-1 text-sm font-semibold">Che cos'è</h2>
           <p className="text-sm text-ink-dim">
