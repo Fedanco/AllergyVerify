@@ -48,12 +48,7 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 
 ### Fatto finora
 
-- v1: scanner barcode, ricerca, profili allergie, storico, verdetto per profilo.
-- Scanner ridisegnato dopo test su iPhone (inquadratura 4:3 compatta, mira stile barcode).
-- v0.2.0: dettaglio prodotto ricco (chip Nutri-Score/NOVA/Green-Score, ingredienti con allergeni evidenziati, additivi, badge vegano/olio di palma, tracce in arancione, pallini livello nutrienti), confronto multi-profilo ("Tutti i profili" con ≥2 profili). Cache prodotti con prefisso `as_product_cache_v2:`.
-- v0.2.1: chip punteggio toccabili → pannello con scala visuale e spiegazione; legenda pallini nutrienti; "Mostra tutto" negli ingredienti solo se il testo supera davvero 4 righe (misura overflow + ResizeObserver); padding-bottom sul `<main>`.
-- 2026-07-13 (da questo PC Windows): frecce dei chip punteggio allineate su mobile (`mt-auto`, erano disallineate quando il sottotitolo NOVA andava su 2 righe); multilingua IT/EN completo con switcher in Settings; traduzione automatica degli ingredienti nella lingua dell'app via MyMemory; reset tap-highlight + `focus-ring` accessibile. Verificato E2E con Playwright (11/11 flussi).
-- v0.3.1: icone Home iOS/Android rigenerate su sfondo bianco (prima erano su `#0a0b0d` → riquadro nero) con cache-busting `apple-touch-icon-v2.png`; gestione safe area in modalità standalone (padding top/bottom `env()` + velo sotto la status bar) — prima titoli e contenuti si sovrapponevano a orologio e notch.
+Cronologia completa delle versioni in `CHANGELOG.md` — aggiornarlo a ogni release invece di questo file.
 
 ### Da fare / prossimi passi
 
