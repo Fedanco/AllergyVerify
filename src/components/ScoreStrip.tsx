@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ChevronDownIcon } from './Icons'
 import type { Product } from '../types/product'
 
 /**
@@ -98,18 +99,18 @@ export default function ScoreStrip({ product }: { product: Product }) {
               >
                 {s.value}
               </span>
-              <span className="flex items-center gap-1 text-xs font-semibold">
-                {s.name}
-                <span
-                  aria-hidden
-                  className={`text-[0.6rem] text-ink-dim transition-transform ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
-                >
-                  ▾
-                </span>
-              </span>
+              <span className="text-xs font-semibold">{s.name}</span>
               <span className="text-[0.65rem] leading-tight text-ink-dim">{s.hint}</span>
+              <span
+                aria-hidden
+                className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded-full border transition-all ${
+                  isOpen
+                    ? 'rotate-180 border-accent/40 bg-accent/10 text-accent'
+                    : 'border-edge bg-surface-2 text-ink-dim'
+                }`}
+              >
+                <ChevronDownIcon className="h-3.5 w-3.5" />
+              </span>
             </button>
           )
         })}
