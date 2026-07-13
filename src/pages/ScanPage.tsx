@@ -52,7 +52,7 @@ export default function ScanPage() {
         subtitle="Inquadra il codice a barre del prodotto"
       />
 
-      <div className="card relative aspect-[3/4] overflow-hidden md:aspect-video">
+      <div className="card relative mx-auto aspect-[4/3] max-w-xl overflow-hidden md:aspect-video">
         <video
           ref={videoRef}
           className="h-full w-full object-cover"
@@ -61,12 +61,18 @@ export default function ScanPage() {
         />
 
         {state === 'scanning' && (
-          <>
-            {/* cornice di mira */}
-            <div className="pointer-events-none absolute inset-x-8 inset-y-16 rounded-2xl border-2 border-accent/60" />
-            {/* linea di scansione animata */}
-            <div className="pointer-events-none absolute inset-x-10 h-0.5 animate-scanline bg-accent shadow-[0_0_12px_var(--color-accent)]" />
-          </>
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            {/* zona di mira bassa e larga, come un codice a barre; l'esterno viene oscurato */}
+            <div className="relative h-2/5 w-3/4 max-w-sm rounded-xl shadow-[0_0_0_9999px_rgba(0,0,0,0.55)]">
+              {/* angoli della cornice */}
+              <div className="absolute -top-px -left-px h-5 w-5 rounded-tl-xl border-t-2 border-l-2 border-accent" />
+              <div className="absolute -top-px -right-px h-5 w-5 rounded-tr-xl border-t-2 border-r-2 border-accent" />
+              <div className="absolute -bottom-px -left-px h-5 w-5 rounded-bl-xl border-b-2 border-l-2 border-accent" />
+              <div className="absolute -bottom-px -right-px h-5 w-5 rounded-br-xl border-b-2 border-r-2 border-accent" />
+              {/* linea di scansione animata */}
+              <div className="absolute inset-x-3 h-0.5 animate-scanline bg-accent shadow-[0_0_12px_var(--color-accent)]" />
+            </div>
+          </div>
         )}
 
         {state === 'starting' && (

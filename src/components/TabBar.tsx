@@ -22,6 +22,11 @@ export default function TabBar() {
         md:inset-x-auto md:inset-y-0 md:left-0 md:w-20 md:border-t-0 md:border-r md:bg-surface"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
+      <img
+        src="./logo.png"
+        alt="AllergyScan"
+        className="absolute top-5 left-1/2 hidden h-10 w-10 -translate-x-1/2 md:block"
+      />
       <ul className="flex h-16 items-stretch justify-around md:h-full md:flex-col md:justify-center md:gap-2">
         {TABS.map(({ to, label, Icon }) => (
           <li key={to} className="flex-1 md:flex-none">
