@@ -15,7 +15,10 @@ export default function App() {
   const { t } = useLang()
   return (
     <HashRouter>
-      <div className="min-h-dvh bg-bg pb-20 md:pb-0 md:pl-20">
+      <div className="min-h-dvh bg-bg pt-[env(safe-area-inset-top)] pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0 md:pl-20">
+        {/* in standalone iOS la pagina si estende sotto la status bar (viewport-fit=cover):
+            questo velo evita che il contenuto scrollato si sovrapponga a orologio e notch */}
+        <div className="fixed inset-x-0 top-0 z-50 h-[env(safe-area-inset-top)] bg-bg/90 backdrop-blur-md md:hidden" />
         <main className="mx-auto w-full max-w-2xl px-4 pt-6 pb-8">
           <Routes>
             <Route path="/" element={<SearchPage />} />

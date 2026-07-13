@@ -33,13 +33,14 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 - **Focus/tap**: `-webkit-tap-highlight-color: transparent` globale + utility `focus-ring` (`index.css`) che mostra un anello accent solo su `:focus-visible`; va aggiunta ai nuovi elementi interattivi.
 - **Matching allergeni** (`src/data/allergenCatalog.ts`): catalogo fisso dei 14 allergeni regolamentati UE (tag OFF senza prefisso lingua + label italiana + emoji). `normalizeTag` strips il prefisso `xx:` dai tag OFF; `matchAllergens` interseca i tag del prodotto con gli allergeni del profilo attivo.
 - **`ProductDetailPage`** è la pagina centrale: fetch per barcode, salvataggio nello storico (sorgente `scan` vs `search` dedotta da `location.state.fromScan`), e composizione di `ScoreStrip` (Nutri-Score/NOVA/Green-Score), `AllergyBanner`, `ProfilesVerdict` (confronto multi-profilo quando ci sono ≥2 profili), tabella nutrimenti con pallini di livello (basso/moderato/alto da `nutrient_levels` OFF), `IngredientsCard`.
-- **PWA** (`vite-plugin-pwa` in `vite.config.ts`): manifest + service worker `autoUpdate`, cache-first per le immagini prodotto (`images.openfoodfacts.org`). Il SW precache-a l'app shell: dopo una nuova build, un reload nello stesso browser context può servire ancora file stale (serve un context/profilo fresco per ritestare).
+- **PWA** (`vite-plugin-pwa` in `vite.config.ts`): manifest + service worker `autoUpdate`, cache-first per le immagini prodotto (`images.openfoodfacts.org`). Il SW precache-a l'app shell: dopo una nuova build, un reload nello stesso browser context può servire ancora file stale (serve un context/profilo fresco per ritestare). **iOS cachea le apple-touch-icon per URL**: per far vedere un'icona nuova bisogna cambiare il nome del file (oggi `apple-touch-icon-v2.png` in `index.html`; `apple-touch-icon.png` resta come fallback alla radice). Le icone iOS devono avere sfondo opaco (trasparente/scuro → riquadro nero in Home).
+- **Safe area iOS standalone**: `index.html` usa `viewport-fit=cover` + status bar `black-translucent`, quindi in modalità webapp la pagina passa sotto orologio/notch. `App.tsx` compensa con `pt-[env(safe-area-inset-top)]` sul wrapper, un velo fisso `bg-bg/90 backdrop-blur` alto quanto la safe area (per lo scroll sotto la status bar) e `pb-[calc(5rem+env(safe-area-inset-bottom))]`; la TabBar ha già `padding-bottom: env(safe-area-inset-bottom)`. Su web/desktop `env()` vale 0, nessun effetto.
 - **Styling**: Tailwind CSS 4 via plugin Vite (non PostCSS). Design tokens dark-tech definiti in `src/index.css` con `@theme` (`--color-bg`, `--color-accent`, ecc.) e utility custom come `card`. Palette e direzione visiva completa in `PROJECT_PLAN.md`.
 - **Convenzione linguistica**: codice/identificatori in inglese, testi UI e commenti in italiano.
 
 ## Stato del progetto (aggiornato al 2026-07-13)
 
-- **v0.3.0 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
+- **v0.3.1 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
 - Repo GitHub privata: https://github.com/Fedanco/AllergyScanWebApp
 - **Auto-deploy attivo**: ogni push su `main` fa il deploy automatico su Vercel.
 - PWA installabile (vite-plugin-pwa, icone avocado, offline per l'app shell).
@@ -52,6 +53,7 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 - v0.2.0: dettaglio prodotto ricco (chip Nutri-Score/NOVA/Green-Score, ingredienti con allergeni evidenziati, additivi, badge vegano/olio di palma, tracce in arancione, pallini livello nutrienti), confronto multi-profilo ("Tutti i profili" con ≥2 profili). Cache prodotti con prefisso `as_product_cache_v2:`.
 - v0.2.1: chip punteggio toccabili → pannello con scala visuale e spiegazione; legenda pallini nutrienti; "Mostra tutto" negli ingredienti solo se il testo supera davvero 4 righe (misura overflow + ResizeObserver); padding-bottom sul `<main>`.
 - 2026-07-13 (da questo PC Windows): frecce dei chip punteggio allineate su mobile (`mt-auto`, erano disallineate quando il sottotitolo NOVA andava su 2 righe); multilingua IT/EN completo con switcher in Settings; traduzione automatica degli ingredienti nella lingua dell'app via MyMemory; reset tap-highlight + `focus-ring` accessibile. Verificato E2E con Playwright (11/11 flussi).
+- v0.3.1: icone Home iOS/Android rigenerate su sfondo bianco (prima erano su `#0a0b0d` → riquadro nero) con cache-busting `apple-touch-icon-v2.png`; gestione safe area in modalità standalone (padding top/bottom `env()` + velo sotto la status bar) — prima titoli e contenuti si sovrapponevano a orologio e notch.
 
 ### Da fare / prossimi passi
 

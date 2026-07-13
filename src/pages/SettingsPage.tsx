@@ -80,7 +80,7 @@ export default function SettingsPage() {
         </section>
 
         <p className="mt-2 text-center text-xs text-ink-dim/60">
-          AllergyScan Web · v0.3.0
+          AllergyScan Web · v0.3.1
         </p>
       </div>
     </div>
