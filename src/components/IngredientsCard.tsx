@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { normalizeTag } from '../data/allergenCatalog'
 import type { AllergyProfile, Product } from '../types/product'
 
@@ -36,7 +36,23 @@ interface Props {
 
 export default function IngredientsCard({ product, profile }: Props) {
   const [expanded, setExpanded] = useState(false)
+  // il testo eccede davvero le 4 righe del clamp? (misurato, non stimato)
+  const [clamped, setClamped] = useState(false)
+  const textRef = useRef<HTMLParagraphElement>(null)
   const text = product.ingredients_text_it?.trim() || product.ingredients_text?.trim()
+
+  useLayoutEffect(() => {
+    const el = textRef.current
+    if (!el) return
+    const measure = () => {
+      // con line-clamp attivo scrollHeight > clientHeight solo se c'è testo tagliato
+      if (!expanded) setClamped(el.scrollHeight > el.clientHeight)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [text, expanded])
 
   const additives = (product.additives_tags ?? []).map((t) =>
     normalizeTag(t).toUpperCase(),
@@ -48,8 +64,6 @@ export default function IngredientsCard({ product, profile }: Props) {
 
   if (!text && additives.length === 0 && badges.length === 0) return null
 
-  const isLong = (text?.length ?? 0) > 220
-
   return (
     <section className="card p-4">
       <h2 className="mb-3 text-sm font-semibold text-ink-dim">Ingredienti</h2>
@@ -57,13 +71,14 @@ export default function IngredientsCard({ product, profile }: Props) {
       {text ? (
         <>
           <p
+            ref={textRef}
             className={`text-sm leading-relaxed text-ink ${
-              isLong && !expanded ? 'line-clamp-4' : ''
+              expanded ? '' : 'line-clamp-4'
             }`}
           >
             {highlightAllergens(text, profile)}
           </p>
-          {isLong && (
+          {(clamped || expanded) && (
             <button
               type="button"
               onClick={() => setExpanded((e) => !e)}
