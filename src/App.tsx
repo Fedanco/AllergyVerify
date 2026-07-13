@@ -14,7 +14,7 @@ export default function App() {
   return (
     <HashRouter>
       <div className="min-h-dvh bg-bg pb-20 md:pb-0 md:pl-20">
-        <main className="mx-auto w-full max-w-2xl px-4 pt-6">
+        <main className="mx-auto w-full max-w-2xl px-4 pt-6 pb-8">
           <Routes>
             <Route path="/" element={<SearchPage />} />
             <Route

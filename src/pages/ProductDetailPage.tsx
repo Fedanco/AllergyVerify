@@ -202,15 +202,20 @@ function NutrimentTable({
         })}
       </ul>
       {hasLevels && (
-        <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] text-ink-dim">
-          {(Object.keys(LEVEL_DOTS) as (keyof typeof LEVEL_DOTS)[]).map((l) => (
-            <span key={l} className="flex items-center gap-1">
-              <span className={`h-1.5 w-1.5 rounded-full ${LEVEL_DOTS[l].dot}`} />
-              {LEVEL_DOTS[l].label}
-            </span>
-          ))}
-          <span className="opacity-70">— quantità per 100 g</span>
-        </p>
+        <div className="mt-3 border-t border-edge pt-3 text-[0.65rem] leading-relaxed text-ink-dim">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            {(Object.keys(LEVEL_DOTS) as (keyof typeof LEVEL_DOTS)[]).map((l) => (
+              <span key={l} className="flex items-center gap-1">
+                <span className={`h-1.5 w-1.5 rounded-full ${LEVEL_DOTS[l].dot}`} />
+                {LEVEL_DOTS[l].label}
+              </span>
+            ))}
+          </p>
+          <p className="mt-1 opacity-80">
+            Il pallino indica se la quantità per 100 g è bassa, moderata o alta
+            rispetto alle soglie nutrizionali di riferimento europee.
+          </p>
+        </div>
       )}
     </>
   )
