@@ -38,6 +38,16 @@ export default function SettingsPage() {
         </section>
 
         <section className="card p-4">
+          <h2 className="mb-1 text-sm font-semibold">Installa l'app</h2>
+          <p className="text-sm text-ink-dim">
+            AllergyScan si può aggiungere alla schermata Home come una vera app:
+            su iPhone tocca <span className="text-ink">Condividi → Aggiungi alla
+            schermata Home</span>; su Android usa il banner di installazione o il
+            menu del browser (<span className="text-ink">Installa app</span>).
+          </p>
+        </section>
+
+        <section className="card p-4">
           <h2 className="mb-1 text-sm font-semibold">Attenzione</h2>
           <p className="text-sm text-ink-dim">
             Le informazioni potrebbero essere incomplete o non aggiornate:
@@ -46,7 +56,7 @@ export default function SettingsPage() {
         </section>
 
         <p className="mt-2 text-center text-xs text-ink-dim/60">
-          AllergyScan Web · v0.1.0
+          AllergyScan Web · v0.2.0
         </p>
       </div>
     </div>

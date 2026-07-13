@@ -39,5 +39,7 @@ Le route usano HashRouter: `http://localhost:4173/#/profile`, `#/product/<barcod
 
 ## Gotcha
 
-- Le chiamate vanno direttamente a `world.openfoodfacts.org`: serve rete; i lookup barcode sono cachati 24h in localStorage (`as_product_cache:*`), quindi per ritestare il fetch pulire lo storage.
+- Le chiamate vanno direttamente a `world.openfoodfacts.org`: serve rete; i lookup barcode sono cachati 24h in localStorage (`as_product_cache_v2:*`), quindi per ritestare il fetch pulire lo storage.
 - Il chunk dello scanner (zxing) è lazy: la pagina Scan mostra prima "Caricamento scanner…".
+- **PWA/service worker** (da v0.2.0): la build genera `dist/sw.js` + `manifest.webmanifest`; il SW precache-a l'app shell, quindi dopo la prima visita un reload nello stesso context può servire file stale — per ritestare una nuova build usare un browser context fresco. Test offline: `ctx.setOffline(true)` + reload deve funzionare. `images.openfoodfacts.org` a volte è lentissimo (>15s): un'immagine prodotto vuota nello screenshot non è un bug.
+- Per lo stato "scanning" della camera in headless: lanciare Chrome con `--use-fake-device-for-media-stream --use-fake-ui-for-media-stream` e `permissions: ['camera']`.

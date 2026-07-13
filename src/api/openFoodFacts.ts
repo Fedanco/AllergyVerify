@@ -2,10 +2,23 @@ import { LookupError, type Product } from '../types/product'
 
 const BASE = 'https://world.openfoodfacts.org'
 const FIELDS =
-  'code,product_name,brands,image_front_url,allergens_tags,categories_tags,nutriments,nutriscore_grade'
+  'code,product_name,brands,quantity,serving_size,image_front_url,allergens_tags,traces_tags,additives_tags,ingredients_analysis_tags,ingredients_text_it,ingredients_text,categories_tags,nutriments,nutrient_levels,nutriscore_grade,nova_group,ecoscore_grade,environmental_score_grade'
 const TIMEOUT_MS = 10_000
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000
-const CACHE_PREFIX = 'as_product_cache:'
+// v2: i campi richiesti sono cambiati, le voci col vecchio prefisso vanno ignorate
+const CACHE_PREFIX = 'as_product_cache_v2:'
+const OLD_CACHE_PREFIXES = ['as_product_cache:']
+
+// pulizia una tantum delle cache con prefissi obsoleti
+try {
+  for (const key of Object.keys(localStorage)) {
+    if (OLD_CACHE_PREFIXES.some((p) => key.startsWith(p))) {
+      localStorage.removeItem(key)
+    }
+  }
+} catch {
+  // localStorage non disponibile: nessuna pulizia necessaria
+}
 
 const memoryCache = new Map<string, Product>()
 
