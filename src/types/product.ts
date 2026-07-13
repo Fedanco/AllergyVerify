@@ -10,15 +10,37 @@ export interface Nutriments {
   fiber_100g?: number
 }
 
+/** Livello per 100 g secondo OFF: basso / moderato / alto */
+export type NutrientLevel = 'low' | 'moderate' | 'high'
+
+export interface NutrientLevels {
+  fat?: NutrientLevel
+  'saturated-fat'?: NutrientLevel
+  sugars?: NutrientLevel
+  salt?: NutrientLevel
+}
+
 export interface Product {
   code: string
   product_name?: string
   brands?: string
+  quantity?: string
+  serving_size?: string
   image_front_url?: string
   allergens_tags?: string[]
+  traces_tags?: string[]
+  additives_tags?: string[]
+  ingredients_analysis_tags?: string[]
+  ingredients_text_it?: string
+  ingredients_text?: string
   categories_tags?: string[]
   nutriments?: Nutriments
+  nutrient_levels?: NutrientLevels
   nutriscore_grade?: string
+  nova_group?: number
+  /** Green-Score: OFF sta migrando da ecoscore_grade a environmental_score_grade */
+  ecoscore_grade?: string
+  environmental_score_grade?: string
 }
 
 /** Voce ridotta salvata nello storico locale */
