@@ -1,6 +1,10 @@
-# AllergyScan Web
+# CLAUDE.md
 
-Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alimentare e verifica se contiene allergeni pericolosi per i profili configurati.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project
+
+Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alimentare (fotocamera o ricerca manuale) e verifica se contiene allergeni pericolosi per i profili configurati. SPA statica (Vite + React + TypeScript), nessun backend: tutti i dati utente vivono in `localStorage`.
 
 ## Contesto utente
 
@@ -11,9 +15,31 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 - Approccio iterativo: prima una versione funzionante, poi migliorare in base al feedback.
 - Design voluto: **dark-first / moderno-tech** (distacco esplicito dal vecchio look iOS).
 
+## Comandi
+
+- `npm run dev` — dev server con HMR su http://localhost:5173
+- `npm run build` — `tsc -b && vite build`; deve passare senza errori TypeScript prima di ogni push
+- `npm run preview -- --port 4173` — serve la build di `dist/` per test locali (route con `HashRouter`, es. `http://localhost:4173/#/profile`)
+- `npm run lint` — oxlint (plugin react/typescript/oxc)
+- Nessun test automatizzato configurato. Verifica end-to-end manuale in browser: vedi `.claude/skills/verify/SKILL.md` per la checklist dei flussi da coprire (barcode reale, ricerca testuale, storico, PWA offline, fallback fotocamera).
+
+## Architettura
+
+- **Routing**: `HashRouter` (`src/App.tsx`), scelto per funzionare su hosting statico senza redirect 404 lato server. Route: `/` (Search), `/scan` (lazy-loaded — zxing pesa ~400 kB, caricato solo aprendo lo scanner), `/history`, `/profile`, `/settings`, `/product/:code`.
+- **Data flow prodotto** (`src/api/openFoodFacts.ts`): `getProductByBarcode` / `searchProducts` chiamano Open Food Facts con un set ridotto di `fields`. Cache a due livelli — `Map` in memoria + `localStorage` (prefisso `as_product_cache_v2:`, TTL 24h). Cambiando i `fields` richiesti va incrementato il suffisso di versione del prefisso; le voci con prefisso vecchio (`OLD_CACHE_PREFIXES`) vengono ripulite automaticamente al boot.
+- **Stato persistente senza backend**: `useAllergyProfile` (`as_profiles`, `as_active_profile`) e `useScanHistory` (`as_history`, max 50 voci) sono store esterni basati su `useSyncExternalStore` con stato a livello di modulo e un `Set` di listener — un singleton condiviso tra componenti, non React Context. Nuovi store persistenti dovrebbero seguire lo stesso pattern.
+- **Multilingua IT/EN** (`src/i18n/`): nessuna libreria — `useLang` è uno store `useSyncExternalStore` (chiave `as_lang`, default `it`) che ritorna `{ lang, setLang, t }`; `translations.ts` è l'unico dizionario, con `it` come sorgente e `en: Translations` verificato dal compilatore (chiave mancante = errore di build). Le voci con interpolazione sono funzioni `(x) => string`. Le etichette allergeni stanno in `allergenCatalog.ts` come `label: { it, en }`; `labelForTag(tag, lang)` richiede la lingua. Switcher lingua in `SettingsPage`.
+- **Traduzione ingredienti** (`src/api/translate.ts`): il testo ingredienti segue la lingua dell'app. Si usa direttamente l'etichetta originale se `product.lang` coincide con la lingua app, o il campo `ingredients_text_it` per l'italiano; altrimenti si traduce dall'originale con MyMemory (gratuita, senza chiave, `langpair=autodetect|<target>`, chunk ~450 char, cache `as_ingredients_tr_v1:<lang>:<barcode>` TTL 30gg, fallback silenzioso all'originale). **Non fidarsi di `ingredients_text_en` di OFF per prodotti non anglofoni**: spesso è OCR spazzatura (verificato su Nutella FR 3017620425035).
+- **Focus/tap**: `-webkit-tap-highlight-color: transparent` globale + utility `focus-ring` (`index.css`) che mostra un anello accent solo su `:focus-visible`; va aggiunta ai nuovi elementi interattivi.
+- **Matching allergeni** (`src/data/allergenCatalog.ts`): catalogo fisso dei 14 allergeni regolamentati UE (tag OFF senza prefisso lingua + label italiana + emoji). `normalizeTag` strips il prefisso `xx:` dai tag OFF; `matchAllergens` interseca i tag del prodotto con gli allergeni del profilo attivo.
+- **`ProductDetailPage`** è la pagina centrale: fetch per barcode, salvataggio nello storico (sorgente `scan` vs `search` dedotta da `location.state.fromScan`), e composizione di `ScoreStrip` (Nutri-Score/NOVA/Green-Score), `AllergyBanner`, `ProfilesVerdict` (confronto multi-profilo quando ci sono ≥2 profili), tabella nutrimenti con pallini di livello (basso/moderato/alto da `nutrient_levels` OFF), `IngredientsCard`.
+- **PWA** (`vite-plugin-pwa` in `vite.config.ts`): manifest + service worker `autoUpdate`, cache-first per le immagini prodotto (`images.openfoodfacts.org`). Il SW precache-a l'app shell: dopo una nuova build, un reload nello stesso browser context può servire ancora file stale (serve un context/profilo fresco per ritestare).
+- **Styling**: Tailwind CSS 4 via plugin Vite (non PostCSS). Design tokens dark-tech definiti in `src/index.css` con `@theme` (`--color-bg`, `--color-accent`, ecc.) e utility custom come `card`. Palette e direzione visiva completa in `PROJECT_PLAN.md`.
+- **Convenzione linguistica**: codice/identificatori in inglese, testi UI e commenti in italiano.
+
 ## Stato del progetto (aggiornato al 2026-07-13)
 
-- **v0.2.1 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
+- **v0.3.0 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
 - Repo GitHub privata: https://github.com/Fedanco/AllergyScanWebApp
 - **Auto-deploy attivo**: ogni push su `main` fa il deploy automatico su Vercel.
 - PWA installabile (vite-plugin-pwa, icone avocado, offline per l'app shell).
@@ -25,10 +51,11 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 - Scanner ridisegnato dopo test su iPhone (inquadratura 4:3 compatta, mira stile barcode).
 - v0.2.0: dettaglio prodotto ricco (chip Nutri-Score/NOVA/Green-Score, ingredienti con allergeni evidenziati, additivi, badge vegano/olio di palma, tracce in arancione, pallini livello nutrienti), confronto multi-profilo ("Tutti i profili" con ≥2 profili). Cache prodotti con prefisso `as_product_cache_v2:`.
 - v0.2.1: chip punteggio toccabili → pannello con scala visuale e spiegazione; legenda pallini nutrienti; "Mostra tutto" negli ingredienti solo se il testo supera davvero 4 righe (misura overflow + ResizeObserver); padding-bottom sul `<main>`.
+- 2026-07-13 (da questo PC Windows): frecce dei chip punteggio allineate su mobile (`mt-auto`, erano disallineate quando il sottotitolo NOVA andava su 2 righe); multilingua IT/EN completo con switcher in Settings; traduzione automatica degli ingredienti nella lingua dell'app via MyMemory; reset tap-highlight + `focus-ring` accessibile. Verificato E2E con Playwright (11/11 flussi).
 
 ### Da fare / prossimi passi
 
-1. Test dal telefono: scanner con barcode reale, pagina dettaglio v0.2.1, installazione "Aggiungi a Home".
+1. Test dal telefono: scanner con barcode reale, dettaglio prodotto, lingua inglese e ingredienti tradotti, installazione "Aggiungi a Home".
 2. Iterare su design/funzionalità in base al feedback dopo l'uso.
 
 ## Decisioni tecniche

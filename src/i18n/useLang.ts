@@ -1,0 +1,40 @@
+import { useCallback, useSyncExternalStore } from 'react'
+import { translations, type Lang } from './translations'
+
+const LANG_KEY = 'as_lang'
+
+let lang: Lang = load()
+const listeners = new Set<() => void>()
+
+function load(): Lang {
+  try {
+    const stored = localStorage.getItem(LANG_KEY)
+    if (stored === 'it' || stored === 'en') return stored
+  } catch {
+    // localStorage non disponibile
+  }
+  // default: italiano (comportamento storico dell'app)
+  return 'it'
+}
+
+function commit(next: Lang) {
+  lang = next
+  try {
+    localStorage.setItem(LANG_KEY, next)
+  } catch {
+    // storage non disponibile: la scelta vale solo per la sessione
+  }
+  listeners.forEach((l) => l())
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener)
+  return () => listeners.delete(listener)
+}
+
+/** Lingua attiva, setter e dizionario `t` della lingua corrente. */
+export function useLang() {
+  const snapshot = useSyncExternalStore(subscribe, () => lang)
+  const setLang = useCallback((next: Lang) => commit(next), [])
+  return { lang: snapshot, setLang, t: translations[snapshot] }
+}

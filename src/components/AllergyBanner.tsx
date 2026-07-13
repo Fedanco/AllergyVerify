@@ -1,4 +1,5 @@
 import { labelForTag, matchAllergens } from '../data/allergenCatalog'
+import { useLang } from '../i18n/useLang'
 import type { AllergyProfile } from '../types/product'
 import { AlertIcon, CheckIcon, InfoIcon } from './Icons'
 
@@ -17,34 +18,38 @@ interface Props {
  * - neutro: nessun profilo attivo o dati allergeni mancanti
  */
 export default function AllergyBanner({ allergensTags, tracesTags, profile }: Props) {
+  const { lang, t } = useLang()
+
   if (!profile) {
     return (
-      <Pill tone="neutral" Icon={InfoIcon} title="Nessun profilo attivo">
-        Crea un profilo allergie per il verdetto personalizzato.
+      <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noProfileTitle}>
+        {t.allergyBanner.noProfileBody}
       </Pill>
     )
   }
 
   if (!allergensTags) {
     return (
-      <Pill tone="neutral" Icon={InfoIcon} title="Dati allergeni non disponibili">
-        Il prodotto non riporta l'elenco allergeni: verifica l'etichetta.
+      <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noDataTitle}>
+        {t.allergyBanner.noDataBody}
       </Pill>
     )
   }
 
   const detected = matchAllergens(allergensTags, profile.allergens)
   const traces = matchAllergens(tracesTags, profile.allergens).filter(
-    (t) => !detected.includes(t),
+    (tag) => !detected.includes(tag),
   )
+  const toLabels = (tags: string[]) =>
+    tags.map((tag) => labelForTag(tag, lang)).join(', ')
 
   if (detected.length > 0) {
     return (
       <>
-        <Pill tone="danger" Icon={AlertIcon} title={`Attenzione, ${profile.name}!`}>
-          Contiene: {detected.map(labelForTag).join(', ')}
+        <Pill tone="danger" Icon={AlertIcon} title={t.allergyBanner.dangerTitle(profile.name)}>
+          {t.allergyBanner.contains(toLabels(detected))}
         </Pill>
-        {traces.length > 0 && <TracesPill traces={traces} />}
+        {traces.length > 0 && <TracesPill traces={toLabels(traces)} />}
       </>
     )
   }
@@ -52,25 +57,26 @@ export default function AllergyBanner({ allergensTags, tracesTags, profile }: Pr
   if (traces.length > 0) {
     return (
       <>
-        <Pill tone="safe" Icon={CheckIcon} title="Nessun tuo allergene tra gli ingredienti">
-          Occhio però alle possibili tracce qui sotto.
+        <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.safeWithTracesTitle}>
+          {t.allergyBanner.safeWithTracesBody}
         </Pill>
-        <TracesPill traces={traces} />
+        <TracesPill traces={toLabels(traces)} />
       </>
     )
   }
 
   return (
-    <Pill tone="safe" Icon={CheckIcon} title="Nessun tuo allergene rilevato">
-      Sicuro per il profilo "{profile.name}" secondo i dati disponibili.
+    <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.safeTitle}>
+      {t.allergyBanner.safeBody(profile.name)}
     </Pill>
   )
 }
 
-function TracesPill({ traces }: { traces: string[] }) {
+function TracesPill({ traces }: { traces: string }) {
+  const { t } = useLang()
   return (
-    <Pill tone="warn" Icon={AlertIcon} title="Possibili tracce">
-      Può contenere: {traces.map(labelForTag).join(', ')}
+    <Pill tone="warn" Icon={AlertIcon} title={t.allergyBanner.tracesTitle}>
+      {t.allergyBanner.mayContain(traces)}
     </Pill>
   )
 }

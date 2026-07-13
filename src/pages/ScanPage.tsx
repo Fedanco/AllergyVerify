@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser'
 import PageHeader from '../components/PageHeader'
+import { useLang } from '../i18n/useLang'
 
 type ScanState = 'starting' | 'scanning' | 'denied' | 'unavailable'
 
@@ -9,6 +10,7 @@ export default function ScanPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [state, setState] = useState<ScanState>('starting')
   const navigate = useNavigate()
+  const { t } = useLang()
 
   useEffect(() => {
     let controls: IScannerControls | undefined
@@ -47,10 +49,7 @@ export default function ScanPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Scansiona"
-        subtitle="Inquadra il codice a barre del prodotto"
-      />
+      <PageHeader title={t.scan.title} subtitle={t.scan.subtitle} />
 
       <div className="card relative mx-auto aspect-[4/3] max-w-xl overflow-hidden md:aspect-video">
         <video
@@ -77,7 +76,7 @@ export default function ScanPage() {
 
         {state === 'starting' && (
           <div className="absolute inset-0 flex items-center justify-center bg-surface">
-            <p className="text-sm text-ink-dim">Avvio fotocamera…</p>
+            <p className="text-sm text-ink-dim">{t.scan.starting}</p>
           </div>
         )}
 
@@ -85,17 +84,13 @@ export default function ScanPage() {
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface px-6 text-center">
             <p className="text-3xl">📷</p>
             <p className="text-sm text-ink-dim">
-              {state === 'denied'
-                ? 'Accesso alla fotocamera negato. Consenti l’uso della fotocamera nelle impostazioni del browser e ricarica la pagina.'
-                : 'Fotocamera non disponibile su questo dispositivo. Usa la ricerca manuale.'}
+              {state === 'denied' ? t.scan.denied : t.scan.unavailable}
             </p>
           </div>
         )}
       </div>
 
-      <p className="mt-4 text-center text-xs text-ink-dim">
-        Il codice viene riconosciuto automaticamente: nessuno scatto necessario.
-      </p>
+      <p className="mt-4 text-center text-xs text-ink-dim">{t.scan.hint}</p>
     </div>
   )
 }

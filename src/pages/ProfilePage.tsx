@@ -3,21 +3,20 @@ import PageHeader from '../components/PageHeader'
 import { CheckIcon, TrashIcon } from '../components/Icons'
 import { ALLERGEN_CATALOG } from '../data/allergenCatalog'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
+import { useLang } from '../i18n/useLang'
 import type { AllergyProfile } from '../types/product'
 
 export default function ProfilePage() {
   const { profiles, activeProfile, createProfile, updateProfile, deleteProfile, setActive } =
     useAllergyProfile()
+  const { lang, t } = useLang()
   const [editing, setEditing] = useState<AllergyProfile | 'new' | null>(
     profiles.length === 0 ? 'new' : null,
   )
 
   return (
     <div>
-      <PageHeader
-        title="Profili allergie"
-        subtitle="Il profilo attivo viene usato per il verdetto sui prodotti"
-      />
+      <PageHeader title={t.profile.title} subtitle={t.profile.subtitle} />
 
       {profiles.length > 0 && (
         <ul className="mb-6 flex flex-col gap-2">
@@ -33,7 +32,7 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActive(p.id)}
-                  className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                  className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-lg text-left"
                 >
                   <span
                     className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
@@ -46,9 +45,9 @@ export default function ProfilePage() {
                     <span className="block truncate text-sm font-semibold">{p.name}</span>
                     <span className="block truncate text-xs text-ink-dim">
                       {p.allergens.length === 0
-                        ? 'Nessun allergene selezionato'
+                        ? t.profile.noAllergens
                         : ALLERGEN_CATALOG.filter((a) => p.allergens.includes(a.tag))
-                            .map((a) => a.label)
+                            .map((a) => a.label[lang])
                             .join(', ')}
                     </span>
                   </span>
@@ -56,17 +55,17 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setEditing(p)}
-                  className="rounded-lg border border-edge px-2.5 py-1.5 text-xs text-ink-dim transition-colors hover:text-ink"
+                  className="focus-ring rounded-lg border border-edge px-2.5 py-1.5 text-xs text-ink-dim transition-colors hover:text-ink"
                 >
-                  Modifica
+                  {t.profile.edit}
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-                    if (confirm(`Eliminare il profilo "${p.name}"?`)) deleteProfile(p.id)
+                    if (confirm(t.profile.confirmDelete(p.name))) deleteProfile(p.id)
                   }}
-                  className="rounded-lg border border-edge p-1.5 text-ink-dim transition-colors hover:border-danger/40 hover:text-danger"
-                  aria-label={`Elimina profilo ${p.name}`}
+                  className="focus-ring rounded-lg border border-edge p-1.5 text-ink-dim transition-colors hover:border-danger/40 hover:text-danger"
+                  aria-label={t.profile.deleteAria(p.name)}
                 >
                   <TrashIcon className="h-4 w-4" />
                 </button>
@@ -91,9 +90,9 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setEditing('new')}
-          className="w-full rounded-2xl border border-dashed border-edge py-3 text-sm text-ink-dim transition-colors hover:border-accent/50 hover:text-accent"
+          className="focus-ring w-full rounded-2xl border border-dashed border-edge py-3 text-sm text-ink-dim transition-colors hover:border-accent/50 hover:text-accent"
         >
-          + Nuovo profilo
+          {t.profile.newProfile}
         </button>
       )}
     </div>
@@ -109,6 +108,7 @@ function ProfileEditor({
   onSave: (name: string, allergens: string[]) => void
   onCancel?: () => void
 }) {
+  const { lang, t } = useLang()
   const [name, setName] = useState(profile?.name ?? '')
   const [selected, setSelected] = useState<Set<string>>(new Set(profile?.allergens ?? []))
 
@@ -130,18 +130,18 @@ function ProfileEditor({
       className="card animate-fade-up p-4"
     >
       <h2 className="mb-3 text-sm font-semibold">
-        {profile ? `Modifica "${profile.name}"` : 'Nuovo profilo'}
+        {profile ? t.profile.editorTitleEdit(profile.name) : t.profile.editorTitleNew}
       </h2>
 
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Nome (es. Valentina)"
+        placeholder={t.profile.namePlaceholder}
         className="mb-4 w-full rounded-xl border border-edge bg-surface-2 px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
       />
 
-      <p className="mb-2 text-xs text-ink-dim">I tuoi allergeni (14 allergeni UE):</p>
+      <p className="mb-2 text-xs text-ink-dim">{t.profile.allergensLabel}</p>
       <div className="mb-4 flex flex-wrap gap-2">
         {ALLERGEN_CATALOG.map(({ tag, label, emoji }) => {
           const on = selected.has(tag)
@@ -150,14 +150,14 @@ function ProfileEditor({
               key={tag}
               type="button"
               onClick={() => toggle(tag)}
-              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`focus-ring rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 on
                   ? 'border-accent bg-accent/15 text-accent'
                   : 'border-edge bg-surface-2 text-ink-dim hover:text-ink'
               }`}
               aria-pressed={on}
             >
-              {emoji} {label}
+              {emoji} {label[lang]}
             </button>
           )
         })}
@@ -167,17 +167,17 @@ function ProfileEditor({
         <button
           type="submit"
           disabled={!name.trim()}
-          className="flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-opacity disabled:opacity-40"
+          className="focus-ring flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-opacity disabled:opacity-40"
         >
-          Salva profilo
+          {t.profile.save}
         </button>
         {onCancel && (
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-xl border border-edge px-4 text-sm text-ink-dim transition-colors hover:text-ink"
+            className="focus-ring rounded-xl border border-edge px-4 text-sm text-ink-dim transition-colors hover:text-ink"
           >
-            Annulla
+            {t.profile.cancel}
           </button>
         )}
       </div>

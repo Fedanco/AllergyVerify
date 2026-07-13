@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ChevronDownIcon } from './Icons'
+import { useLang } from '../i18n/useLang'
 import type { Product } from '../types/product'
 
 /**
@@ -22,31 +23,8 @@ interface ScoreData {
   meaning: string
 }
 
-const NUTRI_MEANINGS: Record<string, string> = {
-  a: 'Qualità nutrizionale ottima.',
-  b: 'Qualità nutrizionale buona.',
-  c: 'Qualità nutrizionale nella media.',
-  d: 'Qualità nutrizionale scarsa.',
-  e: 'Qualità nutrizionale molto scarsa.',
-}
-
-const NOVA_MEANINGS: Record<string, string> = {
-  1: 'Alimento non trasformato o minimamente trasformato (es. frutta, latte, legumi).',
-  2: 'Ingrediente culinario trasformato (es. olio, burro, zucchero, sale).',
-  3: 'Alimento trasformato (es. pane, formaggi, verdure in scatola).',
-  4: 'Alimento ultra-trasformato: contiene ingredienti o processi industriali (emulsionanti, aromi, coloranti…).',
-}
-
-const GREEN_MEANINGS: Record<string, string> = {
-  a: 'Impatto ambientale molto basso.',
-  b: 'Impatto ambientale basso.',
-  c: 'Impatto ambientale moderato.',
-  d: 'Impatto ambientale alto.',
-  e: 'Impatto ambientale molto alto.',
-  f: 'Impatto ambientale altissimo.',
-}
-
 export default function ScoreStrip({ product }: { product: Product }) {
+  const { t } = useLang()
   const [open, setOpen] = useState<string | null>(null)
   const green = product.environmental_score_grade ?? product.ecoscore_grade
 
@@ -55,18 +33,23 @@ export default function ScoreStrip({ product }: { product: Product }) {
       'Nutri-Score',
       product.nutriscore_grade,
       'abcde',
-      'Qualità nutrizionale',
-      'Riassume la qualità nutrizionale per 100 g: penalizza calorie, zuccheri, grassi saturi e sale, premia fibre e proteine. A = migliore, E = peggiore.',
-      NUTRI_MEANINGS,
+      t.scores.nutriHint,
+      t.scores.nutriAbout,
+      t.scores.nutriMeanings,
     ),
-    novaScore(product.nova_group),
+    novaScore(
+      product.nova_group,
+      t.scores.novaHint,
+      t.scores.novaAbout,
+      t.scores.novaMeanings,
+    ),
     gradeScore(
       'Green-Score',
       green,
       'abcdef',
-      'Impatto ambientale',
-      "Stima l'impatto ambientale del prodotto sull'intero ciclo di vita: produzione, trasporto e imballaggio. A = impatto minimo, F = massimo.",
-      GREEN_MEANINGS,
+      t.scores.greenHint,
+      t.scores.greenAbout,
+      t.scores.greenMeanings,
     ),
   ].filter((s): s is ScoreData => s !== null)
 
@@ -88,7 +71,7 @@ export default function ScoreStrip({ product }: { product: Product }) {
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : s.name)}
-              className={`card flex flex-col items-center gap-1.5 px-2 py-3 text-center transition-colors ${
+              className={`card focus-ring flex flex-col items-center gap-1.5 px-2 py-3 text-center transition-colors ${
                 isOpen ? 'border-accent/40' : ''
               }`}
             >
@@ -101,9 +84,11 @@ export default function ScoreStrip({ product }: { product: Product }) {
               </span>
               <span className="text-xs font-semibold">{s.name}</span>
               <span className="text-[0.65rem] leading-tight text-ink-dim">{s.hint}</span>
+              {/* mt-auto: freccia ancorata al fondo della card, così i tre chip
+                  restano allineati anche se un sottotitolo va su due righe */}
               <span
                 aria-hidden
-                className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded-full border transition-all ${
+                className={`mt-auto flex h-5 w-5 items-center justify-center rounded-full border transition-all ${
                   isOpen
                     ? 'rotate-180 border-accent/40 bg-accent/10 text-accent'
                     : 'border-edge bg-surface-2 text-ink-dim'
@@ -116,12 +101,12 @@ export default function ScoreStrip({ product }: { product: Product }) {
         })}
       </div>
 
-      {openScore && <ScorePanel score={openScore} />}
+      {openScore && <ScorePanel score={openScore} dataBy={t.scores.dataBy} />}
     </div>
   )
 }
 
-function ScorePanel({ score }: { score: ScoreData }) {
+function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
   return (
     <section className="card animate-fade-up p-4">
       <h3 className="text-sm font-semibold">
@@ -148,9 +133,7 @@ function ScorePanel({ score }: { score: ScoreData }) {
 
       <p className="mt-3 text-sm leading-relaxed text-ink">{score.meaning}</p>
       <p className="mt-2 text-xs leading-relaxed text-ink-dim">{score.about}</p>
-      <p className="mt-2 text-[0.65rem] text-ink-dim/70">
-        Dati calcolati da Open Food Facts.
-      </p>
+      <p className="mt-2 text-[0.65rem] text-ink-dim/70">{dataBy}</p>
     </section>
   )
 }
@@ -184,16 +167,20 @@ function gradeScore(
   }
 }
 
-function novaScore(group: number | undefined): ScoreData | null {
+function novaScore(
+  group: number | undefined,
+  hint: string,
+  about: string,
+  meanings: Record<string, string>,
+): ScoreData | null {
   if (!group || group < 1 || group > 4) return null
   return {
     name: 'NOVA',
     value: String(group),
-    hint: 'Grado di trasformazione',
+    hint,
     scale: ['1', '2', '3', '4'],
     index: group - 1,
-    about:
-      "Indica quanto un alimento è lavorato industrialmente, non quanto è sano. 1 = non trasformato, 4 = ultra-trasformato.",
-    meaning: NOVA_MEANINGS[group],
+    about,
+    meaning: meanings[group],
   }
 }

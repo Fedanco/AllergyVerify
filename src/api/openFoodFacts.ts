@@ -2,12 +2,13 @@ import { LookupError, type Product } from '../types/product'
 
 const BASE = 'https://world.openfoodfacts.org'
 const FIELDS =
-  'code,product_name,brands,quantity,serving_size,image_front_url,allergens_tags,traces_tags,additives_tags,ingredients_analysis_tags,ingredients_text_it,ingredients_text,categories_tags,nutriments,nutrient_levels,nutriscore_grade,nova_group,ecoscore_grade,environmental_score_grade'
+  'code,lang,product_name,brands,quantity,serving_size,image_front_url,allergens_tags,traces_tags,additives_tags,ingredients_analysis_tags,ingredients_text_it,ingredients_text_en,ingredients_text,categories_tags,nutriments,nutrient_levels,nutriscore_grade,nova_group,ecoscore_grade,environmental_score_grade'
 const TIMEOUT_MS = 10_000
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000
-// v2: i campi richiesti sono cambiati, le voci col vecchio prefisso vanno ignorate
-const CACHE_PREFIX = 'as_product_cache_v2:'
-const OLD_CACHE_PREFIXES = ['as_product_cache:']
+// v3: i campi richiesti sono cambiati (ingredients_text_en), le voci
+// coi vecchi prefissi vanno ignorate
+const CACHE_PREFIX = 'as_product_cache_v3:'
+const OLD_CACHE_PREFIXES = ['as_product_cache:', 'as_product_cache_v2:']
 
 // pulizia una tantum delle cache con prefissi obsoleti
 try {
