@@ -175,7 +175,7 @@ function ScoreRing({ ratio, className }: { ratio: number; className?: string }) 
   const strokeWidth = 3
   const r = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * r
-  const fillRatio = 1 - ratio // 0 = migliore -> anello pieno
+  const fillRatio = ratio // ratio vicino a 1 = peggiore -> anello pieno (il rischio deve saltare all'occhio)
   const [filled, setFilled] = useState(false)
 
   useEffect(() => {
