@@ -48,8 +48,15 @@ export default function SearchPage() {
 
       <form onSubmit={handleSubmit} className="mb-6 flex gap-2">
         <div className="relative flex-1">
-          <SearchIcon className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-dim" />
+          <label htmlFor="search-input" className="sr-only">
+            {t.search.placeholder}
+          </label>
+          <SearchIcon
+            aria-hidden
+            className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-dim"
+          />
           <input
+            id="search-input"
             type="text"
             inputMode="search"
             value={query}
@@ -61,6 +68,7 @@ export default function SearchPage() {
         <button
           type="submit"
           disabled={loading || !query.trim()}
+          aria-busy={loading}
           className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-[opacity,box-shadow,transform] duration-[var(--duration-fast)] hover:shadow-md active:scale-[0.97] disabled:opacity-40"
         >
           {loading ? '…' : t.search.submit}
@@ -68,7 +76,10 @@ export default function SearchPage() {
       </form>
 
       {error && (
-        <p className="animate-fade-up rounded-2xl border border-warn/40 bg-warn/10 px-4 py-3 text-sm text-warn">
+        <p
+          role="alert"
+          className="animate-fade-up rounded-2xl border border-warn/40 bg-warn/10 px-4 py-3 text-sm text-warn"
+        >
           {error}
         </p>
       )}
@@ -96,7 +107,7 @@ export default function SearchPage() {
 
       {!results && !error && !loading && (
         <div className="card mt-4 px-5 py-6 text-center">
-          <p className="text-3xl">🔍</p>
+          <p aria-hidden className="text-3xl">🔍</p>
           <p className="mt-2 text-sm text-ink-dim">
             {t.search.emptyHint1}
             <br />

@@ -36,7 +36,7 @@ export default function ProductCard({
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-lg">🍎</div>
+          <div aria-hidden className="flex h-full w-full items-center justify-center text-lg">🍎</div>
         )}
       </div>
       <div className="min-w-0 flex-1">
