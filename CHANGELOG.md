@@ -2,6 +2,18 @@
 
 Cronologia delle versioni di AllergyScan Web, dalla più recente alla più vecchia.
 
+## v0.5.1 — 2026-07-20
+
+- Correzioni post-redesign su segnalazione utente:
+  - `ScoreStrip`: badge punteggio da quadrato a cerchio (concentrico all'anello di reveal), poi anello rimosso del tutto — creava confusione sui punteggi pessimi senza un secondo prodotto a confronto.
+- Passata di rifinitura + audit accessibilità (skill Impeccable) su tutte le pagine, a gruppi:
+  - Dettaglio Prodotto: banner allergeni annunciato agli screen reader (`role="status" aria-live="polite"`), chip punteggio collegati al loro pannello (`aria-controls`), bottone ingredienti con `aria-expanded`.
+  - Ricerca: campo di ricerca con label (prima solo placeholder), errore annunciato (`role="alert"`).
+  - Scan: stato fotocamera annunciato, link vero "Vai alla ricerca manuale" quando la fotocamera non è disponibile.
+  - Storico: emoji decorative marcate `aria-hidden`.
+  - Profilo: campo nome con label visibile "Nome", gruppo allergeni collegato alla sua etichetta, stato di selezione profilo comunicato (`aria-pressed`).
+  - Impostazioni/navigazione: `document.documentElement.lang` ora si aggiorna al cambio lingua IT/EN (prima restava fisso su "it"), barra di navigazione con etichetta, bottoni lingua raggruppati.
+
 ## v0.5.0 — 2026-07-20
 
 - Redesign (Fase 2, skill Impeccable) — resto dell'app allineato alla Fase 1:
