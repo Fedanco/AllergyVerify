@@ -32,7 +32,7 @@ export default function HistoryPage() {
 
       {history.length === 0 ? (
         <div className="card px-5 py-8 text-center">
-          <p className="text-3xl">🕘</p>
+          <p aria-hidden className="text-3xl">🕘</p>
           <p className="mt-2 text-sm text-ink-dim">{t.history.empty}</p>
         </div>
       ) : (
