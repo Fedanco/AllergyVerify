@@ -2,6 +2,16 @@
 
 Cronologia delle versioni di AllergyScan Web, dalla più recente alla più vecchia.
 
+## v0.4.0 — 2026-07-20
+
+- Redesign (Fase 1, skill Impeccable) — fondamenta + pagina Dettaglio Prodotto:
+  - Font reali self-hosted (Inter, JetBrains Mono via `@fontsource`, subset latin/latin-ext), coperti dal precache PWA; prima erano dichiarati ma mai caricati e l'app cadeva su `system-ui`.
+  - Sistema di ombre/glow, scala di raggi, token di movimento e `prefers-reduced-motion` globale.
+  - Nuovo vocabolario di superfici (`.card` con ombra, `.card-row`, `.panel`, `.chip`) al posto dell'unica card riusata ovunque.
+  - Banner allergeni ridisegnato come punto focale: icona in chip tonale, testo a piena leggibilità (contrasto verificato ≥7:1 su tutti i toni), reveal all'ingresso, glow di stato (rosso pericolo / verde sicuro) mai in loop.
+  - `ProfilesVerdict`: emoji 🔴🟠🟢⚪ sostituite dalle icone SVG condivise con il resto dell'app.
+  - `ScoreStrip`: anello di reveal attorno alla lettera del punteggio, pannello con gradini della scala in sequenza.
+
 ## v0.3.1 — 2026-07-13
 
 - Icone Home iOS/Android rigenerate su sfondo bianco (prima erano su `#0a0b0d` → riquadro nero) con cache-busting `apple-touch-icon-v2.png`; favicon opaco bianco (`favicon-v2.png`) perché Safari lo usa anche per i Preferiti.

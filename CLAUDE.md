@@ -38,9 +38,9 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 - **Styling**: Tailwind CSS 4 via plugin Vite (non PostCSS). Design tokens dark-tech definiti in `src/index.css` con `@theme` (`--color-bg`, `--color-accent`, ecc.) e utility custom come `card`. Palette e direzione visiva completa in `PROJECT_PLAN.md`.
 - **Convenzione linguistica**: codice/identificatori in inglese, testi UI e commenti in italiano.
 
-## Stato del progetto (aggiornato al 2026-07-13)
+## Stato del progetto (aggiornato al 2026-07-20)
 
-- **v0.3.1 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
+- **v0.4.0 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
 - Repo GitHub privata: https://github.com/Fedanco/AllergyScanWebApp
 - **Auto-deploy attivo**: ogni push su `main` fa il deploy automatico su Vercel.
 - PWA installabile (vite-plugin-pwa, icone avocado, offline per l'app shell).

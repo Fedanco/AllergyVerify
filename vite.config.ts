@@ -32,6 +32,10 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // include i font self-hosted (@fontsource) nel precache dell'app
+        // shell, altrimenti al primo avvio offline il testo ripiegherebbe
+        // silenziosamente su system-ui
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         // foto prodotto: cache-first, il barcode identifica un'immagine stabile
         runtimeCaching: [
           {

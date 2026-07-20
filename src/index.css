@@ -12,14 +12,54 @@
   --color-accent-dim: #1a9c72;
   --color-danger: #ff4d5e;
   --color-warn: #ffb454;
+  /* Tappabuchi per il livello "intermedio" nelle scale a 4+ gradini
+     (es. ScoreStrip): prima era un lime-400 non tokenizzato. */
+  --color-caution: #a8d84a;
 
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
 
   --radius-card: 1rem;
+  /* Radius dedicati (nomi non standard Tailwind: evitano di sovrascrivere
+     rounded-sm/rounded-lg già in uso altrove per componenti non correlati). */
+  --radius-chip: 0.5rem;
+  --radius-banner: 1.25rem;
+
+  /* Scala di ombre: il palette è quasi nero, servono strati (contatto +
+     ambient) invece di un'ombra piatta per leggersi davvero. Nessun uso
+     preesistente di shadow-sm/md/lg nel progetto: override sicuro dei
+     default Tailwind. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 6px -2px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 2px 8px -2px rgba(0, 0, 0, 0.45), 0 10px 28px -6px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 4px 14px -4px rgba(0, 0, 0, 0.5), 0 20px 48px -12px rgba(0, 0, 0, 0.6);
+  /* Glow semantico riservato al banner allergeni (danger/safe): mai su
+     card generiche, altrimenti perde di significato. */
+  --shadow-glow-danger: 0 0 0 1px rgba(255, 77, 94, 0.35), 0 8px 28px -6px rgba(255, 77, 94, 0.35);
+  --shadow-glow-safe: 0 0 0 1px rgba(46, 230, 168, 0.3), 0 8px 28px -6px rgba(46, 230, 168, 0.3);
+
+  /* Token di movimento: nessuna libreria, solo CSS/WAAPI. Curve
+     ease-out (mai bounce/elastic), durate corte per feedback di stato. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 400ms;
 
   --animate-scanline: scanline 2.2s ease-in-out infinite;
-  --animate-fade-up: fade-up 0.25s ease-out both;
+  --animate-fade-up: fade-up var(--duration-base) var(--ease-out-quart) both;
+
+  /* Momento firma del banner allergeni (AllergyBanner): reveal all'ingresso.
+     Il tono danger ha in più un fade-in del glow, non ripetuto — mai un
+     pulse in loop su un avviso di pericolo alimentare. */
+  --animate-banner-in: banner-in var(--duration-slow) var(--ease-out-quint) both;
+  --animate-banner-in-danger:
+    banner-in var(--duration-slow) var(--ease-out-quint) both,
+    glow-in-danger var(--duration-slow) var(--ease-out-quint) both;
+  --animate-icon-pop: icon-pop var(--duration-base) var(--ease-out-quint) 70ms both;
+  /* Reveal in sequenza dei gradini della scala punteggio (ScorePanel):
+     l'unico stagger della Fase 1, perché qui rivela davvero un ordine. */
+  --animate-step-in: step-in var(--duration-fast) var(--ease-out-quart) both;
 
   @keyframes scanline {
     0%, 100% { top: 8%; }
@@ -28,6 +68,40 @@
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes banner-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes glow-in-danger {
+    from {
+      box-shadow: 0 0 0 1px rgba(255, 77, 94, 0), 0 8px 28px -6px rgba(255, 77, 94, 0);
+    }
+    to {
+      box-shadow: var(--shadow-glow-danger);
+    }
+  }
+  @keyframes icon-pop {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes step-in {
+    from { opacity: 0; transform: translateY(2px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Rispetta sempre la preferenza di riduzione del movimento: azzera
+   automaticamente ogni animazione/transizione CSS, inclusi i momenti
+   "firma" (reveal, glow, stagger) senza bisogno di logica per componente. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -49,11 +123,38 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Card standard: superficie a strato con bordo sottile */
+/* Card standard: superficie a strato con bordo sottile + ombra di contatto */
 @utility card {
   background: var(--color-surface);
   border: 1px solid var(--color-edge);
   border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Riga di lista dentro una card (es. ProfilesVerdict): un livello di
+   superficie, non una card annidata dentro un'altra card. */
+@utility card-row {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-edge);
+  border-radius: var(--radius-chip);
+}
+
+/* Superficie interattiva/espansa (es. chip aperto e pannello di
+   ScoreStrip): un tono più chiaro + ombra più marcata segnalano
+   "attivo/sollevato" invece di un semplice cambio di bordo. */
+@utility panel {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-edge);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+}
+
+/* Badge/chip piccoli (additivi, diete): solo sfondo+bordo condivisi, niente
+   border-radius qui — le forme (pill vs rettangolo arrotondato) restano
+   quelle già in uso in ciascun punto di chiamata, zero cambio visivo. */
+@utility chip {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-edge);
 }
 
 /* Elementi interattivi: sopprime l'outline nativo (blu su Safari iOS)

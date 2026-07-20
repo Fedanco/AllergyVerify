@@ -2,6 +2,7 @@ import { labelForTag, matchAllergens } from '../data/allergenCatalog'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useLang } from '../i18n/useLang'
 import type { Lang, Translations } from '../i18n/translations'
+import { TONE_ICON, TONE_TEXT, type Tone } from '../lib/allergyTone'
 import type { Product } from '../types/product'
 
 /**
@@ -20,11 +21,12 @@ export default function ProfilesVerdict({ product }: { product: Product }) {
         {profiles.map((p) => {
           const v = verdictFor(product, p.allergens, lang, t)
           const active = p.id === activeProfile?.id
+          const Icon = TONE_ICON[v.tone]
           return (
             <li
               key={p.id}
-              className={`flex flex-col gap-0.5 rounded-xl border px-3 py-2 ${
-                active ? 'border-accent/40 bg-surface-2' : 'border-edge bg-surface-2/50'
+              className={`card-row flex flex-col gap-0.5 px-3 py-2 ${
+                active ? 'border-accent/40' : ''
               }`}
             >
               <span className="flex items-center gap-1.5 text-sm font-medium">
@@ -35,8 +37,8 @@ export default function ProfilesVerdict({ product }: { product: Product }) {
                   </span>
                 )}
               </span>
-              <span className={`text-xs font-medium ${v.color}`}>
-                {v.icon} {v.text}
+              <span className={`flex items-center gap-1 text-xs font-medium ${TONE_TEXT[v.tone]}`}>
+                <Icon className="h-3.5 w-3.5 shrink-0" /> {v.text}
               </span>
             </li>
           )
@@ -51,28 +53,20 @@ function verdictFor(
   allergens: string[],
   lang: Lang,
   t: Translations,
-) {
+): { tone: Tone; text: string } {
   const toLabels = (tags: string[]) =>
     tags.map((tag) => labelForTag(tag, lang)).join(', ')
 
   if (!product.allergens_tags) {
-    return { icon: '⚪', text: t.profilesVerdict.noData, color: 'text-ink-dim' }
+    return { tone: 'neutral', text: t.profilesVerdict.noData }
   }
   const detected = matchAllergens(product.allergens_tags, allergens)
   if (detected.length > 0) {
-    return {
-      icon: '🔴',
-      text: t.profilesVerdict.contains(toLabels(detected)),
-      color: 'text-danger',
-    }
+    return { tone: 'danger', text: t.profilesVerdict.contains(toLabels(detected)) }
   }
   const traces = matchAllergens(product.traces_tags, allergens)
   if (traces.length > 0) {
-    return {
-      icon: '🟠',
-      text: t.profilesVerdict.traces(toLabels(traces)),
-      color: 'text-warn',
-    }
+    return { tone: 'warn', text: t.profilesVerdict.traces(toLabels(traces)) }
   }
-  return { icon: '🟢', text: t.profilesVerdict.ok, color: 'text-accent' }
+  return { tone: 'safe', text: t.profilesVerdict.ok }
 }

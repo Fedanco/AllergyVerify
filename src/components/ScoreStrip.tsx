@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDownIcon } from './Icons'
 import { useLang } from '../i18n/useLang'
 import type { Product } from '../types/product'
@@ -65,22 +65,24 @@ export default function ScoreStrip({ product }: { product: Product }) {
       >
         {scores.map((s) => {
           const isOpen = s.name === open
+          const ratio = s.index / (s.scale.length - 1)
           return (
             <button
               key={s.name}
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : s.name)}
-              className={`card focus-ring flex flex-col items-center gap-1.5 px-2 py-3 text-center transition-colors ${
-                isOpen ? 'border-accent/40' : ''
+              className={`focus-ring flex flex-col items-center gap-1.5 px-2 py-3 text-center transition-colors ${
+                isOpen ? 'panel border-accent/40' : 'card'
               }`}
             >
-              <span
-                className={`flex h-10 w-10 items-center justify-center rounded-xl border font-mono text-xl font-bold ${colorFor(
-                  s.index / (s.scale.length - 1),
-                )}`}
-              >
-                {s.value}
+              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+                <ScoreRing ratio={ratio} className={RING_CLASS[toneFor(ratio)]} />
+                <span
+                  className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
+                >
+                  {s.value}
+                </span>
               </span>
               <span className="text-xs font-semibold">{s.name}</span>
               <span className="text-[0.65rem] leading-tight text-ink-dim">{s.hint}</span>
@@ -88,7 +90,7 @@ export default function ScoreStrip({ product }: { product: Product }) {
                   restano allineati anche se un sottotitolo va su due righe */}
               <span
                 aria-hidden
-                className={`mt-auto flex h-5 w-5 items-center justify-center rounded-full border transition-all ${
+                className={`mt-auto flex h-5 w-5 items-center justify-center rounded-full border transition-[transform,background-color,border-color,color] duration-[var(--duration-fast)] ${
                   isOpen
                     ? 'rotate-180 border-accent/40 bg-accent/10 text-accent'
                     : 'border-edge bg-surface-2 text-ink-dim'
@@ -119,9 +121,10 @@ function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
           return (
             <span
               key={step}
-              className={`flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-sm font-bold ${
+              style={{ '--i': i } as React.CSSProperties}
+              className={`animate-step-in flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-sm font-bold [animation-delay:calc(var(--i)*25ms)] ${
                 current
-                  ? colorFor(i / (score.scale.length - 1))
+                  ? BADGE_CLASS[toneFor(i / (score.scale.length - 1))]
                   : 'border-edge bg-surface-2 text-ink-dim/50'
               }`}
             >
@@ -138,12 +141,68 @@ function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
   )
 }
 
-// posizione nella scala -> colore (0 = migliore, 1 = peggiore)
-function colorFor(ratio: number): string {
-  if (ratio <= 0.25) return 'text-accent border-accent/40 bg-accent/10'
-  if (ratio <= 0.5) return 'text-lime-400 border-lime-400/40 bg-lime-400/10'
-  if (ratio <= 0.75) return 'text-warn border-warn/40 bg-warn/10'
-  return 'text-danger border-danger/40 bg-danger/10'
+// posizione nella scala -> tono (0 = migliore, 1 = peggiore)
+type ScoreTone = 'safe' | 'caution' | 'warn' | 'danger'
+
+function toneFor(ratio: number): ScoreTone {
+  if (ratio <= 0.25) return 'safe'
+  if (ratio <= 0.5) return 'caution'
+  if (ratio <= 0.75) return 'warn'
+  return 'danger'
+}
+
+const BADGE_CLASS: Record<ScoreTone, string> = {
+  safe: 'text-accent border-accent/40 bg-accent/10',
+  caution: 'text-caution border-caution/40 bg-caution/10',
+  warn: 'text-warn border-warn/40 bg-warn/10',
+  danger: 'text-danger border-danger/40 bg-danger/10',
+}
+
+const RING_CLASS: Record<ScoreTone, string> = {
+  safe: 'text-accent',
+  caution: 'text-caution',
+  warn: 'text-warn',
+  danger: 'text-danger',
+}
+
+/**
+ * Anello che si riempie da vuoto alla posizione del punteggio nella scala
+ * al primo render (momento firma). Sta dietro il badge colorato come un
+ * piccolo "gauge", non lo sostituisce: la lettera resta leggibile subito.
+ */
+function ScoreRing({ ratio, className }: { ratio: number; className?: string }) {
+  const size = 40
+  const strokeWidth = 3
+  const r = (size - strokeWidth) / 2
+  const circumference = 2 * Math.PI * r
+  const fillRatio = 1 - ratio // 0 = migliore -> anello pieno
+  const [filled, setFilled] = useState(false)
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setFilled(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  return (
+    <svg
+      viewBox={`0 0 ${size} ${size}`}
+      aria-hidden
+      className={`pointer-events-none absolute inset-0 h-full w-full -rotate-90 ${className ?? ''}`}
+    >
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        strokeDashoffset={circumference * (1 - (filled ? fillRatio : 0))}
+        style={{ transition: 'stroke-dashoffset var(--duration-slow) var(--ease-out-expo)' }}
+      />
+    </svg>
+  )
 }
 
 function gradeScore(
