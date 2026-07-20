@@ -135,10 +135,7 @@ export default function IngredientsCard({ product, profile }: Props) {
       {badges.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {badges.map((b) => (
-            <span
-              key={b.tag}
-              className="rounded-full border border-edge bg-surface-2 px-3 py-1 text-xs text-ink-dim"
-            >
+            <span key={b.tag} className="chip rounded-full px-3 py-1 text-xs text-ink-dim">
               {b.emoji} {t.ingredients.badges[b.tag]}
             </span>
           ))}
@@ -150,10 +147,7 @@ export default function IngredientsCard({ product, profile }: Props) {
         {additives.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {additives.map((a) => (
-              <span
-                key={a}
-                className="rounded-md border border-edge bg-surface-2 px-2 py-0.5 font-mono text-xs text-ink-dim"
-              >
+              <span key={a} className="chip rounded-md px-2 py-0.5 font-mono text-xs text-ink-dim">
                 {a}
               </span>
             ))}

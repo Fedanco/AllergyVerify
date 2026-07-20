@@ -1,5 +1,6 @@
 import { labelForTag, matchAllergens } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
+import { TONE_GLOW, TONE_SURFACE, type Tone } from '../lib/allergyTone'
 import type { AllergyProfile } from '../types/product'
 import { AlertIcon, CheckIcon, InfoIcon } from './Icons'
 
@@ -81,11 +82,24 @@ function TracesPill({ traces }: { traces: string }) {
   )
 }
 
-const TONES = {
-  danger: 'border-danger/40 bg-danger/10 text-danger',
-  warn: 'border-warn/40 bg-warn/10 text-warn',
-  safe: 'border-accent/40 bg-accent/10 text-accent',
-  neutral: 'border-edge bg-surface-2 text-ink-dim',
+// Colore del corpo testo a piena opacità, tinto verso --color-ink invece di
+// usare opacity sul colore di tono: l'opacità riduce la luminanza su uno
+// sfondo scuro (l'opposto di quel che serve per leggerlo bene); questi
+// valori restano riconoscibili come "quel tono" mantenendo il contrasto alto.
+const BODY_COLOR: Record<Tone, string> = {
+  danger: '#f97482',
+  warn: '#f8c482',
+  safe: '#66e7bd',
+  neutral: 'var(--color-ink-dim)',
+}
+
+// Chip tonale dietro l'icona: la distingue da un'icona nuda e la rende
+// leggibile come il primo elemento su cui l'occhio si posa nel banner.
+const ICON_CHIP: Record<Tone, string> = {
+  danger: 'bg-danger/15 text-danger',
+  warn: 'bg-warn/15 text-warn',
+  safe: 'bg-accent/15 text-accent',
+  neutral: 'bg-surface text-ink-dim',
 }
 
 function Pill({
@@ -94,17 +108,28 @@ function Pill({
   title,
   children,
 }: {
-  tone: keyof typeof TONES
+  tone: Tone
   Icon: (p: { className?: string }) => React.ReactNode
   title: string
   children: React.ReactNode
 }) {
+  const glow = TONE_GLOW[tone]
   return (
-    <div className={`flex items-start gap-3 rounded-2xl border px-4 py-3 ${TONES[tone]}`}>
-      <Icon className="mt-0.5 h-5 w-5 shrink-0" />
+    <div
+      className={`flex items-start gap-3 rounded-banner border px-5 py-4 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
+        tone === 'danger' ? 'animate-banner-in-danger' : 'animate-banner-in'
+      }`}
+    >
+      <span
+        className={`animate-icon-pop flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${ICON_CHIP[tone]}`}
+      >
+        <Icon className="h-5 w-5" />
+      </span>
       <div>
-        <p className="text-sm font-semibold">{title}</p>
-        <p className="text-xs opacity-80">{children}</p>
+        <p className="text-base font-bold">{title}</p>
+        <p className="mt-0.5 text-sm" style={{ color: BODY_COLOR[tone] }}>
+          {children}
+        </p>
       </div>
     </div>
   )
