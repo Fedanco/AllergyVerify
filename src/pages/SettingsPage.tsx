@@ -24,7 +24,7 @@ export default function SettingsPage() {
 
         <section className="card p-4">
           <h2 className="mb-2 text-sm font-semibold">{t.settings.languageTitle}</h2>
-          <div className="flex gap-2">
+          <div role="group" aria-label={t.settings.languageTitle} className="flex gap-2">
             {LANG_OPTIONS.map(({ value, label }) => (
               <button
                 key={value}

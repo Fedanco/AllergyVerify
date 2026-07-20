@@ -21,6 +21,7 @@ export default function TabBar() {
 
   return (
     <nav
+      aria-label={t.app.mainNavAria}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-edge bg-surface/90 backdrop-blur-md
         md:inset-x-auto md:inset-y-0 md:left-0 md:w-20 md:border-t-0 md:border-r md:bg-surface"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}

@@ -17,8 +17,14 @@ function load(): Lang {
   return 'it'
 }
 
+// document.documentElement.lang guida la pronuncia di uno screen reader:
+// senza aggiornarlo resterebbe fisso sul valore statico di index.html anche
+// passando all'inglese.
+document.documentElement.lang = lang
+
 function commit(next: Lang) {
   lang = next
+  document.documentElement.lang = next
   try {
     localStorage.setItem(LANG_KEY, next)
   } catch {

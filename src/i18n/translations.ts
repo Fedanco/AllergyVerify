@@ -10,6 +10,7 @@ export type Lang = 'it' | 'en'
 const it = {
   app: {
     loadingScanner: 'Caricamento scanner…',
+    mainNavAria: 'Navigazione principale',
   },
   tabs: {
     search: 'Cerca',
@@ -205,6 +206,7 @@ export type Translations = typeof it
 const en: Translations = {
   app: {
     loadingScanner: 'Loading scanner…',
+    mainNavAria: 'Main navigation',
   },
   tabs: {
     search: 'Search',
