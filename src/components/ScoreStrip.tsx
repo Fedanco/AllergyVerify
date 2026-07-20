@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ChevronDownIcon } from './Icons'
 import { useLang } from '../i18n/useLang'
 import type { Product } from '../types/product'
@@ -76,13 +76,10 @@ export default function ScoreStrip({ product }: { product: Product }) {
                 isOpen ? 'panel border-accent/40' : 'card'
               }`}
             >
-              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center">
-                <ScoreRing ratio={ratio} className={RING_CLASS[toneFor(ratio)]} />
-                <span
-                  className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border font-mono text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
-                >
-                  {s.value}
-                </span>
+              <span
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-mono text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
+              >
+                {s.value}
               </span>
               <span className="text-xs font-semibold">{s.name}</span>
               <span className="text-[0.65rem] leading-tight text-ink-dim">{s.hint}</span>
@@ -156,53 +153,6 @@ const BADGE_CLASS: Record<ScoreTone, string> = {
   caution: 'text-caution border-caution/40 bg-caution/10',
   warn: 'text-warn border-warn/40 bg-warn/10',
   danger: 'text-danger border-danger/40 bg-danger/10',
-}
-
-const RING_CLASS: Record<ScoreTone, string> = {
-  safe: 'text-accent',
-  caution: 'text-caution',
-  warn: 'text-warn',
-  danger: 'text-danger',
-}
-
-/**
- * Anello che si riempie da vuoto alla posizione del punteggio nella scala
- * al primo render (momento firma). Sta dietro il badge colorato come un
- * piccolo "gauge", non lo sostituisce: la lettera resta leggibile subito.
- */
-function ScoreRing({ ratio, className }: { ratio: number; className?: string }) {
-  const size = 40
-  const strokeWidth = 3
-  const r = (size - strokeWidth) / 2
-  const circumference = 2 * Math.PI * r
-  const fillRatio = ratio // ratio vicino a 1 = peggiore -> anello pieno (il rischio deve saltare all'occhio)
-  const [filled, setFilled] = useState(false)
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setFilled(true))
-    return () => cancelAnimationFrame(id)
-  }, [])
-
-  return (
-    <svg
-      viewBox={`0 0 ${size} ${size}`}
-      aria-hidden
-      className={`pointer-events-none absolute inset-0 h-full w-full -rotate-90 ${className ?? ''}`}
-    >
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeDasharray={circumference}
-        strokeDashoffset={circumference * (1 - (filled ? fillRatio : 0))}
-        style={{ transition: 'stroke-dashoffset var(--duration-slow) var(--ease-out-expo)' }}
-      />
-    </svg>
-  )
 }
 
 function gradeScore(
