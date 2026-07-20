@@ -32,6 +32,7 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setActive(p.id)}
+                  aria-pressed={isActive}
                   className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-lg text-left"
                 >
                   <span
@@ -133,7 +134,11 @@ function ProfileEditor({
         {profile ? t.profile.editorTitleEdit(profile.name) : t.profile.editorTitleNew}
       </h2>
 
+      <label htmlFor="profile-name" className="mb-1.5 block text-xs text-ink-dim">
+        {t.profile.nameLabel}
+      </label>
       <input
+        id="profile-name"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -141,8 +146,10 @@ function ProfileEditor({
         className="mb-4 w-full rounded-xl border border-edge bg-surface-2 px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
       />
 
-      <p className="mb-2 text-xs text-ink-dim">{t.profile.allergensLabel}</p>
-      <div className="mb-4 flex flex-wrap gap-2">
+      <p id="allergens-label" className="mb-2 text-xs text-ink-dim">
+        {t.profile.allergensLabel}
+      </p>
+      <div role="group" aria-labelledby="allergens-label" className="mb-4 flex flex-wrap gap-2">
         {ALLERGEN_CATALOG.map(({ tag, label, emoji }) => {
           const on = selected.has(tag)
           return (
