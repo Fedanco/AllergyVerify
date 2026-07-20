@@ -116,6 +116,8 @@ function Pill({
   const glow = TONE_GLOW[tone]
   return (
     <div
+      role="status"
+      aria-live="polite"
       className={`flex items-start gap-3 rounded-banner border px-5 py-4 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
         tone === 'danger' ? 'animate-banner-in-danger' : 'animate-banner-in'
       }`}

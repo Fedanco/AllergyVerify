@@ -121,6 +121,7 @@ export default function IngredientsCard({ product, profile }: Props) {
           {(clamped || expanded) && (
             <button
               type="button"
+              aria-expanded={expanded}
               onClick={() => setExpanded((e) => !e)}
               className="focus-ring mt-2 rounded text-xs font-medium text-accent"
             >

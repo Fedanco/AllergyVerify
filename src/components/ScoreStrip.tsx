@@ -71,6 +71,7 @@ export default function ScoreStrip({ product }: { product: Product }) {
               key={s.name}
               type="button"
               aria-expanded={isOpen}
+              aria-controls={`score-panel-${s.name}`}
               onClick={() => setOpen(isOpen ? null : s.name)}
               className={`focus-ring flex flex-col items-center gap-1.5 px-2 py-3 text-center transition-colors ${
                 isOpen ? 'panel border-accent/40' : 'card'
@@ -107,7 +108,7 @@ export default function ScoreStrip({ product }: { product: Product }) {
 
 function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
   return (
-    <section className="card animate-fade-up p-4">
+    <section id={`score-panel-${score.name}`} className="card animate-fade-up p-4">
       <h3 className="text-sm font-semibold">
         {score.name} <span className="font-normal text-ink-dim">— {score.hint}</span>
       </h3>
