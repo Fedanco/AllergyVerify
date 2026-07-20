@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser'
+import { Link } from 'react-router-dom'
 import { CheckIcon } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import { useLang } from '../i18n/useLang'
@@ -99,17 +100,28 @@ export default function ScanPage() {
         )}
 
         {state === 'starting' && (
-          <div className="absolute inset-0 flex items-center justify-center bg-surface">
+          <div
+            role="status"
+            aria-live="polite"
+            className="absolute inset-0 flex items-center justify-center bg-surface"
+          >
             <p className="text-sm text-ink-dim">{t.scan.starting}</p>
           </div>
         )}
 
         {(state === 'denied' || state === 'unavailable') && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface px-6 text-center">
-            <p className="text-3xl">📷</p>
+          <div
+            role="status"
+            aria-live="polite"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface px-6 text-center"
+          >
+            <p aria-hidden className="text-3xl">📷</p>
             <p className="text-sm text-ink-dim">
               {state === 'denied' ? t.scan.denied : t.scan.unavailable}
             </p>
+            <Link to="/" className="focus-ring rounded text-sm font-medium text-accent">
+              {t.scan.searchInstead}
+            </Link>
           </div>
         )}
       </div>

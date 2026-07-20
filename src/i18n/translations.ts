@@ -44,6 +44,7 @@ const it = {
     unavailable:
       'Fotocamera non disponibile su questo dispositivo. Usa la ricerca manuale.',
     hint: 'Il codice viene riconosciuto automaticamente: nessuno scatto necessario.',
+    searchInstead: 'Vai alla ricerca manuale',
   },
   history: {
     title: 'Storico',
@@ -236,6 +237,7 @@ const en: Translations = {
       'Camera access denied. Allow camera access in your browser settings and reload the page.',
     unavailable: 'Camera not available on this device. Use manual search instead.',
     hint: 'The barcode is recognized automatically: no need to take a picture.',
+    searchInstead: 'Go to manual search',
   },
   history: {
     title: 'History',
