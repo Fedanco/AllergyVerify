@@ -57,8 +57,9 @@
     banner-in var(--duration-slow) var(--ease-out-quint) both,
     glow-in-danger var(--duration-slow) var(--ease-out-quint) both;
   --animate-icon-pop: icon-pop var(--duration-base) var(--ease-out-quint) 70ms both;
-  /* Reveal in sequenza dei gradini della scala punteggio (ScorePanel):
-     l'unico stagger della Fase 1, perché qui rivela davvero un ordine. */
+  /* Reveal in sequenza: gradini della scala punteggio (ScorePanel) e voci
+     di una lista (risultati ricerca, storico) — sempre un ordine reale da
+     rivelare, mai un fade applicato per riflesso a ogni sezione. */
   --animate-step-in: step-in var(--duration-fast) var(--ease-out-quart) both;
 
   @keyframes scanline {

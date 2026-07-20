@@ -25,7 +25,7 @@ export default function ProfilePage() {
             return (
               <li
                 key={p.id}
-                className={`card flex items-center gap-3 p-4 transition-colors ${
+                className={`card flex items-center gap-3 p-4 transition-colors duration-[var(--duration-fast)] ${
                   isActive ? 'border-accent/50' : ''
                 }`}
               >
@@ -35,7 +35,7 @@ export default function ProfilePage() {
                   className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-lg text-left"
                 >
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color] duration-[var(--duration-fast)] ${
                       isActive ? 'border-accent bg-accent text-bg' : 'border-edge'
                     }`}
                   >
@@ -150,9 +150,9 @@ function ProfileEditor({
               key={tag}
               type="button"
               onClick={() => toggle(tag)}
-              className={`focus-ring rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`focus-ring rounded-full border px-3 py-1.5 text-xs font-medium transition-[background-color,border-color,color,transform] duration-[var(--duration-fast)] active:scale-95 ${
                 on
-                  ? 'border-accent bg-accent/15 text-accent'
+                  ? 'scale-[1.03] border-accent bg-accent/15 text-accent'
                   : 'border-edge bg-surface-2 text-ink-dim hover:text-ink'
               }`}
               aria-pressed={on}

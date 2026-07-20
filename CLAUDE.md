@@ -40,7 +40,7 @@ Versione web dell'app iOS AllergyScan: scansiona il barcode di un prodotto alime
 
 ## Stato del progetto (aggiornato al 2026-07-20)
 
-- **v0.4.0 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
+- **v0.5.0 live**: https://allergyscan-web.vercel.app (Vercel, piano gratuito)
 - Repo GitHub privata: https://github.com/Fedanco/AllergyScanWebApp
 - **Auto-deploy attivo**: ogni push su `main` fa il deploy automatico su Vercel.
 - PWA installabile (vite-plugin-pwa, icone avocado, offline per l'app shell).
