@@ -79,7 +79,7 @@ export default function ScoreStrip({ product }: { product: Product }) {
               <span className="relative flex h-10 w-10 shrink-0 items-center justify-center">
                 <ScoreRing ratio={ratio} className={RING_CLASS[toneFor(ratio)]} />
                 <span
-                  className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
+                  className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border font-mono text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
                 >
                   {s.value}
                 </span>
