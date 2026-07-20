@@ -55,13 +55,13 @@ export default function SearchPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.search.placeholder}
-            className="w-full rounded-2xl border border-edge bg-surface py-3 pl-11 pr-4 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
+            className="w-full rounded-2xl border border-edge bg-surface py-3 pl-11 pr-4 text-sm outline-none transition-colors duration-[var(--duration-fast)] placeholder:text-ink-dim/60 focus:border-accent"
           />
         </div>
         <button
           type="submit"
           disabled={loading || !query.trim()}
-          className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-opacity disabled:opacity-40"
+          className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-[opacity,box-shadow,transform] duration-[var(--duration-fast)] hover:shadow-md active:scale-[0.97] disabled:opacity-40"
         >
           {loading ? '…' : t.search.submit}
         </button>
@@ -74,9 +74,13 @@ export default function SearchPage() {
       )}
 
       {results && (
-        <ul className="flex animate-fade-up flex-col gap-2">
-          {results.map((p) => (
-            <li key={p.code}>
+        <ul className="flex flex-col gap-2">
+          {results.map((p, i) => (
+            <li
+              key={p.code}
+              style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
+              className="animate-step-in [animation-delay:calc(var(--i)*40ms)]"
+            >
               <ProductCard
                 code={p.code}
                 name={p.product_name ?? t.common.unnamedProduct}

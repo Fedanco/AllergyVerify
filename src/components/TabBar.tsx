@@ -35,16 +35,24 @@ export default function TabBar() {
           <li key={to} className="flex-1 md:flex-none">
             <NavLink
               to={to}
-              className={({ isActive }) =>
-                `focus-ring flex h-full flex-col items-center justify-center gap-1 text-[0.65rem] font-medium transition-colors md:h-16 ${
-                  isActive ? 'text-accent' : 'text-ink-dim hover:text-ink'
-                }`
-              }
+              className="focus-ring group flex h-full flex-col items-center justify-center gap-1 text-[0.65rem] font-medium md:h-16"
             >
               {({ isActive }) => (
                 <>
-                  <Icon className="h-6 w-6" filled={isActive} />
-                  <span>{label}</span>
+                  <span
+                    className={`flex h-8 w-8 items-center justify-center rounded-full transition-[background-color,color] duration-[var(--duration-fast)] ${
+                      isActive ? 'bg-accent/15 text-accent' : 'text-ink-dim group-hover:text-ink'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" filled={isActive} />
+                  </span>
+                  <span
+                    className={`transition-colors duration-[var(--duration-fast)] ${
+                      isActive ? 'text-accent' : 'text-ink-dim group-hover:text-ink'
+                    }`}
+                  >
+                    {label}
+                  </span>
                 </>
               )}
             </NavLink>

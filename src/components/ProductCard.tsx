@@ -30,7 +30,7 @@ export default function ProductCard({
   return (
     <Link
       to={`/product/${code}`}
-      className="card flex items-center gap-3 p-3 transition-colors hover:border-accent/40 active:scale-[0.99]"
+      className="card group flex items-center gap-3 p-3 transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)] hover:border-accent/40 hover:shadow-md active:scale-[0.99]"
     >
       <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-surface-2">
         {imageUrl ? (
@@ -50,7 +50,7 @@ export default function ProductCard({
           </p>
         )}
       </div>
-      <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-dim" />
+      <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-dim transition-transform duration-[var(--duration-fast)] group-hover:translate-x-0.5" />
     </Link>
   )
 }

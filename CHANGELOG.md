@@ -2,6 +2,17 @@
 
 Cronologia delle versioni di AllergyScan Web, dalla più recente alla più vecchia.
 
+## v0.5.0 — 2026-07-20
+
+- Redesign (Fase 2, skill Impeccable) — resto dell'app allineato alla Fase 1:
+  - `PageHeader`: nuovo slot `action` per azioni allineate a destra (usato in Storico al posto di un wrapper ad hoc); `text-balance` sul titolo.
+  - `TabBar`: evidenziazione dello stato attivo con una pillola di sfondo che dissolve tra le voci (mobile e sidebar desktop).
+  - `ProductCard`: micro-interazioni coerenti con il resto dell'app (ombra al hover, freccia che scorre leggermente).
+  - Ricerca e Storico: reveal in sequenza dei risultati/voci (stagger), non più un fade uniforme su tutta la lista.
+  - Scan: nuovo stato "rilevato" con pausa breve, scala e glow "sicuro" (lo stesso del banner allergeni) prima di aprire il prodotto, invece di un salto istantaneo.
+  - Profilo: toggle allergeni con un piccolo "pop" di scala alla selezione.
+  - Impostazioni: sezione avviso medico con trattamento tonale ambra invece di una card grigia uguale alle altre; versione aggiornata a v0.5.0.
+
 ## v0.4.0 — 2026-07-20
 
 - Redesign (Fase 1, skill Impeccable) — fondamenta + pagina Dettaglio Prodotto:

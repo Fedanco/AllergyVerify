@@ -12,20 +12,23 @@ export default function HistoryPage() {
 
   return (
     <div>
-      <div className="flex items-start justify-between">
-        <PageHeader title={t.history.title} subtitle={t.history.subtitle(history.length)} />
-        {history.length > 0 && (
-          <button
-            type="button"
-            onClick={() => {
-              if (confirm(t.history.confirmClear)) clearHistory()
-            }}
-            className="focus-ring flex items-center gap-1.5 rounded-xl border border-edge px-3 py-2 text-xs text-ink-dim transition-colors hover:border-danger/40 hover:text-danger"
-          >
-            <TrashIcon className="h-4 w-4" /> {t.history.clear}
-          </button>
-        )}
-      </div>
+      <PageHeader
+        title={t.history.title}
+        subtitle={t.history.subtitle(history.length)}
+        action={
+          history.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm(t.history.confirmClear)) clearHistory()
+              }}
+              className="focus-ring flex items-center gap-1.5 rounded-xl border border-edge px-3 py-2 text-xs text-ink-dim transition-colors duration-[var(--duration-fast)] hover:border-danger/40 hover:text-danger"
+            >
+              <TrashIcon className="h-4 w-4" /> {t.history.clear}
+            </button>
+          )
+        }
+      />
 
       {history.length === 0 ? (
         <div className="card px-5 py-8 text-center">
@@ -33,9 +36,13 @@ export default function HistoryPage() {
           <p className="mt-2 text-sm text-ink-dim">{t.history.empty}</p>
         </div>
       ) : (
-        <ul className="flex animate-fade-up flex-col gap-2">
-          {history.map((e) => (
-            <li key={e.code}>
+        <ul className="flex flex-col gap-2">
+          {history.map((e, i) => (
+            <li
+              key={e.code}
+              style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
+              className="animate-step-in [animation-delay:calc(var(--i)*40ms)]"
+            >
               <ProductCard
                 code={e.code}
                 name={e.name}

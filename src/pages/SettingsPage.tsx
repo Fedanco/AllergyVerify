@@ -1,3 +1,4 @@
+import { AlertIcon } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import { useLang } from '../i18n/useLang'
 import type { Lang } from '../i18n/translations'
@@ -74,13 +75,17 @@ export default function SettingsPage() {
           </p>
         </section>
 
-        <section className="card p-4">
-          <h2 className="mb-1 text-sm font-semibold">{t.settings.warningTitle}</h2>
+        {/* Trattamento tonale (non decorativo): è un vero avviso medico,
+            merita di distinguersi dalle altre sezioni informative sopra. */}
+        <section className="card border-warn/30 bg-warn/5 p-4">
+          <h2 className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-warn">
+            <AlertIcon className="h-4 w-4" /> {t.settings.warningTitle}
+          </h2>
           <p className="text-sm text-ink-dim">{t.settings.warningBody}</p>
         </section>
 
         <p className="mt-2 text-center text-xs text-ink-dim/60">
-          AllergyScan Web · v0.3.1
+          AllergyScan Web · v0.5.0
         </p>
       </div>
     </div>
