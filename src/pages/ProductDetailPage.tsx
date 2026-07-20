@@ -88,7 +88,7 @@ export default function ProductDetailPage() {
 
       {errorKind && (
         <div className="card px-5 py-6 text-center">
-          <p className="text-3xl">🤷</p>
+          <p aria-hidden className="text-3xl">🤷</p>
           <p className="mt-2 text-sm text-ink-dim">{t.productDetail.errors[errorKind]}</p>
           <p className="mt-1 font-mono text-xs text-ink-dim/60">{code}</p>
         </div>
@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-3xl">🍎</div>
+                <div aria-hidden className="flex h-full w-full items-center justify-center text-3xl">🍎</div>
               )}
             </div>
             <div className="min-w-0">
