@@ -1,18 +1,18 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProductByBarcode, searchProducts } from '../api/openFoodFacts'
 import PageHeader from '../components/PageHeader'
 import ProductCard from '../components/ProductCard'
 import { SearchIcon } from '../components/Icons'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
+import { useSearchState } from '../hooks/useSearchState'
 import { useLang } from '../i18n/useLang'
-import { LookupError, type Product } from '../types/product'
+import { LookupError } from '../types/product'
 
 export default function SearchPage() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState<Product[] | null>(null)
+  const { query, results, error, setQuery, setResults, setError } = useSearchState()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const requestIdRef = useRef(0)
   const { activeProfile } = useAllergyProfile()
   const { t } = useLang()
   const navigate = useNavigate()
@@ -21,6 +21,7 @@ export default function SearchPage() {
     e.preventDefault()
     const q = query.trim()
     if (!q || loading) return
+    const myRequestId = ++requestIdRef.current
     setLoading(true)
     setError(null)
     setResults(null)
@@ -28,17 +29,20 @@ export default function SearchPage() {
       if (/^\d{6,14}$/.test(q)) {
         // barcode esatto: vai dritto al dettaglio
         await getProductByBarcode(q)
+        if (myRequestId !== requestIdRef.current) return
         navigate(`/product/${q}`)
       } else {
         const products = await searchProducts(q)
+        if (myRequestId !== requestIdRef.current) return
         if (products.length === 0) setError(t.search.errors['not-found'])
         else setResults(products)
       }
     } catch (err) {
+      if (myRequestId !== requestIdRef.current) return
       const kind = err instanceof LookupError ? err.kind : 'error'
       setError(t.search.errors[kind])
     } finally {
-      setLoading(false)
+      if (myRequestId === requestIdRef.current) setLoading(false)
     }
   }
 
