@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProductByBarcode, searchProducts } from '../api/openFoodFacts'
+import InstallBanner from '../components/InstallBanner'
 import PageHeader from '../components/PageHeader'
 import ProductCard from '../components/ProductCard'
 import { SearchIcon } from '../components/Icons'
@@ -49,6 +50,8 @@ export default function SearchPage() {
   return (
     <div>
       <PageHeader title={t.search.title} subtitle={t.search.subtitle} />
+
+      <InstallBanner />
 
       <form onSubmit={handleSubmit} className="mb-6 flex gap-2">
         <div className="relative flex-1">

@@ -1,5 +1,9 @@
+import { useState } from 'react'
 import { AlertIcon } from '../components/Icons'
+import InstallGuideModal from '../components/InstallGuideModal'
+import InstallNativeModal from '../components/InstallNativeModal'
 import PageHeader from '../components/PageHeader'
+import { useInstallPrompt } from '../hooks/useInstallPrompt'
 import { useLang } from '../i18n/useLang'
 import type { Lang } from '../i18n/translations'
 
@@ -10,6 +14,9 @@ const LANG_OPTIONS: { value: Lang; label: string }[] = [
 
 export default function SettingsPage() {
   const { lang, setLang, t } = useLang()
+  const { standalone, isIOS, canInstallNative, promptInstall } = useInstallPrompt()
+  const [guideOpen, setGuideOpen] = useState(false)
+  const [nativeIntroOpen, setNativeIntroOpen] = useState(false)
 
   return (
     <div>
@@ -64,16 +71,33 @@ export default function SettingsPage() {
           </p>
         </section>
 
-        <section className="card p-4">
-          <h2 className="mb-1 text-sm font-semibold">{t.settings.installTitle}</h2>
-          <p className="text-sm text-ink-dim">
-            {t.settings.installBody1}
-            <span className="text-ink">{t.settings.installIos}</span>
-            {t.settings.installBody2}
-            <span className="text-ink">{t.settings.installAndroid}</span>
-            {t.settings.installBody3}
-          </p>
-        </section>
+        {!standalone && (
+          <section className="card p-4">
+            <h2 className="mb-1 text-sm font-semibold">{t.settings.installTitle}</h2>
+            {canInstallNative || isIOS ? (
+              <>
+                <p className="text-sm text-ink-dim">{t.settings.installBody}</p>
+                <button
+                  type="button"
+                  onClick={
+                    canInstallNative ? () => setNativeIntroOpen(true) : () => setGuideOpen(true)
+                  }
+                  className="focus-ring mt-3 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-bg transition-transform duration-[var(--duration-fast)] active:scale-[0.97]"
+                >
+                  {canInstallNative ? t.settings.installCta : t.settings.installCtaGuide}
+                </button>
+              </>
+            ) : (
+              <p className="text-sm text-ink-dim">
+                {t.settings.installBody1}
+                <span className="text-ink">{t.settings.installIos}</span>
+                {t.settings.installBody2}
+                <span className="text-ink">{t.settings.installAndroid}</span>
+                {t.settings.installBody3}
+              </p>
+            )}
+          </section>
+        )}
 
         {/* Trattamento tonale (non decorativo): è un vero avviso medico,
             merita di distinguersi dalle altre sezioni informative sopra. */}
@@ -88,6 +112,16 @@ export default function SettingsPage() {
           AllergyScan Web · v0.5.1
         </p>
       </div>
+
+      <InstallGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
+      <InstallNativeModal
+        open={nativeIntroOpen}
+        onClose={() => setNativeIntroOpen(false)}
+        onContinue={() => {
+          setNativeIntroOpen(false)
+          promptInstall()
+        }}
+      />
     </div>
   )
 }
