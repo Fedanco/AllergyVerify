@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .vercel
 .env*
+
+# File di progettazione/contesto personali: restano solo locali
+CLAUDE.md
+docs/PROJECT_PLAN.md

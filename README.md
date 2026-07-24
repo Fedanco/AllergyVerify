@@ -49,5 +49,3 @@ Stack: Vite · React · TypeScript · Tailwind CSS 4 · react-router · @zxing/b
 Il sito è pubblicato su **Vercel**: https://allergyscan-web.vercel.app
 
 Deploy manuale dalla cartella del progetto: `npx vercel --prod`. Con la Git integration di Vercel attiva, ogni push su `main` viene pubblicato automaticamente (dopo che la CI su GitHub Actions ha verificato lint e build).
-
-Le decisioni di progetto sono documentate in [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md).
