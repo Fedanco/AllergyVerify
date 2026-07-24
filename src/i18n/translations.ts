@@ -86,6 +86,9 @@ const it = {
     dataBody2:
       ', il database alimentare libero e collaborativo. Profili e storico restano solo su questo dispositivo (localStorage): nessun account, nessun server.',
     installTitle: "Installa l'app",
+    installBody: "Aggiungi AllergyScan alla schermata Home per usarla come un'app vera, anche offline.",
+    installCta: 'Installa',
+    installCtaGuide: 'Come si fa',
     installBody1:
       'AllergyScan si può aggiungere alla schermata Home come una vera app: su iPhone tocca ',
     installIos: 'Condividi → Aggiungi alla schermata Home',
@@ -96,6 +99,20 @@ const it = {
     warningTitle: 'Attenzione',
     warningBody:
       "Le informazioni potrebbero essere incomplete o non aggiornate: in caso di allergie gravi, verifica sempre l'etichetta del prodotto.",
+  },
+  installBanner: {
+    title: 'Installa AllergyScan',
+    body: 'Aggiungila alla schermata Home: si apre a schermo intero, funziona anche offline.',
+    cta: 'Installa',
+    ctaGuide: 'Come si fa',
+    continueCta: 'Continua',
+    dismissAria: 'Chiudi il banner di installazione',
+  },
+  installGuide: {
+    title: 'Aggiungi alla schermata Home',
+    step1: 'Tocca Condividi',
+    step2: 'Tocca "Aggiungi alla schermata Home"',
+    gotIt: 'Ho capito',
   },
   productDetail: {
     back: 'Indietro',
@@ -281,6 +298,9 @@ const en: Translations = {
     dataBody2:
       ', the free collaborative food database. Profiles and history stay on this device only (localStorage): no account, no server.',
     installTitle: 'Install the app',
+    installBody: 'Add AllergyScan to your Home Screen to use it like a real app, offline too.',
+    installCta: 'Install',
+    installCtaGuide: 'How to do it',
     installBody1:
       'AllergyScan can be added to your Home screen like a real app: on iPhone tap ',
     installIos: 'Share → Add to Home Screen',
@@ -290,6 +310,20 @@ const en: Translations = {
     warningTitle: 'Warning',
     warningBody:
       'Information may be incomplete or out of date: if you have severe allergies, always check the product label.',
+  },
+  installBanner: {
+    title: 'Install AllergyScan',
+    body: 'Add it to your Home Screen: it opens full-screen and works offline too.',
+    cta: 'Install',
+    ctaGuide: 'How to do it',
+    continueCta: 'Continue',
+    dismissAria: 'Close the install banner',
+  },
+  installGuide: {
+    title: 'Add to Home Screen',
+    step1: 'Tap Share',
+    step2: 'Tap "Add to Home Screen"',
+    gotIt: 'Got it',
   },
   productDetail: {
     back: 'Back',
