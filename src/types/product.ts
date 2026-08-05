@@ -53,6 +53,10 @@ export interface HistoryEntry {
   brands: string
   imageUrl: string
   allergensTags: string[]
+  /** tag "può contenere" (tracce) al momento dello scan, per il fallback testuale del verdetto in lista */
+  tracesTags?: string[]
+  /** testo ingredienti grezzo (IT/EN/originale concatenati) al momento dello scan */
+  ingredientsText?: string
   scannedAt: number
   source: 'scan' | 'search'
 }

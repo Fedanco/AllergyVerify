@@ -1,6 +1,7 @@
 import PageHeader from '../components/PageHeader'
 import ProductCard from '../components/ProductCard'
 import { TrashIcon } from '../components/Icons'
+import { checkAllergensFromHistoryEntry } from '../data/allergenCatalog'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useScanHistory } from '../hooks/useScanHistory'
 import { useLang } from '../i18n/useLang'
@@ -48,8 +49,11 @@ export default function HistoryPage() {
                 name={e.name}
                 brands={e.brands}
                 imageUrl={e.imageUrl}
-                allergensTags={e.allergensTags}
-                profile={activeProfile}
+                detected={
+                  activeProfile
+                    ? checkAllergensFromHistoryEntry(e, activeProfile.allergens).detected
+                    : []
+                }
                 subtitle={`${e.source === 'scan' ? t.history.sourceScan : t.history.sourceSearch} · ${formatDate(e.scannedAt, t.history.dateLocale)}`}
               />
             </li>

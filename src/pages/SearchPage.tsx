@@ -5,6 +5,7 @@ import InstallBanner from '../components/InstallBanner'
 import PageHeader from '../components/PageHeader'
 import ProductCard from '../components/ProductCard'
 import { SearchIcon } from '../components/Icons'
+import { checkAllergens } from '../data/allergenCatalog'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useSearchState } from '../hooks/useSearchState'
 import { useLang } from '../i18n/useLang'
@@ -104,8 +105,7 @@ export default function SearchPage() {
                 name={p.product_name ?? t.common.unnamedProduct}
                 brands={p.brands}
                 imageUrl={p.image_front_url}
-                allergensTags={p.allergens_tags}
-                profile={activeProfile}
+                detected={activeProfile ? checkAllergens(p, activeProfile.allergens).detected : []}
               />
             </li>
           ))}

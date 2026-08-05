@@ -1,5 +1,5 @@
 import type { Lang } from '../i18n/translations'
-import type { Product } from '../types/product'
+import type { HistoryEntry, Product } from '../types/product'
 
 /**
  * I 14 allergeni regolamentati UE (Reg. 1169/2011), mappati sui tag
@@ -128,6 +128,22 @@ export interface AllergenCheckResult {
   hasData: boolean
 }
 
+function computeAllergenCheck(
+  allergensTags: string[] | undefined,
+  tracesTags: string[] | undefined,
+  ingredientsText: string | undefined,
+  profileAllergens: string[],
+): AllergenCheckResult {
+  const fromTags = matchAllergens(allergensTags, profileAllergens)
+  const fromText = matchAllergensInText(ingredientsText, profileAllergens)
+  const detected = Array.from(new Set([...fromTags, ...fromText]))
+  const traces = matchAllergens(tracesTags, profileAllergens).filter(
+    (tag) => !detected.includes(tag),
+  )
+  const hasData = (allergensTags?.length ?? 0) > 0 || !!ingredientsText
+  return { detected, traces, hasData }
+}
+
 /**
  * Verdetto allergeni completo per un prodotto: combina i tag OFF
  * (`allergens_tags`/`traces_tags`) con un fallback testuale sugli
@@ -138,13 +154,29 @@ export function checkAllergens(
   product: Product,
   profileAllergens: string[],
 ): AllergenCheckResult {
-  const ingredientsText = getIngredientsRawText(product)
-  const fromTags = matchAllergens(product.allergens_tags, profileAllergens)
-  const fromText = matchAllergensInText(ingredientsText, profileAllergens)
-  const detected = Array.from(new Set([...fromTags, ...fromText]))
-  const traces = matchAllergens(product.traces_tags, profileAllergens).filter(
-    (tag) => !detected.includes(tag),
+  return computeAllergenCheck(
+    product.allergens_tags,
+    product.traces_tags,
+    getIngredientsRawText(product),
+    profileAllergens,
   )
-  const hasData = (product.allergens_tags?.length ?? 0) > 0 || !!ingredientsText
-  return { detected, traces, hasData }
+}
+
+/**
+ * Stessa logica di `checkAllergens`, ma per una voce di storico
+ * (dataset ridotto salvato in `as_history`, vedi `useScanHistory`) invece
+ * del `Product` completo. Le entry salvate prima dell'introduzione dei
+ * campi `tracesTags`/`ingredientsText` li avranno `undefined`: si degrada
+ * correttamente al solo confronto sui tag, senza errori.
+ */
+export function checkAllergensFromHistoryEntry(
+  entry: HistoryEntry,
+  profileAllergens: string[],
+): AllergenCheckResult {
+  return computeAllergenCheck(
+    entry.allergensTags,
+    entry.tracesTags,
+    entry.ingredientsText,
+    profileAllergens,
+  )
 }

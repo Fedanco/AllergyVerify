@@ -1,4 +1,5 @@
 import { useCallback, useSyncExternalStore } from 'react'
+import { getIngredientsRawText } from '../data/allergenCatalog'
 import type { HistoryEntry, Product } from '../types/product'
 
 const HISTORY_KEY = 'as_history'
@@ -36,6 +37,8 @@ export function useScanHistory() {
       brands: product.brands ?? '',
       imageUrl: product.image_front_url ?? '',
       allergensTags: product.allergens_tags ?? [],
+      tracesTags: product.traces_tags ?? [],
+      ingredientsText: getIngredientsRawText(product),
       scannedAt: Date.now(),
       source,
     }
