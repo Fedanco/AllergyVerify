@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
-import { labelForTag, matchAllergens } from '../data/allergenCatalog'
+import { labelForTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
-import type { AllergyProfile } from '../types/product'
 import { AlertIcon, ChevronRightIcon } from './Icons'
 
 interface Props {
@@ -9,8 +8,8 @@ interface Props {
   name: string
   brands?: string
   imageUrl?: string
-  allergensTags?: string[]
-  profile: AllergyProfile | null
+  /** allergeni del profilo attivo già rilevati (tag OFF + fallback testuale), calcolati dal chiamante */
+  detected: string[]
   subtitle?: string
 }
 
@@ -20,12 +19,10 @@ export default function ProductCard({
   name,
   brands,
   imageUrl,
-  allergensTags,
-  profile,
+  detected,
   subtitle,
 }: Props) {
   const { lang } = useLang()
-  const detected = profile ? matchAllergens(allergensTags, profile.allergens) : []
 
   return (
     <Link
