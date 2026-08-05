@@ -130,11 +130,7 @@ export default function ProductDetailPage() {
 
           <ScoreStrip product={product} />
 
-          <AllergyBanner
-            allergensTags={product.allergens_tags}
-            tracesTags={product.traces_tags}
-            profile={activeProfile}
-          />
+          <AllergyBanner product={product} profile={activeProfile} />
 
           <ProfilesVerdict product={product} />
 

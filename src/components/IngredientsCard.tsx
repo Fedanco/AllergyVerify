@@ -1,26 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { translateIngredients } from '../api/translate'
-import { normalizeTag } from '../data/allergenCatalog'
+import { ALLERGEN_KEYWORDS, normalizeTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
 import type { AllergyProfile, Product } from '../types/product'
-
-// parole da evidenziare nel testo ingredienti per ciascun tag del catalogo
-const HIGHLIGHT_WORDS: Record<string, string[]> = {
-  gluten: ['glutine', 'grano', 'frumento', 'orzo', 'segale', 'avena', 'farro', 'kamut', 'gluten', 'wheat', 'barley', 'rye', 'oat'],
-  crustaceans: ['crostacei', 'gambero', 'gamberi', 'granchio', 'aragosta', 'scampi', 'crustaceans', 'shrimp', 'crab', 'lobster'],
-  eggs: ['uova', 'uovo', 'albume', 'tuorlo', 'egg', 'eggs'],
-  fish: ['pesce', 'acciughe', 'acciuga', 'tonno', 'salmone', 'merluzzo', 'fish', 'anchovy', 'tuna', 'salmon', 'cod'],
-  peanuts: ['arachidi', 'arachide', 'peanut', 'peanuts'],
-  soybeans: ['soia', 'soy', 'soja'],
-  milk: ['latte', 'lattosio', 'panna', 'burro', 'siero di latte', 'formaggio', 'caseina', 'milk', 'lactose', 'cream', 'butter', 'whey', 'cheese', 'casein'],
-  nuts: ['nocciole', 'nocciola', 'mandorle', 'mandorla', 'noci', 'noce', 'pistacchi', 'pistacchio', 'anacardi', 'anacardo', 'frutta a guscio', 'hazelnut', 'almond', 'walnut', 'pistachio', 'cashew', 'nuts'],
-  celery: ['sedano', 'celery'],
-  mustard: ['senape', 'mustard'],
-  'sesame-seeds': ['sesamo', 'sesame'],
-  'sulphur-dioxide-and-sulphites': ['solfiti', 'solfito', 'anidride solforosa', 'sulphites', 'sulfites', 'sulphur dioxide'],
-  lupin: ['lupini', 'lupino', 'lupin'],
-  molluscs: ['molluschi', 'mollusco', 'vongole', 'cozze', 'seppia', 'calamaro', 'polpo', 'molluscs', 'clam', 'mussel', 'squid', 'octopus'],
-}
 
 const ANALYSIS_BADGES = [
   { tag: 'vegan', emoji: '🌱' },
@@ -169,7 +151,7 @@ function highlightAllergens(
   if (!profile || profile.allergens.length === 0) return text
 
   const words = profile.allergens
-    .flatMap((tag) => HIGHLIGHT_WORDS[tag] ?? [])
+    .flatMap((tag) => ALLERGEN_KEYWORDS[tag] ?? [])
     .sort((a, b) => b.length - a.length) // match più lunghi per primi
   if (words.length === 0) return text
 
