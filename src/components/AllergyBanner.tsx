@@ -1,13 +1,11 @@
-import { labelForTag, matchAllergens } from '../data/allergenCatalog'
+import { checkAllergens, labelForTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
 import { TONE_GLOW, TONE_SURFACE, type Tone } from '../lib/allergyTone'
-import type { AllergyProfile } from '../types/product'
+import type { AllergyProfile, Product } from '../types/product'
 import { AlertIcon, CheckIcon, InfoIcon } from './Icons'
 
 interface Props {
-  allergensTags: string[] | undefined
-  /** tag "può contenere" (tracce) del prodotto */
-  tracesTags?: string[]
+  product: Product
   profile: AllergyProfile | null
 }
 
@@ -18,7 +16,7 @@ interface Props {
  * - verde neon: nessun allergene del profilo rilevato
  * - neutro: nessun profilo attivo o dati allergeni mancanti
  */
-export default function AllergyBanner({ allergensTags, tracesTags, profile }: Props) {
+export default function AllergyBanner({ product, profile }: Props) {
   const { lang, t } = useLang()
 
   if (!profile) {
@@ -29,7 +27,9 @@ export default function AllergyBanner({ allergensTags, tracesTags, profile }: Pr
     )
   }
 
-  if (!allergensTags) {
+  const { detected, traces, hasData } = checkAllergens(product, profile.allergens)
+
+  if (!hasData) {
     return (
       <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noDataTitle}>
         {t.allergyBanner.noDataBody}
@@ -37,10 +37,6 @@ export default function AllergyBanner({ allergensTags, tracesTags, profile }: Pr
     )
   }
 
-  const detected = matchAllergens(allergensTags, profile.allergens)
-  const traces = matchAllergens(tracesTags, profile.allergens).filter(
-    (tag) => !detected.includes(tag),
-  )
   const toLabels = (tags: string[]) =>
     tags.map((tag) => labelForTag(tag, lang)).join(', ')
 

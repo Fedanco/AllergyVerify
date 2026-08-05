@@ -179,8 +179,9 @@ const it = {
   allergyBanner: {
     noProfileTitle: 'Nessun profilo attivo',
     noProfileBody: 'Crea un profilo allergie per il verdetto personalizzato.',
-    noDataTitle: 'Dati allergeni non disponibili',
-    noDataBody: "Il prodotto non riporta l'elenco allergeni: verifica l'etichetta.",
+    noDataTitle: 'Dati insufficienti',
+    noDataBody:
+      "Il prodotto non riporta ingredienti né allergeni: non possiamo stabilirlo, controlla l'etichetta.",
     dangerTitle: (name: string) => `Attenzione, ${name}!`,
     contains: (list: string) => `Contiene: ${list}`,
     safeWithTracesTitle: 'Nessun tuo allergene tra gli ingredienti',
@@ -389,8 +390,9 @@ const en: Translations = {
   allergyBanner: {
     noProfileTitle: 'No active profile',
     noProfileBody: 'Create an allergy profile to get a personalized verdict.',
-    noDataTitle: 'Allergen data not available',
-    noDataBody: "The product doesn't list its allergens: check the label.",
+    noDataTitle: 'Insufficient data',
+    noDataBody:
+      "The product has no ingredients or allergen list: we can't tell, check the label.",
     dangerTitle: (name: string) => `Warning, ${name}!`,
     contains: (list: string) => `Contains: ${list}`,
     safeWithTracesTitle: 'None of your allergens in the ingredients',

@@ -1,4 +1,4 @@
-import { labelForTag, matchAllergens } from '../data/allergenCatalog'
+import { checkAllergens, labelForTag } from '../data/allergenCatalog'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useLang } from '../i18n/useLang'
 import type { Lang, Translations } from '../i18n/translations'
@@ -57,14 +57,13 @@ function verdictFor(
   const toLabels = (tags: string[]) =>
     tags.map((tag) => labelForTag(tag, lang)).join(', ')
 
-  if (!product.allergens_tags) {
+  const { detected, traces, hasData } = checkAllergens(product, allergens)
+  if (!hasData) {
     return { tone: 'neutral', text: t.profilesVerdict.noData }
   }
-  const detected = matchAllergens(product.allergens_tags, allergens)
   if (detected.length > 0) {
     return { tone: 'danger', text: t.profilesVerdict.contains(toLabels(detected)) }
   }
-  const traces = matchAllergens(product.traces_tags, allergens)
   if (traces.length > 0) {
     return { tone: 'warn', text: t.profilesVerdict.traces(toLabels(traces)) }
   }
