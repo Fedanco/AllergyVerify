@@ -28,7 +28,7 @@ export default function TabBar() {
     >
       <img
         src="./logo.png"
-        alt="AllergyScan"
+        alt="AllergyVerify"
         className="absolute top-5 left-1/2 hidden h-10 w-10 -translate-x-1/2 md:block"
       />
       <ul className="flex h-16 items-stretch justify-around md:h-full md:flex-col md:justify-center md:gap-2">

@@ -1,9 +1,9 @@
 ---
 name: verify
-description: Come buildare, lanciare e verificare AllergyScan Web end-to-end nel browser
+description: Come buildare, lanciare e verificare AllergyVerify Web end-to-end nel browser
 ---
 
-# Verifica AllergyScan Web
+# Verifica AllergyVerify Web
 
 SPA statica (Vite + React), nessun backend. Superficie: GUI browser.
 

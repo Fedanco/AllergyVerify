@@ -76,21 +76,21 @@ const it = {
   },
   settings: {
     title: 'Info',
-    subtitle: 'AllergyScan Web',
+    subtitle: 'AllergyVerify Web',
     languageTitle: 'Lingua',
     aboutTitle: "Che cos'è",
     aboutBody:
-      'Versione web di AllergyScan: scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al profilo attivo.',
+      'Versione web di AllergyVerify: scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al profilo attivo.',
     dataTitle: 'Dati',
     dataBody1: 'I dati dei prodotti provengono da ',
     dataBody2:
       ', il database alimentare libero e collaborativo. Profili e storico restano solo su questo dispositivo (localStorage): nessun account, nessun server.',
     installTitle: "Installa l'app",
-    installBody: "Aggiungi AllergyScan alla schermata Home per usarla come un'app vera, anche offline.",
+    installBody: "Aggiungi AllergyVerify alla schermata Home per usarla come un'app vera, anche offline.",
     installCta: 'Installa',
     installCtaGuide: 'Come si fa',
     installBody1:
-      'AllergyScan si può aggiungere alla schermata Home come una vera app: su iPhone tocca ',
+      'AllergyVerify si può aggiungere alla schermata Home come una vera app: su iPhone tocca ',
     installIos: 'Condividi → Aggiungi alla schermata Home',
     installBody2:
       '; su Android usa il banner di installazione o il menu del browser (',
@@ -101,7 +101,7 @@ const it = {
       "Le informazioni potrebbero essere incomplete o non aggiornate: in caso di allergie gravi, verifica sempre l'etichetta del prodotto.",
   },
   installBanner: {
-    title: 'Installa AllergyScan',
+    title: 'Installa AllergyVerify',
     body: 'Aggiungila alla schermata Home: si apre a schermo intero, funziona anche offline.',
     cta: 'Installa',
     ctaGuide: 'Come si fa',
@@ -289,21 +289,21 @@ const en: Translations = {
   },
   settings: {
     title: 'Info',
-    subtitle: 'AllergyScan Web',
+    subtitle: 'AllergyVerify Web',
     languageTitle: 'Language',
     aboutTitle: 'What it is',
     aboutBody:
-      'Web version of AllergyScan: scan or search a food product and instantly find out whether it contains your allergens, based on the active profile.',
+      'Web version of AllergyVerify: scan or search a food product and instantly find out whether it contains your allergens, based on the active profile.',
     dataTitle: 'Data',
     dataBody1: 'Product data comes from ',
     dataBody2:
       ', the free collaborative food database. Profiles and history stay on this device only (localStorage): no account, no server.',
     installTitle: 'Install the app',
-    installBody: 'Add AllergyScan to your Home Screen to use it like a real app, offline too.',
+    installBody: 'Add AllergyVerify to your Home Screen to use it like a real app, offline too.',
     installCta: 'Install',
     installCtaGuide: 'How to do it',
     installBody1:
-      'AllergyScan can be added to your Home screen like a real app: on iPhone tap ',
+      'AllergyVerify can be added to your Home screen like a real app: on iPhone tap ',
     installIos: 'Share → Add to Home Screen',
     installBody2: '; on Android use the install banner or the browser menu (',
     installAndroid: 'Install app',
@@ -313,7 +313,7 @@ const en: Translations = {
       'Information may be incomplete or out of date: if you have severe allergies, always check the product label.',
   },
   installBanner: {
-    title: 'Install AllergyScan',
+    title: 'Install AllergyVerify',
     body: 'Add it to your Home Screen: it opens full-screen and works offline too.',
     cta: 'Install',
     ctaGuide: 'How to do it',

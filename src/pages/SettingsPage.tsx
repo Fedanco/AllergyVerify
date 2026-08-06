@@ -25,7 +25,7 @@ export default function SettingsPage() {
       <div className="flex flex-col gap-3">
         <img
           src="./logo.png"
-          alt="Logo AllergyScan"
+          alt="Logo AllergyVerify"
           className="mx-auto h-24 w-24"
         />
 
@@ -109,7 +109,7 @@ export default function SettingsPage() {
         </section>
 
         <p className="mt-2 text-center text-xs text-ink-dim/60">
-          AllergyScan Web · v0.5.1
+          AllergyVerify Web · v0.5.1
         </p>
       </div>
 
