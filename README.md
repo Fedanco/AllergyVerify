@@ -1,4 +1,4 @@
-# AllergyScan Web 🍎🚫
+# AllergyVerify Web 🍎🚫
 
 Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al tuo profilo personale. PWA installabile, mobile-first, utilizzabile anche da desktop.
 

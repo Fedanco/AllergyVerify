@@ -1,6 +1,10 @@
 # Changelog
 
-Cronologia delle versioni di AllergyScan Web, dalla più recente alla più vecchia.
+Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
+
+## v0.5.2 — 2026-08-06
+
+- Rebrand: nome dell'app da AllergyScan ad **AllergyVerify** — distacco dal vecchio progetto nativo iOS AllergyScan (condiviso con i colleghi, non più aggiornato). Aggiornati testi UI (IT/EN), manifest PWA, `package.json`, meta tag e documentazione. Logo/icona (ancora l'avocado) e repo/dominio pubblico rimandati a un secondo momento: il rebrand visivo richiede un redesign a parte, il rename di repo/dominio richiede conferma esplicita essendo azioni difficili da annullare (URL pubblici già condivisi).
 
 ## v0.5.1 — 2026-07-20
 

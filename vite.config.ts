@@ -12,8 +12,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'AllergyScan',
-        short_name: 'AllergyScan',
+        name: 'AllergyVerify',
+        short_name: 'AllergyVerify',
         description:
           'Scansiona i prodotti alimentari e scopri subito se contengono i tuoi allergeni.',
         lang: 'it',
