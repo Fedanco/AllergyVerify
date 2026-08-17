@@ -126,7 +126,11 @@ function ProfileEditor({
     <form
       onSubmit={(e) => {
         e.preventDefault()
-        if (name.trim()) onSave(name, [...selected])
+        // Il nome non è obbligatorio: chi ha un solo profilo non ha motivo di
+        // inventargli un'etichetta. Se manca ne mettiamo uno sensato, invece
+        // di bloccare il salvataggio con un bottone spento che non spiega sé
+        // stesso (era la causa del "il tasto salva non funziona").
+        onSave(name.trim() || t.profile.defaultName, [...selected])
       }}
       className="card animate-fade-up p-4"
     >
@@ -143,7 +147,7 @@ function ProfileEditor({
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder={t.profile.namePlaceholder}
-        className="mb-4 w-full rounded-xl border border-edge bg-surface-2 px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
+        className="inset-surface mb-4 w-full rounded-xl px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
       />
 
       <p id="allergens-label" className="mb-2 text-xs text-ink-dim">
@@ -173,8 +177,7 @@ function ProfileEditor({
       <div className="flex gap-2">
         <button
           type="submit"
-          disabled={!name.trim()}
-          className="focus-ring flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-colors duration-[var(--duration-fast)] disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-ink-dim"
+          className="focus-ring flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-colors duration-[var(--duration-fast)]"
         >
           {t.profile.save}
         </button>
@@ -188,12 +191,6 @@ function ProfileEditor({
           </button>
         )}
       </div>
-
-      {/* Il salva resta inattivo finché non c'è un nome: senza questa riga
-          l'unico segnale è il bottone spento, e chi tocca non capisce perché. */}
-      {!name.trim() && (
-        <p className="mt-2 text-xs text-ink-dim">{t.profile.saveHint}</p>
-      )}
     </form>
   )
 }

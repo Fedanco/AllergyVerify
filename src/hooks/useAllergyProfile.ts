@@ -6,6 +6,24 @@ const ACTIVE_KEY = 'as_active_profile'
 
 type State = { profiles: AllergyProfile[]; activeId: string | null }
 
+/**
+ * Id di un profilo.
+ *
+ * `crypto.randomUUID()` esiste solo in secure context (HTTPS o localhost):
+ * aprendo l'app da un IP di rete in HTTP — il modo normale di provarla dal
+ * telefono durante lo sviluppo — non è definita, e il salvataggio del
+ * profilo moriva con "crypto.randomUUID is not a function".
+ *
+ * L'id serve solo a distinguere i profili dentro questo dispositivo, non a
+ * essere globalmente unico: tempo + casuale è più che sufficiente.
+ */
+function newProfileId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  return `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+}
+
 let state: State = load()
 const listeners = new Set<() => void>()
 
@@ -42,7 +60,7 @@ export function useAllergyProfile() {
 
   const createProfile = useCallback((name: string, allergens: string[]) => {
     const profile: AllergyProfile = {
-      id: crypto.randomUUID(),
+      id: newProfileId(),
       name: name.trim() || 'Profilo',
       allergens,
     }
