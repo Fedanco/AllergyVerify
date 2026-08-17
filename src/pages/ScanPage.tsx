@@ -90,7 +90,7 @@ export default function ScanPage() {
                 <div className="absolute inset-x-3 h-0.5 animate-scanline bg-accent shadow-[0_0_12px_var(--color-accent)]" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="animate-icon-pop flex h-14 w-14 items-center justify-center rounded-full bg-accent/15 text-accent shadow-glow-safe">
+                  <span className="animate-icon-pop flex h-14 w-14 items-center justify-center rounded-full bg-safe/15 text-safe shadow-glow-safe">
                     <CheckIcon className="h-8 w-8" />
                   </span>
                 </div>

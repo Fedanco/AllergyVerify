@@ -20,7 +20,7 @@ export const TONE_ICON: Record<Tone, IconComponent> = {
 export const TONE_TEXT: Record<Tone, string> = {
   danger: 'text-danger',
   warn: 'text-warn',
-  safe: 'text-accent',
+  safe: 'text-safe',
   neutral: 'text-ink-dim',
 }
 
@@ -28,7 +28,7 @@ export const TONE_TEXT: Record<Tone, string> = {
 export const TONE_SURFACE: Record<Tone, string> = {
   danger: 'border-danger/40 bg-danger/10 text-danger',
   warn: 'border-warn/40 bg-warn/10 text-warn',
-  safe: 'border-accent/40 bg-accent/10 text-accent',
+  safe: 'border-safe/40 bg-safe/10 text-safe',
   neutral: 'border-edge bg-surface-2 text-ink-dim',
 }
 

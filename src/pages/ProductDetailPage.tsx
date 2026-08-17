@@ -38,7 +38,7 @@ const NUTRIMENT_ROWS: {
 ]
 
 const LEVEL_DOTS: Record<'low' | 'moderate' | 'high', string> = {
-  low: 'bg-accent',
+  low: 'bg-safe',
   moderate: 'bg-warn',
   high: 'bg-danger',
 }
