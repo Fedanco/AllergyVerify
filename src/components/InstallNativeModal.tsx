@@ -1,5 +1,5 @@
 import { useLang } from '../i18n/useLang'
-import BrandMark from './BrandMark'
+import LogoTile from './LogoTile'
 import Modal from './Modal'
 
 interface Props {
@@ -14,7 +14,7 @@ export default function InstallNativeModal({ open, onClose, onContinue }: Props)
   return (
     <Modal open={open} onClose={onClose} titleId="install-native-title">
       <div className="flex flex-col items-center text-center">
-        <BrandMark className="animate-icon-pop h-16 w-16 text-ink" />
+        <LogoTile className="animate-icon-pop h-16 w-16" />
         <h2 id="install-native-title" className="mt-3 text-base font-bold text-ink">
           {t.installBanner.title}
         </h2>
