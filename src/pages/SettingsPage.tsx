@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AlertIcon } from '../components/Icons'
+import BrandMark from '../components/BrandMark'
 import InstallGuideModal from '../components/InstallGuideModal'
 import InstallNativeModal from '../components/InstallNativeModal'
 import PageHeader from '../components/PageHeader'
@@ -23,11 +24,7 @@ export default function SettingsPage() {
       <PageHeader title={t.settings.title} subtitle={t.settings.subtitle} />
 
       <div className="flex flex-col gap-3">
-        <img
-          src="./logo.png"
-          alt="Logo AllergyVerify"
-          className="mx-auto h-24 w-24"
-        />
+        <BrandMark className="mx-auto h-24 w-24 text-ink" />
 
         <section className="card p-4">
           <h2 className="mb-2 text-sm font-semibold">{t.settings.languageTitle}</h2>
