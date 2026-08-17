@@ -72,6 +72,7 @@ const it = {
     namePlaceholder: 'Nome (es. Valentina)',
     allergensLabel: 'I tuoi allergeni (14 allergeni UE):',
     save: 'Salva profilo',
+    saveHint: 'Dai un nome al profilo per poterlo salvare.',
     cancel: 'Annulla',
   },
   settings: {
@@ -285,6 +286,7 @@ const en: Translations = {
     namePlaceholder: 'Name (e.g. Valentina)',
     allergensLabel: 'Your allergens (14 EU allergens):',
     save: 'Save profile',
+    saveHint: 'Name the profile to be able to save it.',
     cancel: 'Cancel',
   },
   settings: {

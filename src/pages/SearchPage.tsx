@@ -77,7 +77,7 @@ export default function SearchPage() {
           type="submit"
           disabled={loading || !query.trim()}
           aria-busy={loading}
-          className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-[opacity,box-shadow,transform] duration-[var(--duration-fast)] hover:shadow-md active:scale-[0.97] disabled:opacity-40"
+          className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-[background-color,color,box-shadow,transform] duration-[var(--duration-fast)] hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-ink-dim disabled:shadow-none"
         >
           {loading ? '…' : t.search.submit}
         </button>

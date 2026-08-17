@@ -1,20 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette dark-tech */
-  --color-bg: #0a0b0d;
-  --color-surface: #14161a;
-  --color-surface-2: #1c1f25;
-  --color-edge: #262a31;
-  --color-ink: #e8eaed;
-  --color-ink-dim: #9aa0a9;
-  --color-accent: #2ee6a8;
-  --color-accent-dim: #1a9c72;
-  --color-danger: #ff4d5e;
-  --color-warn: #ffb454;
-  /* Tappabuchi per il livello "intermedio" nelle scale a 4+ gradini
-     (es. ScoreStrip): prima era un lime-400 non tokenizzato. */
+  /* Palette "Inchiostro": blu notte profondo. La direzione di design è la
+     materia (superfici in rilievo, luce direzionale) — non la temperatura:
+     il fondo resta freddo e fa da contrasto al grano dorato del logo, e
+     soprattutto fa risaltare il rosso del verdetto più di un fondo caldo. */
+  --color-bg: #0b1017;
+  --color-surface: #141b24;
+  --color-surface-2: #1d2733;
+  /* Terzo livello: superfici sollevate/attive (dock, chip premuto). Serve
+     perché con la materia in rilievo due soli livelli non bastano a
+     distinguere "a riposo" da "sollevato" da "aperto". */
+  --color-surface-3: #263241;
+  --color-edge: #2e3b4b;
+  --color-ink: #e8eef6;
+  --color-ink-dim: #94a3b8;
+
+  /* Colore di MARCA, non semantico: grano del logo. Usato solo per
+     interazione e stato (CTA, tab attiva, focus, selezione). */
+  --color-accent: #f2c14e;
+
+  /* Toni SEMANTICI, tenuti separati dalla marca. Prima `accent` faceva
+     entrambi i mestieri: era il colore dei bottoni E il verde di "sicuro
+     per te". Col grano come colore di marca un verdetto positivo sarebbe
+     diventato giallo — su un'app di allergeni è inaccettabile, quindi il
+     verde ha un token suo e significa una cosa sola. */
+  --color-safe: #57d97a;
+  /* Gradino "intermedio" nelle scale a 4+ livelli (es. ScoreStrip):
+     resta francamente lime, così non si confonde col grano di marca. */
   --color-caution: #a8d84a;
+  /* Ambra spostata verso l'arancio rispetto al vecchio #ffb454: prende
+     distanza dal grano, che ora vive nella stessa famiglia calda. */
+  --color-warn: #ffa24d;
+  --color-danger: #ff6b6b;
 
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
@@ -29,13 +47,15 @@
      ambient) invece di un'ombra piatta per leggersi davvero. Nessun uso
      preesistente di shadow-sm/md/lg nel progetto: override sicuro dei
      default Tailwind. */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 6px -2px rgba(0, 0, 0, 0.45);
-  --shadow-md: 0 2px 8px -2px rgba(0, 0, 0, 0.45), 0 10px 28px -6px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 4px 14px -4px rgba(0, 0, 0, 0.5), 0 20px 48px -12px rgba(0, 0, 0, 0.6);
+  /* Ombre tinte del fondo (blu-nere), non nero puro: un nero neutro su una
+     superficie blu legge come sporco invece che come assenza di luce. */
+  --shadow-sm: 0 1px 2px rgba(3, 7, 14, 0.5), 0 2px 6px -2px rgba(3, 7, 14, 0.55);
+  --shadow-md: 0 2px 8px -2px rgba(3, 7, 14, 0.55), 0 10px 28px -6px rgba(3, 7, 14, 0.65);
+  --shadow-lg: 0 4px 14px -4px rgba(3, 7, 14, 0.6), 0 20px 48px -12px rgba(3, 7, 14, 0.7);
   /* Glow semantico riservato al banner allergeni (danger/safe): mai su
      card generiche, altrimenti perde di significato. */
-  --shadow-glow-danger: 0 0 0 1px rgba(255, 77, 94, 0.35), 0 8px 28px -6px rgba(255, 77, 94, 0.35);
-  --shadow-glow-safe: 0 0 0 1px rgba(46, 230, 168, 0.3), 0 8px 28px -6px rgba(46, 230, 168, 0.3);
+  --shadow-glow-danger: 0 0 0 1px rgba(255, 107, 107, 0.38), 0 8px 28px -6px rgba(255, 107, 107, 0.35);
+  --shadow-glow-safe: 0 0 0 1px rgba(87, 217, 122, 0.34), 0 8px 28px -6px rgba(87, 217, 122, 0.3);
 
   /* Token di movimento: nessuna libreria, solo CSS/WAAPI. Curve
      ease-out (mai bounce/elastic), durate corte per feedback di stato. */
@@ -76,7 +96,7 @@
   }
   @keyframes glow-in-danger {
     from {
-      box-shadow: 0 0 0 1px rgba(255, 77, 94, 0), 0 8px 28px -6px rgba(255, 77, 94, 0);
+      box-shadow: 0 0 0 1px rgba(255, 107, 107, 0), 0 8px 28px -6px rgba(255, 107, 107, 0);
     }
     to {
       box-shadow: var(--shadow-glow-danger);

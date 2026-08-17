@@ -18,8 +18,8 @@ export default defineConfig({
           'Scansiona i prodotti alimentari e scopri subito se contengono i tuoi allergeni.',
         lang: 'it',
         display: 'standalone',
-        theme_color: '#0a0b0d',
-        background_color: '#0a0b0d',
+        theme_color: '#0b1017',
+        background_color: '#0b1017',
         icons: [
           { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },

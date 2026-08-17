@@ -150,7 +150,7 @@ function toneFor(ratio: number): ScoreTone {
 }
 
 const BADGE_CLASS: Record<ScoreTone, string> = {
-  safe: 'text-accent border-accent/40 bg-accent/10',
+  safe: 'text-safe border-safe/40 bg-safe/10',
   caution: 'text-caution border-caution/40 bg-caution/10',
   warn: 'text-warn border-warn/40 bg-warn/10',
   danger: 'text-danger border-danger/40 bg-danger/10',

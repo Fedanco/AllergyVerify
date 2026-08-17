@@ -174,7 +174,7 @@ function ProfileEditor({
         <button
           type="submit"
           disabled={!name.trim()}
-          className="focus-ring flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-opacity disabled:opacity-40"
+          className="focus-ring flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-colors duration-[var(--duration-fast)] disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-ink-dim"
         >
           {t.profile.save}
         </button>
@@ -188,6 +188,12 @@ function ProfileEditor({
           </button>
         )}
       </div>
+
+      {/* Il salva resta inattivo finché non c'è un nome: senza questa riga
+          l'unico segnale è il bottone spento, e chi tocca non capisce perché. */}
+      {!name.trim() && (
+        <p className="mt-2 text-xs text-ink-dim">{t.profile.saveHint}</p>
+      )}
     </form>
   )
 }

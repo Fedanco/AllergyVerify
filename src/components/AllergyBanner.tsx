@@ -13,7 +13,7 @@ interface Props {
  * Badge/pill di verdetto allergie:
  * - rosso: almeno un allergene del profilo attivo e' presente
  * - arancio: nessun allergene diretto ma tracce ("può contenere") del profilo
- * - verde neon: nessun allergene del profilo rilevato
+ * - verde: nessun allergene del profilo rilevato
  * - neutro: nessun profilo attivo o dati allergeni mancanti
  */
 export default function AllergyBanner({ product, profile }: Props) {
@@ -83,9 +83,9 @@ function TracesPill({ traces }: { traces: string }) {
 // sfondo scuro (l'opposto di quel che serve per leggerlo bene); questi
 // valori restano riconoscibili come "quel tono" mantenendo il contrasto alto.
 const BODY_COLOR: Record<Tone, string> = {
-  danger: '#f97482',
-  warn: '#f8c482',
-  safe: '#66e7bd',
+  danger: '#ffa8ae',
+  warn: '#ffd79a',
+  safe: '#8fefc4',
   neutral: 'var(--color-ink-dim)',
 }
 
@@ -94,7 +94,7 @@ const BODY_COLOR: Record<Tone, string> = {
 const ICON_CHIP: Record<Tone, string> = {
   danger: 'bg-danger/15 text-danger',
   warn: 'bg-warn/15 text-warn',
-  safe: 'bg-accent/15 text-accent',
+  safe: 'bg-safe/15 text-safe',
   neutral: 'bg-surface text-ink-dim',
 }
 
