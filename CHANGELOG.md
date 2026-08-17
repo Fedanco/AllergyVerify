@@ -2,6 +2,10 @@
 
 Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
 
+## v0.5.3 — 2026-08-17
+
+- Sostituito il logo (avocado della vecchia app iOS) con il nuovo logo creato da Fede — spiga di grano, lente d'ingrandimento, badge d'allerta. Icone di sistema (favicon, apple-touch-icon, icone PWA) rigenerate dal nuovo artwork; dentro l'interfaccia scura (sidebar, pagina Info, modale installa) è invece usato `BrandMark`, un'icona piatta ridisegnata a mano nello stesso linguaggio delle icone dell'app, per non avere lo sfondo bianco del logo a stonare sul tema scuro. Cache-busting favicon/apple-touch-icon aggiornato a `-v3` (iOS/Safari le cachea per URL).
+
 ## v0.5.2 — 2026-08-06
 
 - Rebrand: nome dell'app da AllergyScan ad **AllergyVerify** — distacco dal vecchio progetto nativo iOS AllergyScan (condiviso con i colleghi, non più aggiornato). Aggiornati testi UI (IT/EN), manifest PWA, `package.json`, meta tag e documentazione. Logo/icona (ancora l'avocado) e repo/dominio pubblico rimandati a un secondo momento: il rebrand visivo richiede un redesign a parte, il rename di repo/dominio richiede conferma esplicita essendo azioni difficili da annullare (URL pubblici già condivisi).
