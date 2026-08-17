@@ -5,16 +5,16 @@
      materia (superfici in rilievo, luce direzionale) — non la temperatura:
      il fondo resta freddo e fa da contrasto al grano dorato del logo, e
      soprattutto fa risaltare il rosso del verdetto più di un fondo caldo. */
-  --color-bg: #0b1017;
-  --color-surface: #141b24;
-  --color-surface-2: #1d2733;
+  --color-bg: #070b12;
+  --color-surface: #151d29;
+  --color-surface-2: #202b3a;
   /* Terzo livello: superfici sollevate/attive (dock, chip premuto). Serve
      perché con la materia in rilievo due soli livelli non bastano a
      distinguere "a riposo" da "sollevato" da "aperto". */
-  --color-surface-3: #263241;
-  --color-edge: #2e3b4b;
-  --color-ink: #e8eef6;
-  --color-ink-dim: #94a3b8;
+  --color-surface-3: #2c3a4c;
+  --color-edge: #34445a;
+  --color-ink: #eaf0f8;
+  --color-ink-dim: #93a3b8;
 
   /* Colore di MARCA, non semantico: grano del logo. Usato solo per
      interazione e stato (CTA, tab attiva, focus, selezione). */
@@ -37,11 +37,23 @@
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
 
-  --radius-card: 1rem;
+  /* Raggi più generosi della media: un oggetto con volume ha bisogno di
+     spigoli morbidi, altrimenti il rilievo legge come un errore di rendering.
+     20px su una card larga ~358px (iPhone) è il punto in cui la superficie
+     sembra morbida senza perdere la struttura di lista. */
+  --radius-card: 1.5rem;
   /* Radius dedicati (nomi non standard Tailwind: evitano di sovrascrivere
      rounded-sm/rounded-lg già in uso altrove per componenti non correlati). */
-  --radius-chip: 0.5rem;
-  --radius-banner: 1.25rem;
+  --radius-chip: 1rem;
+  --radius-banner: 1.75rem;
+
+  /* Luce dell'ambiente. Tutta la materia sotto nasce da qui: una sorgente
+     sola, in alto, che accende il bordo superiore degli oggetti e lascia
+     il bordo inferiore in ombra. Tinta verso l'azzurro come il fondo:
+     un rim bianco puro su superficie blu sembra un bordo, non luce. */
+  --clay-rim: rgba(214, 232, 255, 0.1);
+  --clay-rim-strong: rgba(214, 232, 255, 0.16);
+  --clay-base: rgba(0, 0, 0, 0.3);
 
   /* Scala di ombre: il palette è quasi nero, servono strati (contatto +
      ambient) invece di un'ombra piatta per leggersi davvero. Nessun uso
@@ -144,20 +156,37 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Card standard: superficie a strato con bordo sottile + ombra di contatto */
+/* Card standard: un oggetto con volume, non un rettangolo con un bordo.
+   Il rilievo nasce da tre cose insieme, tutte coerenti con una luce sola
+   in alto: un gradiente verticale corto (delta ~5%, sotto la soglia del
+   banding su OLED), un filo di luce sul bordo superiore, uno stacco scuro
+   su quello inferiore. Il bordo grigio 1px sparisce.
+
+   `border` resta dichiarato trasparente: diversi componenti sovrascrivono
+   il bordo della card per segnalare lo stato attivo (`border-accent/40` in
+   ScoreStrip, ProfilePage, ProfilesVerdict, SettingsPage). Senza questa
+   riga quelle override cambierebbero il box model e sposterebbero il
+   layout di 1px a ogni toggle. */
 @utility card {
   background: var(--color-surface);
-  border: 1px solid var(--color-edge);
+  border: 1px solid transparent;
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
+  /* Solo un filo di luce sul bordo alto. La card si stacca dal fondo per
+     salto di superficie, non per ombra: su un fondo quasi nero le ombre
+     non si vedono comunque, e cercare di renderle visibili produce quegli
+     aloni grigi che fanno sembrare tutto appiccicato. */
+  box-shadow: inset 0 1px 0 0 var(--clay-rim);
 }
 
 /* Riga di lista dentro una card (es. ProfilesVerdict): un livello di
    superficie, non una card annidata dentro un'altra card. */
 @utility card-row {
   background: var(--color-surface-2);
-  border: 1px solid var(--color-edge);
+  border: 1px solid transparent;
   border-radius: var(--radius-chip);
+  /* Solo il filo di luce, nessuna ombra esterna: è già dentro un oggetto,
+     e una card dentro una card è sempre un errore di gerarchia. */
+  box-shadow: inset 0 1px 0 0 var(--clay-rim);
 }
 
 /* Superficie interattiva/espansa (es. chip aperto e pannello di
@@ -165,9 +194,25 @@ body {
    "attivo/sollevato" invece di un semplice cambio di bordo. */
 @utility panel {
   background: var(--color-surface-2);
-  border: 1px solid var(--color-edge);
+  border: 1px solid transparent;
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-md);
+  /* "Sollevato" si legge dal salto di superficie (surface → surface-2),
+     rinforzato da un filo di luce più acceso. */
+  box-shadow: inset 0 1px 0 0 var(--clay-rim-strong);
+}
+
+/* Incavo: la superficie scende invece di salire — luce e ombra invertite
+   rispetto a `card`. Serve per i campi in cui si scrive e per i dischi
+   dietro le icone. È il contro-canto che rende credibile il rilievo:
+   senza qualcosa che affonda, tutto ciò che sporge sembra finto. */
+@utility inset-surface {
+  background: var(--color-bg);
+  border: 1px solid transparent;
+  /* Nessun border-radius, come `chip`: la forma la decide il call site
+     (un campo di ricerca la vuole più morbida di un disco icona). */
+  box-shadow:
+    inset 0 2px 4px -1px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 0 var(--clay-rim);
 }
 
 /* Badge/chip piccoli (additivi, diete): solo sfondo+bordo condivisi, niente
@@ -175,7 +220,8 @@ body {
    quelle già in uso in ciascun punto di chiamata, zero cambio visivo. */
 @utility chip {
   background: var(--color-surface-2);
-  border: 1px solid var(--color-edge);
+  border: 1px solid transparent;
+  box-shadow: inset 0 1px 0 0 var(--clay-rim);
 }
 
 /* Elementi interattivi: sopprime l'outline nativo (blu su Safari iOS)
@@ -185,7 +231,9 @@ body {
 
   &:focus-visible {
     outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    /* offset maggiore di prima: con raggi più generosi un anello aderente
+       taglia visivamente gli angoli morbidi */
+    outline-offset: 3px;
     border-radius: inherit;
   }
 }

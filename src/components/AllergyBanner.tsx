@@ -91,11 +91,14 @@ const BODY_COLOR: Record<Tone, string> = {
 
 // Chip tonale dietro l'icona: la distingue da un'icona nuda e la rende
 // leggibile come il primo elemento su cui l'occhio si posa nel banner.
+// Disco a colore PIENO, non tinta trasparente: è il punto di colore più
+// saturo della schermata e si legge da lontano, prima ancora delle parole.
+// Una tinta al 15% su fondo scuro diventa un grigio colorato e sparisce.
 const ICON_CHIP: Record<Tone, string> = {
-  danger: 'bg-danger/15 text-danger',
-  warn: 'bg-warn/15 text-warn',
-  safe: 'bg-safe/15 text-safe',
-  neutral: 'bg-surface text-ink-dim',
+  danger: 'bg-danger text-bg',
+  warn: 'bg-warn text-bg',
+  safe: 'bg-safe text-bg',
+  neutral: 'bg-surface-3 text-ink-dim',
 }
 
 function Pill({

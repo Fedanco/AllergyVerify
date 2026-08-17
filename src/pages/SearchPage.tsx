@@ -70,7 +70,7 @@ export default function SearchPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.search.placeholder}
-            className="w-full rounded-2xl border border-edge bg-surface py-3 pl-11 pr-4 text-sm outline-none transition-colors duration-[var(--duration-fast)] placeholder:text-ink-dim/60 focus:border-accent"
+            className="inset-surface w-full rounded-2xl py-3 pl-11 pr-4 text-sm outline-none transition-colors duration-[var(--duration-fast)] placeholder:text-ink-dim/60 focus:border-accent"
           />
         </div>
         <button
