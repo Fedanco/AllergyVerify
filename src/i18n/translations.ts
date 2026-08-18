@@ -98,7 +98,9 @@ const it = {
     dataTitle: 'Dati',
     dataBody1: 'I dati dei prodotti provengono da ',
     dataBody2:
-      ', il database alimentare libero e collaborativo. Profili e storico restano solo su questo dispositivo (localStorage): nessun account, nessun server.',
+      ', resi disponibili con licenza Open Database License (ODbL): possono contenere errori e non vanno usati per scopi medici. Gli ingredienti vengono tradotti con MyMemory quando serve. Profili e storico restano solo su questo dispositivo (localStorage): nessun account, nessun server.',
+    privacyRowTitle: 'Privacy',
+    termsRowTitle: 'Termini e responsabilità',
     installTitle: "Installa l'app",
     installBody: "Aggiungi AllergyVerify alla schermata Home per usarla come un'app vera, anche offline.",
     installCta: 'Installa',
@@ -112,7 +114,7 @@ const it = {
     installBody3: ').',
     warningTitle: 'Attenzione',
     warningBody:
-      "Le informazioni potrebbero essere incomplete o non aggiornate: in caso di allergie gravi, verifica sempre l'etichetta del prodotto.",
+      "Le informazioni potrebbero essere incomplete, errate o non aggiornate, e non sostituiscono il parere medico né l'etichetta del prodotto: in caso di allergie gravi, verifica sempre l'etichetta. Per il testo completo vedi Termini e responsabilità qui sopra.",
   },
   installBanner: {
     title: 'Installa AllergyVerify',
@@ -156,6 +158,8 @@ const it = {
       timeout: 'La richiesta ha impiegato troppo tempo. Riprova.',
       error: 'Si è verificato un errore nel caricamento del prodotto.',
     },
+    disclaimer1: "Informazione indicativa, non sostituisce l'etichetta. ",
+    disclaimerLink: 'Termini',
   },
   scores: {
     nutriHint: 'Qualità nutrizionale',
@@ -232,6 +236,66 @@ const it = {
     },
     additivesTitle: 'Additivi',
     noAdditives: 'Nessun additivo segnalato.',
+  },
+  privacy: {
+    title: 'Privacy',
+    updated: 'Ultimo aggiornamento: 18 agosto 2026',
+    intro:
+      "AllergyVerify è pensata per non raccogliere dati: non c'è un account, non c'è un server che conserva le tue informazioni. Questa pagina spiega nel dettaglio cosa succede ai tuoi dati mentre usi l'app.",
+    controllerTitle: 'Titolare del trattamento',
+    controllerBody:
+      'Il progetto è gestito da AllergyVerify. Per qualsiasi domanda su questa informativa o sui tuoi dati puoi scrivere a ',
+    contactEmail: 'AllergyVerify@protonmail.com',
+    dataTitle: 'I tuoi dati restano sul tuo dispositivo',
+    dataBody:
+      "I profili allergie e lo storico delle scansioni sono salvati solo nella memoria locale del tuo browser (localStorage). Non vengono mai inviati a un server: se disinstalli l'app o svuoti i dati del sito, spariscono e nessuno ne ha una copia, noi compresi.",
+    thirdPartiesTitle: 'Servizi di terze parti usati dall\'app',
+    thirdPartiesIntro:
+      "Per funzionare, AllergyVerify comunica con questi servizi esterni, che possono ricevere il tuo indirizzo IP secondo le rispettive policy:",
+    thirdParties: [
+      {
+        name: 'Open Food Facts',
+        body: 'fornisce i dati dei prodotti quando cerchi o scansioni un barcode.',
+      },
+      {
+        name: 'MyMemory',
+        body: 'traduce automaticamente il testo degli ingredienti quando serve.',
+      },
+      {
+        name: 'Vercel',
+        body: "ospita il sito: come qualunque hosting, registra dati tecnici di accesso (es. indirizzo IP) nei log del server.",
+      },
+    ],
+    cookiesTitle: 'Nessun cookie di tracciamento',
+    cookiesBody:
+      "AllergyVerify non usa cookie di profilazione né strumenti di analytics o pubblicità. Il localStorage descritto sopra serve solo al funzionamento dell'app (salvare profili e storico) e non richiede consenso.",
+    rightsTitle: 'I tuoi diritti',
+    rightsBody:
+      "Puoi cancellare tutti i tuoi dati in autonomia in qualsiasi momento, svuotando i dati del sito dalle impostazioni del browser: non serve chiedere nulla, perché non ne conserviamo copia. Per qualsiasi domanda, scrivici all'indirizzo sopra.",
+  },
+  terms: {
+    title: 'Termini e responsabilità',
+    updated: 'Ultimo aggiornamento: 18 agosto 2026',
+    intro:
+      'Usando AllergyVerify accetti questi termini. Leggili con attenzione: riguardano le tue allergie.',
+    purposeTitle: "A cosa serve l'app",
+    purposeBody:
+      "AllergyVerify ti aiuta a controllare più in fretta se un prodotto contiene i tuoi allergeni, confrontando i dati disponibili con il tuo profilo. È uno strumento di supporto, non un sostituto: il dato definitivo resta sempre l'etichetta fisica del prodotto che hai in mano.",
+    accuracyTitle: 'Nessuna garanzia sui dati',
+    accuracyBody:
+      "I dati dei prodotti provengono da Open Food Facts, un database collaborativo aperto: possono essere mancanti, non aggiornati o inseriti in modo scorretto da chi contribuisce. Anche la traduzione automatica degli ingredienti può contenere imprecisioni. AllergyVerify non verifica né garantisce l'accuratezza di queste informazioni.",
+    medicalTitle: 'Non è un consiglio medico',
+    medicalBody:
+      "AllergyVerify non è un dispositivo medico e non fornisce consulenza medica. In caso di dubbi, allergie gravi o reazioni, rivolgiti sempre a un medico e non affidarti solo all'app.",
+    liabilityTitle: 'Limitazione di responsabilità',
+    liabilityBody:
+      "Usi l'app a tuo rischio. Nei limiti consentiti dalla legge, chi sviluppa AllergyVerify non è responsabile di eventuali conseguenze — comprese reazioni allergiche — derivanti da dati mancanti, errati o non aggiornati nelle fonti terze utilizzate dall'app.",
+    licenseTitle: 'Licenza dei dati',
+    licenseBody:
+      'I dati dei prodotti provengono da Open Food Facts (openfoodfacts.org), resi disponibili con licenza Open Database License (ODbL) v1.0. Le informazioni sono fornite a scopo indicativo, possono contenere errori e non vanno usate per scopi medici.',
+    changesTitle: 'Modifiche a questi termini',
+    changesBody:
+      "Questi termini possono cambiare in futuro, ad esempio se l'app aggiunge nuove funzionalità. La data qui sopra indica l'ultimo aggiornamento.",
   },
 }
 
@@ -326,7 +390,9 @@ const en: Translations = {
     dataTitle: 'Data',
     dataBody1: 'Product data comes from ',
     dataBody2:
-      ', the free collaborative food database. Profiles and history stay on this device only (localStorage): no account, no server.',
+      ', made available under the Open Database License (ODbL): it can contain errors and should not be used for medical purposes. Ingredients are translated with MyMemory when needed. Profiles and history stay on this device only (localStorage): no account, no server.',
+    privacyRowTitle: 'Privacy',
+    termsRowTitle: 'Terms & Liability',
     installTitle: 'Install the app',
     installBody: 'Add AllergyVerify to your Home Screen to use it like a real app, offline too.',
     installCta: 'Install',
@@ -339,7 +405,7 @@ const en: Translations = {
     installBody3: ').',
     warningTitle: 'Warning',
     warningBody:
-      'Information may be incomplete or out of date: if you have severe allergies, always check the product label.',
+      'Information may be incomplete, inaccurate or out of date, and does not replace medical advice or the product label: if you have severe allergies, always check the label. See Terms & Liability above for the full text.',
   },
   installBanner: {
     title: 'Install AllergyVerify',
@@ -382,6 +448,8 @@ const en: Translations = {
       timeout: 'The request took too long. Try again.',
       error: 'An error occurred while loading the product.',
     },
+    disclaimer1: "For guidance only — doesn't replace the label. ",
+    disclaimerLink: 'Terms',
   },
   scores: {
     nutriHint: 'Nutritional quality',
@@ -458,6 +526,66 @@ const en: Translations = {
     },
     additivesTitle: 'Additives',
     noAdditives: 'No additives reported.',
+  },
+  privacy: {
+    title: 'Privacy',
+    updated: 'Last updated: August 18, 2026',
+    intro:
+      "AllergyVerify is built to not collect data: there's no account, no server that stores your information. This page explains in detail what happens to your data while you use the app.",
+    controllerTitle: 'Data controller',
+    controllerBody:
+      'The project is run by AllergyVerify. For any question about this notice or your data, write to ',
+    contactEmail: 'AllergyVerify@protonmail.com',
+    dataTitle: 'Your data stays on your device',
+    dataBody:
+      "Allergy profiles and scan history are saved only in your browser's local storage (localStorage). They are never sent to a server: if you uninstall the app or clear the site data, they're gone and no one has a copy, not even us.",
+    thirdPartiesTitle: 'Third-party services used by the app',
+    thirdPartiesIntro:
+      'To work, AllergyVerify talks to these external services, which may receive your IP address under their own policies:',
+    thirdParties: [
+      {
+        name: 'Open Food Facts',
+        body: 'provides product data when you search or scan a barcode.',
+      },
+      {
+        name: 'MyMemory',
+        body: 'automatically translates ingredient text when needed.',
+      },
+      {
+        name: 'Vercel',
+        body: 'hosts the site: like any hosting provider, it logs standard technical access data (e.g. IP address) in server logs.',
+      },
+    ],
+    cookiesTitle: 'No tracking cookies',
+    cookiesBody:
+      'AllergyVerify does not use profiling cookies or any analytics/advertising tools. The localStorage described above is only used to run the app (saving profiles and history) and does not require consent.',
+    rightsTitle: 'Your rights',
+    rightsBody:
+      "You can delete all your data at any time on your own, by clearing the site data in your browser settings: no request needed, since we don't keep a copy. For any question, write to the address above.",
+  },
+  terms: {
+    title: 'Terms & Liability',
+    updated: 'Last updated: August 18, 2026',
+    intro:
+      'By using AllergyVerify you accept these terms. Read them carefully: they concern your allergies.',
+    purposeTitle: 'What the app is for',
+    purposeBody:
+      "AllergyVerify helps you quickly check whether a product contains your allergens, by comparing available data with your profile. It's a support tool, not a replacement: the definitive source is always the physical label of the product in your hand.",
+    accuracyTitle: 'No guarantee on the data',
+    accuracyBody:
+      'Product data comes from Open Food Facts, an open collaborative database: it can be missing, out of date, or entered incorrectly by contributors. Automatic ingredient translation can also contain inaccuracies. AllergyVerify does not verify or guarantee the accuracy of this information.',
+    medicalTitle: 'Not medical advice',
+    medicalBody:
+      "AllergyVerify is not a medical device and does not provide medical advice. If in doubt, or in case of severe allergies or reactions, always consult a doctor and don't rely on the app alone.",
+    liabilityTitle: 'Limitation of liability',
+    liabilityBody:
+      'You use the app at your own risk. To the extent permitted by law, the developer of AllergyVerify is not liable for any consequences — including allergic reactions — arising from missing, incorrect or outdated data in the third-party sources the app relies on.',
+    licenseTitle: 'Data license',
+    licenseBody:
+      'Product data comes from Open Food Facts (openfoodfacts.org), made available under the Open Database License (ODbL) v1.0. The information is provided for indicative purposes only, may contain errors, and should not be used for medical purposes.',
+    changesTitle: 'Changes to these terms',
+    changesBody:
+      'These terms may change in the future, for example if the app adds new features. The date above shows the latest update.',
   },
 }
 

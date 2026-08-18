@@ -3,10 +3,12 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import TabBar from './components/TabBar'
 import { useLang } from './i18n/useLang'
 import HistoryPage from './pages/HistoryPage'
+import PrivacyPage from './pages/PrivacyPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import ProfilePage from './pages/ProfilePage'
 import SearchPage from './pages/SearchPage'
 import SettingsPage from './pages/SettingsPage'
+import TermsPage from './pages/TermsPage'
 
 // zxing pesa ~400 kB: caricato solo quando si apre lo scanner
 const ScanPage = lazy(() => import('./pages/ScanPage'))
@@ -43,6 +45,8 @@ export default function App() {
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
             <Route path="/product/:code" element={<ProductDetailPage />} />
           </Routes>
         </main>

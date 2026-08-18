@@ -1,12 +1,15 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   AlertIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   DatabaseIcon,
+  DocumentIcon,
   GlobeIcon,
   HomeAddIcon,
   InfoIcon,
+  ShieldIcon,
 } from '../components/Icons'
 import LogoTile from '../components/LogoTile'
 import InstallGuideModal from '../components/InstallGuideModal'
@@ -137,6 +140,33 @@ export default function SettingsPage() {
             {t.settings.dataBody2}
           </p>
         </Row>
+
+        {/* Link diretti, non righe espandibili: sono documenti a sé, non
+            testo da leggere qui dentro. */}
+        <Link
+          to="/privacy"
+          className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-surface-2"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim">
+            <ShieldIcon className="h-5 w-5" />
+          </span>
+          <span className="min-w-0 flex-1 text-sm font-semibold">
+            {t.settings.privacyRowTitle}
+          </span>
+          <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-dim" />
+        </Link>
+        <Link
+          to="/terms"
+          className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-surface-2"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim">
+            <DocumentIcon className="h-5 w-5" />
+          </span>
+          <span className="min-w-0 flex-1 text-sm font-semibold">
+            {t.settings.termsRowTitle}
+          </span>
+          <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-dim" />
+        </Link>
       </div>
 
       {/* L'unica sezione sempre aperta: è un avviso medico, nasconderlo dietro

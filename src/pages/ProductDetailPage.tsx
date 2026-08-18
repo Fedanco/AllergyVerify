@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getProductByBarcode } from '../api/openFoodFacts'
 import AllergyBanner from '../components/AllergyBanner'
 import { BackIcon, NotFoundIcon, PackageIcon } from '../components/Icons'
@@ -160,6 +160,19 @@ export default function ProductDetailPage() {
               punteggi nutrizionali stavano sopra al verdetto, cioe' l'app
               rispondeva a una domanda che nessuno le aveva fatto. */}
           <AllergyBanner product={product} profiles={activeProfiles} />
+
+          {/* Una riga, non un altro banner: chi non apre mai le Impostazioni
+              deve comunque vedere il disclaimer nel punto in cui prende la
+              decisione, senza che pesi sul verdetto sopra. */}
+          <p className="-mt-1 px-1 text-[0.7rem] leading-relaxed text-ink-dim">
+            {t.productDetail.disclaimer1}
+            <Link
+              to="/terms"
+              className="focus-ring rounded text-accent underline-offset-2 hover:underline"
+            >
+              {t.productDetail.disclaimerLink}
+            </Link>
+          </p>
 
           <IngredientsCard product={product} allergens={activeAllergens} />
 
