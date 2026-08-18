@@ -16,7 +16,7 @@ import { useInstallPrompt } from '../hooks/useInstallPrompt'
 import { useLang } from '../i18n/useLang'
 import type { Lang } from '../i18n/translations'
 
-const APP_VERSION = 'v0.6.0'
+const APP_VERSION = 'v0.6.1'
 
 const LANG_OPTIONS: { value: Lang; label: string }[] = [
   { value: 'it', label: '🇮🇹 Italiano' },
@@ -46,7 +46,7 @@ export default function SettingsPage() {
       {/* Identità dell'app: logo, nome e versione in un blocco solo. Prima il
           logo galleggiava scollegato sopra le sezioni. */}
       <div className="card mb-3 flex items-center gap-3.5 p-4">
-        <LogoTile className="h-14 w-14" />
+        <LogoTile className="h-14" />
         <div className="min-w-0">
           <p className="font-display text-base font-bold">AllergyVerify</p>
           <p className="mt-0.5 text-xs text-ink-dim">{APP_VERSION}</p>
