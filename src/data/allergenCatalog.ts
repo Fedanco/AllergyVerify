@@ -44,6 +44,11 @@ export function labelForTag(tag: string, lang: Lang): string {
   return readable.charAt(0).toUpperCase() + readable.slice(1)
 }
 
+/** Emoji del catalogo per un tag, se e' un allergene dei 14 UE. */
+export function emojiForTag(tag: string): string | undefined {
+  return ALLERGEN_CATALOG.find((a) => a.tag === normalizeTag(tag))?.emoji
+}
+
 /**
  * Interseca gli allergeni del prodotto (tag OFF grezzi) con quelli
  * del profilo (tag normalizzati). Ritorna i tag normalizzati in comune.
