@@ -128,11 +128,18 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          <ScoreStrip product={product} />
-
+          {/* L'ordine segue la domanda di chi apre la pagina: "posso
+              mangiarlo?" prima di tutto, poi "perche'?" (gli ingredienti, che
+              sono la prova del verdetto), e solo dopo il resto. Prima i
+              punteggi nutrizionali stavano sopra al verdetto, cioe' l'app
+              rispondeva a una domanda che nessuno le aveva fatto. */}
           <AllergyBanner product={product} profile={activeProfile} />
 
           <ProfilesVerdict product={product} />
+
+          <IngredientsCard product={product} profile={activeProfile} />
+
+          <ScoreStrip product={product} />
 
           <section className="card p-4">
             <h2 className="mb-3 text-sm font-semibold text-ink-dim">
@@ -144,8 +151,6 @@ export default function ProductDetailPage() {
               levels={product.nutrient_levels}
             />
           </section>
-
-          <IngredientsCard product={product} profile={activeProfile} />
         </div>
       )}
     </div>

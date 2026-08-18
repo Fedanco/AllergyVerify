@@ -1,4 +1,4 @@
-import { checkAllergens, labelForTag } from '../data/allergenCatalog'
+import { checkAllergens, emojiForTag, labelForTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
 import { TONE_GLOW, TONE_SURFACE, type Tone } from '../lib/allergyTone'
 import type { AllergyProfile, Product } from '../types/product'
@@ -10,14 +10,14 @@ interface Props {
 }
 
 /**
- * Badge/pill di verdetto allergie:
+ * Verdetto allergie: l'oggetto principale della pagina prodotto.
  * - rosso: almeno un allergene del profilo attivo e' presente
  * - arancio: nessun allergene diretto ma tracce ("può contenere") del profilo
  * - verde: nessun allergene del profilo rilevato
  * - neutro: nessun profilo attivo o dati allergeni mancanti
  */
 export default function AllergyBanner({ product, profile }: Props) {
-  const { lang, t } = useLang()
+  const { t } = useLang()
 
   if (!profile) {
     return (
@@ -37,16 +37,18 @@ export default function AllergyBanner({ product, profile }: Props) {
     )
   }
 
-  const toLabels = (tags: string[]) =>
-    tags.map((tag) => labelForTag(tag, lang)).join(', ')
-
   if (detected.length > 0) {
     return (
       <>
-        <Pill tone="danger" Icon={AlertIcon} title={t.allergyBanner.dangerTitle(profile.name)}>
-          {t.allergyBanner.contains(toLabels(detected))}
+        <Pill
+          tone="danger"
+          Icon={AlertIcon}
+          title={t.allergyBanner.dangerTitle(profile.name)}
+          tags={detected}
+        >
+          {t.allergyBanner.containsLabel}
         </Pill>
-        {traces.length > 0 && <TracesPill traces={toLabels(traces)} />}
+        {traces.length > 0 && <TracesPill traces={traces} />}
       </>
     )
   }
@@ -57,7 +59,7 @@ export default function AllergyBanner({ product, profile }: Props) {
         <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.safeWithTracesTitle}>
           {t.allergyBanner.safeWithTracesBody}
         </Pill>
-        <TracesPill traces={toLabels(traces)} />
+        <TracesPill traces={traces} />
       </>
     )
   }
@@ -69,11 +71,11 @@ export default function AllergyBanner({ product, profile }: Props) {
   )
 }
 
-function TracesPill({ traces }: { traces: string }) {
+function TracesPill({ traces }: { traces: string[] }) {
   const { t } = useLang()
   return (
-    <Pill tone="warn" Icon={AlertIcon} title={t.allergyBanner.tracesTitle}>
-      {t.allergyBanner.mayContain(traces)}
+    <Pill tone="warn" Icon={AlertIcon} title={t.allergyBanner.tracesTitle} tags={traces}>
+      {t.allergyBanner.mayContainLabel}
     </Pill>
   )
 }
@@ -89,8 +91,6 @@ const BODY_COLOR: Record<Tone, string> = {
   neutral: 'var(--color-ink-dim)',
 }
 
-// Chip tonale dietro l'icona: la distingue da un'icona nuda e la rende
-// leggibile come il primo elemento su cui l'occhio si posa nel banner.
 // Disco a colore PIENO, non tinta trasparente: è il punto di colore più
 // saturo della schermata e si legge da lontano, prima ancora delle parole.
 // Una tinta al 15% su fondo scuro diventa un grigio colorato e sparisce.
@@ -106,31 +106,55 @@ function Pill({
   Icon,
   title,
   children,
+  tags,
 }: {
   tone: Tone
   Icon: (p: { className?: string }) => React.ReactNode
   title: string
   children: React.ReactNode
+  /** allergeni da elencare come chip sotto il titolo (tag normalizzati) */
+  tags?: string[]
 }) {
+  const { lang } = useLang()
   const glow = TONE_GLOW[tone]
   return (
     <div
       role="status"
       aria-live="polite"
-      className={`flex items-start gap-3 rounded-banner border px-5 py-4 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
+      className={`flex items-start gap-4 rounded-banner border px-5 py-5 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
         tone === 'danger' ? 'animate-banner-in-danger' : 'animate-banner-in'
       }`}
     >
       <span
-        className={`animate-icon-pop flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${ICON_CHIP[tone]}`}
+        className={`animate-icon-pop flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${ICON_CHIP[tone]}`}
       >
-        <Icon className="h-5 w-5" />
+        <Icon className="h-6 w-6" />
       </span>
-      <div>
-        <p className="font-display text-base font-bold">{title}</p>
-        <p className="mt-0.5 text-sm" style={{ color: BODY_COLOR[tone] }}>
+      <div className="min-w-0">
+        <p className="font-display text-lg leading-tight font-bold">{title}</p>
+        <p className="mt-1 text-sm" style={{ color: BODY_COLOR[tone] }}>
           {children}
         </p>
+        {tags && tags.length > 0 && (
+          /* Gli allergeni come chip invece che in una riga separata da
+             virgole: si contano a colpo d'occhio e ognuno resta leggibile
+             anche quando sono tre o quattro. */
+          <ul className="mt-2.5 flex flex-wrap gap-1.5">
+            {tags.map((tag) => {
+              const emoji = emojiForTag(tag)
+              return (
+                <li
+                  key={tag}
+                  className="flex items-center gap-1.5 rounded-full bg-bg/55 px-2.5 py-1 text-xs font-semibold"
+                  style={{ color: BODY_COLOR[tone] }}
+                >
+                  {emoji && <span aria-hidden>{emoji}</span>}
+                  {labelForTag(tag, lang)}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
     </div>
   )

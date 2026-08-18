@@ -24,11 +24,16 @@ export const TONE_TEXT: Record<Tone, string> = {
   neutral: 'text-ink-dim',
 }
 
-/** Bordo + sfondo tinto + testo, per superfici tonali (pill, banner). */
+/**
+ * Bordo + sfondo tinto + testo, per superfici tonali (pill, banner).
+ * La tinta e' al 20%, non al 10%: sul fondo blu quasi nero una velatura
+ * del 10% diventa un grigio appena colorato e il verdetto smette di
+ * riconoscersi da lontano, che e' l'unica cosa che deve saper fare.
+ */
 export const TONE_SURFACE: Record<Tone, string> = {
-  danger: 'border-danger/40 bg-danger/10 text-danger',
-  warn: 'border-warn/40 bg-warn/10 text-warn',
-  safe: 'border-safe/40 bg-safe/10 text-safe',
+  danger: 'border-danger/45 bg-danger/20 text-danger',
+  warn: 'border-warn/45 bg-warn/20 text-warn',
+  safe: 'border-safe/45 bg-safe/20 text-safe',
   neutral: 'border-edge bg-surface-2 text-ink-dim',
 }
 
