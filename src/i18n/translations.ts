@@ -78,9 +78,6 @@ const it = {
     confirmDelete: (name: string) => `Eliminare il profilo "${name}"?`,
     deleteAria: (name: string) => `Elimina profilo ${name}`,
     newProfile: 'Nuovo profilo',
-    multiTitle: 'Controlla più profili insieme',
-    multiHint:
-      'Utile in famiglia: il verdetto considera gli allergeni di tutti i profili selezionati e ti dice per chi.',
     editorTitleEdit: (name: string) => `Modifica "${name}"`,
     editorTitleNew: 'Nuovo profilo',
     nameLabel: 'Nome',
@@ -317,9 +314,6 @@ const en: Translations = {
     confirmDelete: (name: string) => `Delete profile "${name}"?`,
     deleteAria: (name: string) => `Delete profile ${name}`,
     newProfile: 'New profile',
-    multiTitle: 'Check several profiles together',
-    multiHint:
-      'Useful for a family: the verdict covers the allergens of every selected profile and tells you who is affected.',
     editorTitleEdit: (name: string) => `Edit "${name}"`,
     editorTitleNew: 'New profile',
     nameLabel: 'Name',

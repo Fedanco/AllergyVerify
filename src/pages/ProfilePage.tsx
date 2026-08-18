@@ -10,13 +10,10 @@ export default function ProfilePage() {
   const {
     profiles,
     activeProfiles,
-    multi,
     createProfile,
     updateProfile,
     deleteProfile,
-    setActive,
     toggleActive,
-    setMulti,
   } = useAllergyProfile()
   const { lang, t } = useLang()
   const [editing, setEditing] = useState<AllergyProfile | 'new' | null>(
@@ -28,39 +25,8 @@ export default function ProfilePage() {
     <div>
       <PageHeader
         title={t.profile.title}
-        subtitle={multi ? t.profile.subtitleMulti : t.profile.subtitle}
+        subtitle={activeProfiles.length > 1 ? t.profile.subtitleMulti : t.profile.subtitle}
       />
-
-      {/* Interruttore esplicito: con un profilo solo l'app si comporta come
-          prima, e nessuno si ritrova verdetti di altre persone senza averlo
-          chiesto. Compare solo quando i profili sono almeno due, perché con
-          uno solo non avrebbe nulla da fare. */}
-      {profiles.length > 1 && (
-        <div className="card mb-3 flex items-start gap-3 p-4">
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">{t.profile.multiTitle}</p>
-            <p className="mt-0.5 text-xs leading-relaxed text-ink-dim">
-              {t.profile.multiHint}
-            </p>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={multi}
-            aria-label={t.profile.multiTitle}
-            onClick={() => setMulti(!multi)}
-            className={`focus-ring relative h-7 w-12 shrink-0 rounded-full transition-colors duration-[var(--duration-fast)] ${
-              multi ? 'bg-accent' : 'inset-surface'
-            }`}
-          >
-            <span
-              className={`absolute top-1 h-5 w-5 rounded-full transition-[left,background-color] duration-[var(--duration-fast)] ${
-                multi ? 'left-6 bg-bg' : 'left-1 bg-ink-dim'
-              }`}
-            />
-          </button>
-        </div>
-      )}
 
       {profiles.length > 0 && (
         <ul className="mb-3 flex flex-col gap-2">
@@ -78,17 +44,17 @@ export default function ProfilePage() {
               >
                 <button
                   type="button"
-                  onClick={() => (multi ? toggleActive(p.id) : setActive(p.id))}
+                  onClick={() => toggleActive(p.id)}
                   aria-pressed={isActive}
                   className="focus-ring flex min-w-0 flex-1 items-center gap-3 rounded-lg text-left"
                 >
-                  {/* Cerchio quando la scelta è esclusiva, quadrato quando se
-                      ne possono selezionare più d'uno: è la convenzione che
-                      distingue "scegli uno" da "scegli quanti vuoi". */}
+                  {/* Casella quadrata: dice da sola che se ne possono
+                      spuntare quanti se ne vogliono, senza bisogno di una
+                      modalità da attivare prima. */}
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center border transition-[background-color,border-color] duration-[var(--duration-fast)] ${
-                      multi ? 'rounded-md' : 'rounded-full'
-                    } ${isActive ? 'border-accent bg-accent text-bg' : 'border-edge'}`}
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-[background-color,border-color] duration-[var(--duration-fast)] ${
+                      isActive ? 'border-accent bg-accent text-bg' : 'border-edge'
+                    }`}
                   >
                     {isActive && <CheckMarkIcon className="h-3.5 w-3.5" />}
                   </span>
@@ -138,19 +104,20 @@ export default function ProfilePage() {
           onCancel={profiles.length > 0 ? () => setEditing(null) : undefined}
         />
       ) : (
-        /* Un oggetto premibile a tutti gli effetti: superficie, disco grano e
-           testo pieno. L'incavo vuoto provato prima era troppo timido — di
-           fatto si vedeva solo la scritta, e aggiungere un profilo e' l'azione
-           principale di questa schermata. */
+        /* Riconoscibile come bottone, ma in secondo piano: il disco a colore
+           pieno provato prima rubava l'occhio ai profili, che sono il
+           contenuto vero della schermata. Qui il colore arriva solo al tocco. */
         <button
           type="button"
           onClick={() => setEditing('new')}
-          className="card focus-ring flex w-full items-center gap-3 p-3.5 text-left transition-[background-color,box-shadow,transform] duration-[var(--duration-fast)] hover:bg-surface-2 hover:shadow-md active:scale-[0.99]"
+          className="card focus-ring group flex w-full items-center gap-3 p-3 text-left transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-surface-2"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-bg">
-            <PlusIcon className="h-5 w-5" />
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim transition-colors duration-[var(--duration-fast)] group-hover:bg-accent group-hover:text-bg">
+            <PlusIcon className="h-4 w-4" />
           </span>
-          <span className="text-sm font-semibold">{t.profile.newProfile}</span>
+          <span className="text-sm text-ink-dim transition-colors duration-[var(--duration-fast)] group-hover:text-ink">
+            {t.profile.newProfile}
+          </span>
         </button>
       )}
     </div>
