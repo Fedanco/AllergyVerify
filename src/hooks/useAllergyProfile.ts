@@ -6,18 +6,20 @@ const PROFILES_KEY = 'as_profiles'
  *  precedente dell'app non fa perdere la selezione. */
 const ACTIVE_KEY = 'as_active_profile'
 const ACTIVE_IDS_KEY = 'as_active_profiles'
-const MULTI_KEY = 'as_multi_profile'
 
 /**
  * `activeIds` invece di un singolo id: in una famiglia ogni persona ha
  * allergie diverse e la spesa è una sola, quindi serve poter controllare un
- * prodotto per più profili in una volta. Resta però una scelta esplicita
- * (`multi`): con un profilo solo il comportamento non cambia di una virgola.
+ * prodotto per più persone insieme.
+ *
+ * Non c'è una "modalità multipla" da attivare: si spuntano i profili che
+ * servono, uno o più d'uno. Resta comunque una scelta esplicita — l'app non
+ * somma mai profili per conto suo — ma senza il passaggio in più di un
+ * interruttore da accendere prima di poter selezionare.
  */
 type State = {
   profiles: AllergyProfile[]
   activeIds: string[]
-  multi: boolean
 }
 
 let state: State = load()
@@ -57,10 +59,9 @@ function load(): State {
     let activeIds = candidates.filter(exists)
     if (activeIds.length === 0 && profiles[0]) activeIds = [profiles[0].id]
 
-    const multi = localStorage.getItem(MULTI_KEY) === '1'
-    return { profiles, activeIds, multi }
+    return { profiles, activeIds }
   } catch {
-    return { profiles: [], activeIds: [], multi: false }
+    return { profiles: [], activeIds: [] }
   }
 }
 
@@ -70,7 +71,6 @@ function commit(next: State) {
   localStorage.setItem(ACTIVE_IDS_KEY, JSON.stringify(next.activeIds))
   if (next.activeIds[0]) localStorage.setItem(ACTIVE_KEY, next.activeIds[0])
   else localStorage.removeItem(ACTIVE_KEY)
-  localStorage.setItem(MULTI_KEY, next.multi ? '1' : '0')
   listeners.forEach((l) => l())
 }
 
@@ -114,29 +114,26 @@ export function useAllergyProfile() {
     commit({ ...state, profiles, activeIds })
   }, [])
 
-  /** Selezione esclusiva: usata quando i profili multipli sono spenti. */
+  /** Rende attivo solo questo profilo. */
   const setActive = useCallback((id: string) => {
     if (state.profiles.some((p) => p.id === id)) {
       commit({ ...state, activeIds: [id] })
     }
   }, [])
 
-  /** Aggiunge o toglie un profilo dalla selezione (profili multipli accesi). */
+  /**
+   * Aggiunge o toglie un profilo dalla selezione. L'ultimo rimasto non si può
+   * togliere: senza nessun profilo attivo l'app non saprebbe piu' per chi
+   * esprimere un verdetto, e il tocco sembrerebbe semplicemente non funzionare.
+   */
   const toggleActive = useCallback((id: string) => {
     if (!state.profiles.some((p) => p.id === id)) return
-    const activeIds = state.activeIds.includes(id)
+    const isOn = state.activeIds.includes(id)
+    if (isOn && state.activeIds.length === 1) return
+    const activeIds = isOn
       ? state.activeIds.filter((a) => a !== id)
       : [...state.activeIds, id]
     commit({ ...state, activeIds })
-  }, [])
-
-  /** Spegnendo la modalità resta attivo solo il primo profilo selezionato. */
-  const setMulti = useCallback((on: boolean) => {
-    commit({
-      ...state,
-      multi: on,
-      activeIds: on ? state.activeIds : state.activeIds.slice(0, 1),
-    })
   }, [])
 
   const activeProfiles = snapshot.profiles.filter((p) =>
@@ -148,12 +145,10 @@ export function useAllergyProfile() {
     activeProfiles,
     /** primo profilo attivo: per le UI che ne mostrano uno solo */
     activeProfile: activeProfiles[0] ?? null,
-    multi: snapshot.multi,
     createProfile,
     updateProfile,
     deleteProfile,
     setActive,
     toggleActive,
-    setMulti,
   }
 }
