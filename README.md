@@ -2,7 +2,7 @@
 
 Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al tuo profilo personale. PWA installabile, mobile-first, utilizzabile anche da desktop.
 
-**Demo live**: https://allergyverify-web.vercel.app
+**Demo live**: https://allergyverify.vercel.app
 
 [![CI](https://github.com/Fedanco/AllergyVerifyWebApp/actions/workflows/ci.yml/badge.svg)](https://github.com/Fedanco/AllergyVerifyWebApp/actions/workflows/ci.yml)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
@@ -46,6 +46,6 @@ Stack: Vite · React · TypeScript · Tailwind CSS 4 · react-router · @zxing/b
 
 ## Deploy
 
-Il sito è pubblicato su **Vercel**: https://allergyverify-web.vercel.app
+Il sito è pubblicato su **Vercel**: https://allergyverify.vercel.app
 
 Deploy manuale dalla cartella del progetto: `npx vercel --prod`. Con la Git integration di Vercel attiva, ogni push su `main` viene pubblicato automaticamente (dopo che la CI su GitHub Actions ha verificato lint e build).
