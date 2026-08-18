@@ -142,6 +142,18 @@ export function ShareIcon({ className }: IconProps) {
   )
 }
 
+/** Fotocamera sbarrata: permesso negato o dispositivo senza camera. */
+export function CameraOffIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M9.5 5h5l1.2 2H20a2 2 0 0 1 2 2v8.5" />
+      <path d="M18 20H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2" />
+      <path d="M9.9 10.1a3 3 0 0 0 4.1 4.2" />
+      <path d="m3 3 18 18" />
+    </svg>
+  )
+}
+
 export function HomeAddIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>

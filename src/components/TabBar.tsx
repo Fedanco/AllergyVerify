@@ -33,7 +33,13 @@ export default function TabBar() {
         md:inset-x-auto md:top-3 md:bottom-3 md:left-3 md:w-20"
       style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
     >
-      <LogoTile className="absolute top-5 left-1/2 hidden h-10 w-10 -translate-x-1/2 md:block" />
+      {/* La visibilità sta sul wrapper, non su LogoTile: quel componente
+          porta gia' `inline-flex`, e due utility di display sullo stesso
+          elemento litigano (vinceva `inline-flex`, quindi su mobile il logo
+          restava visibile sopra l'icona Storico). */}
+      <div className="absolute top-5 left-1/2 hidden -translate-x-1/2 md:block">
+        <LogoTile className="h-10 w-10" />
+      </div>
       <ul className="flex h-16 items-stretch justify-around md:h-full md:flex-col md:justify-center md:gap-2">
         {tabs.map(({ to, label, Icon }) => (
           <li key={to} className="flex-1 md:flex-none">
