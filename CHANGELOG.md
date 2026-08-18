@@ -2,6 +2,16 @@
 
 Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
 
+## v0.6.2 — 2026-08-19
+
+Il verdetto con più profili attivi diventa una scheda per persona.
+
+- **Via la scatola rossa unica.** Con due o tre profili il blocco era un solo riquadro velato di rosso con l'elenco delle persone dentro: il colore copriva tutto, quindi non distingueva più niente — anche i dischi con l'iniziale erano rossi su rosso, e chi poteva mangiare il prodotto si scopriva solo leggendo. Ora c'è **una tessera per persona**, ciascuna col proprio tono: rossa se contiene un suo allergene, arancio se ci sono tracce, verde se è a posto. Con due o tre persone la domanda vera non è "c'è un allergene?" ma "per chi?", e la risposta adesso si vede prima di leggere i nomi.
+- **Riga di sintesi sopra le tessere** ("Allergeni per 1 profilo su 3") con il pallino del caso peggiore, per chi guarda la pagina da lontano. Le frasi lunghe del vecchio titolo sono state sostituite da tre stringhe corte (`multiSummaryDanger/Traces/Safe`, IT+EN); le cinque stringhe che non servivano più sono state rimosse.
+- **Ogni tessera dice cosa e perché**: "Contiene 🥛 Latte", "Può contenere 🌾 Glutine", "Nessun allergene" — la parola *Contiene* contro *Può contenere* è quella che cambia la decisione, e prima stava solo nel titolo del riquadro.
+- La griglia usa `auto-fit`: due tessere per riga su telefono, tutte in fila su schermo largo, senza breakpoint. Sei varianti sono state disegnate e confrontate a video prima di scegliere questa.
+- Il banner a **profilo singolo non cambia** (stesso riquadro tonale con i chip degli allergeni); la prop `rows` di `Pill`, che serviva solo al vecchio elenco, è stata rimossa.
+
 ## v0.6.1 — 2026-08-18
 
 Il logo dell'app torna a essere il file disegnato da Fede, ovunque.
