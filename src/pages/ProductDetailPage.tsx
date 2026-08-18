@@ -51,7 +51,10 @@ export default function ProductDetailPage() {
   const { code } = useParams<{ code: string }>()
   const location = useLocation()
   const navigate = useNavigate()
-  const { activeProfile } = useAllergyProfile()
+  const { activeProfiles } = useAllergyProfile()
+  // unione degli allergeni di tutti i profili attivi: con la modalità famiglia
+  // il testo ingredienti deve evidenziare quelli di chiunque sia selezionato
+  const activeAllergens = [...new Set(activeProfiles.flatMap((p) => p.allergens))]
   const { addEntry } = useScanHistory()
   const { t } = useLang()
   const [product, setProduct] = useState<Product | null>(null)
@@ -141,11 +144,11 @@ export default function ProductDetailPage() {
               sono la prova del verdetto), e solo dopo il resto. Prima i
               punteggi nutrizionali stavano sopra al verdetto, cioe' l'app
               rispondeva a una domanda che nessuno le aveva fatto. */}
-          <AllergyBanner product={product} profile={activeProfile} />
+          <AllergyBanner product={product} profiles={activeProfiles} />
 
           <ProfilesVerdict product={product} />
 
-          <IngredientsCard product={product} profile={activeProfile} />
+          <IngredientsCard product={product} allergens={activeAllergens} />
 
           <ScoreStrip product={product} />
 

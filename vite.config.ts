@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => ({
         name: 'AllergyVerify',
         short_name: 'AllergyVerify',
         description:
-          'Scansiona i prodotti alimentari e scopri subito se contengono i tuoi allergeni.',
+          'Scan food products and instantly find out whether they contain your allergens.',
         lang: 'en',
         display: 'standalone',
         theme_color: '#0b1017',

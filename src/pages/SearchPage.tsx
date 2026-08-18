@@ -15,7 +15,10 @@ export default function SearchPage() {
   const { query, results, error, setQuery, setResults, setError } = useSearchState()
   const [loading, setLoading] = useState(false)
   const requestIdRef = useRef(0)
-  const { activeProfile } = useAllergyProfile()
+  const { activeProfiles } = useAllergyProfile()
+  // unione degli allergeni dei profili attivi: in modalità famiglia una riga
+  // deve segnalare il pericolo per chiunque sia selezionato, non solo il primo
+  const activeAllergens = [...new Set(activeProfiles.flatMap((x) => x.allergens))]
   const { t } = useLang()
   const navigate = useNavigate()
 
@@ -105,7 +108,7 @@ export default function SearchPage() {
                 name={p.product_name ?? t.common.unnamedProduct}
                 brands={p.brands}
                 imageUrl={p.image_front_url}
-                detected={activeProfile ? checkAllergens(p, activeProfile.allergens).detected : []}
+                detected={checkAllergens(p, activeAllergens).detected}
               />
             </li>
           ))}

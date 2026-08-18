@@ -72,11 +72,15 @@ const it = {
   profile: {
     title: 'Profili allergie',
     subtitle: 'Il profilo attivo viene usato per il verdetto sui prodotti',
+    subtitleMulti: 'I profili selezionati vengono usati insieme per il verdetto',
     noAllergens: 'Nessun allergene selezionato',
     edit: 'Modifica',
     confirmDelete: (name: string) => `Eliminare il profilo "${name}"?`,
     deleteAria: (name: string) => `Elimina profilo ${name}`,
-    newProfile: '+ Nuovo profilo',
+    newProfile: 'Nuovo profilo',
+    multiTitle: 'Controlla più profili insieme',
+    multiHint:
+      'Utile in famiglia: il verdetto considera gli allergeni di tutti i profili selezionati e ti dice per chi.',
     editorTitleEdit: (name: string) => `Modifica "${name}"`,
     editorTitleNew: 'Nuovo profilo',
     nameLabel: 'Nome',
@@ -206,6 +210,13 @@ const it = {
     safeTitle: 'Nessun tuo allergene rilevato',
     safeBody: (name: string) =>
       `Sicuro per il profilo "${name}" secondo i dati disponibili.`,
+    multiDangerTitle: 'Attenzione!',
+    multiDangerBody: (n: number, tot: number) =>
+      `Allergeni rilevati per ${n} profil${n === 1 ? 'o' : 'i'} su ${tot} attiv${tot === 1 ? 'o' : 'i'}.`,
+    multiSafeTitle: 'Nessun allergene rilevato',
+    multiSafeBody: (tot: number) =>
+      `Sicuro per tutti i ${tot} profili attivi, secondo i dati disponibili.`,
+    multiTracesTitle: 'Possibili tracce',
   },
   profilesVerdict: {
     title: 'Tutti i profili',
@@ -300,11 +311,15 @@ const en: Translations = {
   profile: {
     title: 'Allergy profiles',
     subtitle: 'The active profile is used for product verdicts',
+    subtitleMulti: 'The selected profiles are used together for the verdict',
     noAllergens: 'No allergens selected',
     edit: 'Edit',
     confirmDelete: (name: string) => `Delete profile "${name}"?`,
     deleteAria: (name: string) => `Delete profile ${name}`,
-    newProfile: '+ New profile',
+    newProfile: 'New profile',
+    multiTitle: 'Check several profiles together',
+    multiHint:
+      'Useful for a family: the verdict covers the allergens of every selected profile and tells you who is affected.',
     editorTitleEdit: (name: string) => `Edit "${name}"`,
     editorTitleNew: 'New profile',
     nameLabel: 'Name',
@@ -431,6 +446,13 @@ const en: Translations = {
     safeTitle: 'None of your allergens detected',
     safeBody: (name: string) =>
       `Safe for the "${name}" profile according to available data.`,
+    multiDangerTitle: 'Warning!',
+    multiDangerBody: (n: number, tot: number) =>
+      `Allergens found for ${n} of ${tot} active profile${tot === 1 ? '' : 's'}.`,
+    multiSafeTitle: 'No allergens detected',
+    multiSafeBody: (tot: number) =>
+      `Safe for all ${tot} active profiles, according to available data.`,
+    multiTracesTitle: 'Possible traces',
   },
   profilesVerdict: {
     title: 'All profiles',

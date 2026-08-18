@@ -8,7 +8,8 @@ import { useLang } from '../i18n/useLang'
 
 export default function HistoryPage() {
   const { history, clearHistory } = useScanHistory()
-  const { activeProfile } = useAllergyProfile()
+  const { activeProfiles } = useAllergyProfile()
+  const activeAllergens = [...new Set(activeProfiles.flatMap((p) => p.allergens))]
   const { t } = useLang()
 
   return (
@@ -52,9 +53,7 @@ export default function HistoryPage() {
                 brands={e.brands}
                 imageUrl={e.imageUrl}
                 detected={
-                  activeProfile
-                    ? checkAllergensFromHistoryEntry(e, activeProfile.allergens).detected
-                    : []
+                  checkAllergensFromHistoryEntry(e, activeAllergens).detected
                 }
                 subtitle={`${e.source === 'scan' ? t.history.sourceScan : t.history.sourceSearch} · ${formatDate(e.scannedAt, t.history.dateLocale)}`}
               />
