@@ -121,7 +121,7 @@ function Pill({
     <div
       role="status"
       aria-live="polite"
-      className={`flex items-start gap-4 rounded-banner border px-5 py-5 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
+      className={`flex items-start gap-3.5 rounded-banner border px-4 py-4 sm:gap-4 sm:px-5 sm:py-5 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
         tone === 'danger' ? 'animate-banner-in-danger' : 'animate-banner-in'
       }`}
     >
@@ -131,7 +131,9 @@ function Pill({
         <Icon className="h-6 w-6" />
       </span>
       <div className="min-w-0">
-        <p className="font-display text-lg leading-tight font-bold">{title}</p>
+        <p className="font-display text-[1.0625rem] leading-tight font-bold sm:text-lg">
+          {title}
+        </p>
         <p className="mt-1 text-sm" style={{ color: BODY_COLOR[tone] }}>
           {children}
         </p>
