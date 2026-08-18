@@ -6,7 +6,16 @@ import { CameraOffIcon, CheckIcon } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import { useLang } from '../i18n/useLang'
 
-type ScanState = 'starting' | 'scanning' | 'detected' | 'denied' | 'unavailable'
+type ScanState =
+  | 'starting'
+  | 'scanning'
+  | 'detected'
+  | 'denied'
+  /** il dispositivo non ha una fotocamera utilizzabile */
+  | 'unavailable'
+  /** pagina servita in http su un indirizzo diverso da localhost: il browser
+      non espone `navigator.mediaDevices` e non c'e' nulla da autorizzare */
+  | 'insecure'
 
 // Pausa breve sul momento "trovato" prima di navigare: dà al gesto di
 // scansione un feedback soddisfacente invece di saltare via all'istante.
@@ -30,7 +39,11 @@ export default function ScanPage() {
 
     async function start() {
       if (!navigator.mediaDevices?.getUserMedia) {
-        setState('unavailable')
+        // Distinzione importante: senza secure context la fotocamera non è
+        // "assente", è il browser che non la espone. Dire all'utente che il
+        // suo telefono non ha una fotocamera sarebbe falso, e non gli
+        // farebbe capire che basta aprire l'app in https.
+        setState(window.isSecureContext ? 'unavailable' : 'insecure')
         return
       }
       try {
@@ -113,22 +126,30 @@ export default function ScanPage() {
           </div>
         )}
 
-        {(state === 'denied' || state === 'unavailable') && (
+        {(state === 'denied' || state === 'unavailable' || state === 'insecure') && (
           <div
             role="status"
             aria-live="polite"
-            className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface px-6 text-center"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto bg-surface px-6 py-4 text-center"
           >
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-surface-3 text-ink-dim">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-surface-3 text-ink-dim">
               <CameraOffIcon className="h-7 w-7" />
             </span>
             <p className="font-display text-base font-bold">
-              {state === 'denied' ? t.scan.deniedTitle : t.scan.unavailableTitle}
+              {state === 'denied'
+                ? t.scan.deniedTitle
+                : state === 'insecure'
+                  ? t.scan.insecureTitle
+                  : t.scan.unavailableTitle}
             </p>
             <p className="text-sm text-ink-dim">
-              {state === 'denied' ? t.scan.denied : t.scan.unavailable}
+              {state === 'denied'
+                ? t.scan.denied
+                : state === 'insecure'
+                  ? t.scan.insecure
+                  : t.scan.unavailable}
             </p>
-            {state === 'denied' && (
+            {(state === 'denied' || state === 'insecure') && (
               <button
                 type="button"
                 onClick={() => {

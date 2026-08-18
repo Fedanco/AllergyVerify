@@ -46,6 +46,9 @@ const it = {
     unavailableTitle: 'Fotocamera non disponibile',
     unavailable:
       'Questo dispositivo non espone una fotocamera utilizzabile dal browser.',
+    insecureTitle: 'Connessione non sicura',
+    insecure:
+      'I browser permettono di usare la fotocamera solo su connessioni sicure (https). Stai aprendo l\'app da un indirizzo di rete locale in http, quindi la fotocamera non è nemmeno richiedibile. Sul sito pubblicato funziona.',
     retry: 'Riprova',
     howToTitle: 'Come riattivarla',
     howToIos:
@@ -271,6 +274,9 @@ const en: Translations = {
       'Without the camera we cannot read the barcode. If you denied access by mistake, you can turn it back on.',
     unavailableTitle: 'Camera not available',
     unavailable: 'This device has no camera the browser can use.',
+    insecureTitle: 'Insecure connection',
+    insecure:
+      'Browsers only allow camera access over a secure connection (https). You are opening the app from a local network address over http, so the camera cannot even be requested. It works on the published site.',
     retry: 'Try again',
     howToTitle: 'How to turn it back on',
     howToIos:

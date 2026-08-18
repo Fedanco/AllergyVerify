@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // base './' + HashRouter: funziona su hosting statico senza redirect 404
@@ -9,6 +10,12 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    // HTTPS con certificato autofirmato in sviluppo. Non è un vezzo: la
+    // fotocamera (e crypto.randomUUID) esistono solo in "secure context",
+    // cioè https o localhost. Provando l'app dal telefono via IP di rete in
+    // http, lo scanner non è nemmeno richiedibile. Nessun effetto sulla
+    // build di produzione, dove ci pensa Vercel.
+    basicSsl(),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
