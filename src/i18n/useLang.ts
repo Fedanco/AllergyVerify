@@ -13,8 +13,10 @@ function load(): Lang {
   } catch {
     // localStorage non disponibile
   }
-  // default: italiano (comportamento storico dell'app)
-  return 'it'
+  // Al primo avvio l'app parte in inglese: è la lingua che serve a chiunque
+  // non sia italiano, e chi lo è la cambia una volta sola da Info → Lingua
+  // (la scelta resta salvata). Prima il default era l'italiano.
+  return 'en'
 }
 
 // document.documentElement.lang guida la pronuncia di uno screen reader:
