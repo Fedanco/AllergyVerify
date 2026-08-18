@@ -29,10 +29,10 @@ export default defineConfig(({ mode }) => ({
         theme_color: '#0b1017',
         background_color: '#0b1017',
         icons: [
-          { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'pwa-192-v2.png', sizes: '192x192', type: 'image/png' },
+          { src: 'pwa-512-v2.png', sizes: '512x512', type: 'image/png' },
           {
-            src: 'pwa-maskable-512.png',
+            src: 'pwa-maskable-512-v2.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',

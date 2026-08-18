@@ -2,6 +2,16 @@
 
 Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
 
+## v0.6.1 — 2026-08-18
+
+Il logo dell'app torna a essere il file disegnato da Fede, ovunque.
+
+- **Inquadratura ripristinata.** Le icone in uso erano state derivate schiacciando lo squircle originale in un quadrato: il disegno finiva più in basso e più grande, con appena lo 0,6% di margine sotto — foglie verdi e badge rosso a filo del bordo, contro il 10% ai lati. Ora tutte le icone nascono da `assets/logo-source.png`, il file originale, con scala sempre uniforme: le proporzioni non si toccano.
+- **Via la cornice intorno al logo.** `LogoTile` incastonava l'immagine in una `card`: nella dock desktop quel riquadro da 40px, con un raggio di 24px, diventava un cerchio pieno — uno squircle dentro un cerchio, con dentro ancora un rettangolo arrotondato. Tre forme annidate che non combaciavano. Il file è già un'icona finita, con la sua forma, la sua luce e la sua ombra: adesso si mostra da sola, come un'icona sulla Home di iOS poggiata sul fondo scuro.
+- **Nessun ritaglio.** Il tile entra intero nel quadrato dell'icona, con gli angoli riempiti di bianco: sono bianchi quanto il tile, quindi non si vedono, e sopra ci va comunque la maschera del sistema. Un tentativo intermedio ingrandiva il tile fino a portarlo agli angoli — e ricambiava l'inquadratura dell'8% per lato, cioè il difetto da cui si partiva. Unica eccezione l'icona `maskable` di Android, dove la maschera è un cerchio e il soggetto deve stare nel 62% centrale: lì lo squircle non c'è.
+- **Un unico script rifà tutto**: `scripts/build-icons.ps1` (PowerShell + System.Drawing, nessuna dipendenza da installare) genera i sette file da quell'unica sorgente e misura da sé forma, riquadri e zoom necessario, così un riesporto del logo non richiede di rifare i conti a mano.
+- Nomi file versionati (`favicon-v5`, `apple-touch-icon-v5`, `pwa-*-v2`) perché **iOS cachea le icone per URL**: riscrivere lo stesso nome non cambierebbe nulla sui telefoni che l'hanno già installata. I file superati sono stati rimossi.
+
 ## v0.6.0 — 2026-08-18
 
 Redesign completo dell'interfaccia ("Inchiostro") — la pelle era ancora quella del progetto precedente, nome e logo no.
