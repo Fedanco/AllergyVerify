@@ -35,10 +35,12 @@ export default function SettingsPage() {
                 type="button"
                 onClick={() => setLang(value)}
                 aria-pressed={lang === value}
-                className={`focus-ring flex-1 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
+                /* Stessa grammatica dei chip allergene: la scelta attiva
+                   affonda invece di cambiare solo colore. */
+                className={`focus-ring flex-1 rounded-xl px-3 py-2 text-sm transition-[background-color,box-shadow,color] duration-[var(--duration-fast)] ${
                   lang === value
-                    ? 'border-accent/40 bg-accent/10 text-accent'
-                    : 'border-edge bg-surface-2 text-ink-dim hover:text-ink'
+                    ? 'inset-surface font-semibold text-accent'
+                    : 'chip font-medium text-ink-dim hover:text-ink'
                 }`}
               >
                 {label}
@@ -105,8 +107,8 @@ export default function SettingsPage() {
           <p className="text-sm text-ink-dim">{t.settings.warningBody}</p>
         </section>
 
-        <p className="mt-2 text-center text-xs text-ink-dim/60">
-          AllergyVerify Web · v0.5.1
+        <p className="mt-2 text-center text-xs text-ink-dim">
+          AllergyVerify Web · v0.6.0
         </p>
       </div>
 
