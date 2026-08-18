@@ -4,7 +4,7 @@ Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi alle
 
 **Demo live**: https://allergyverify.vercel.app
 
-[![CI](https://github.com/Fedanco/AllergyVerifyWebApp/actions/workflows/ci.yml/badge.svg)](https://github.com/Fedanco/AllergyVerifyWebApp/actions/workflows/ci.yml)
+[![CI](https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml/badge.svg)](https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
