@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser'
 import { Link } from 'react-router-dom'
-import { CheckIcon } from '../components/Icons'
+import { CameraOffIcon, CheckIcon } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import { useLang } from '../i18n/useLang'
 
@@ -15,6 +15,10 @@ const DETECTED_DELAY_MS = 350
 export default function ScanPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [state, setState] = useState<ScanState>('starting')
+  // Incrementare questo contatore rilancia l'effetto: è il "Riprova" dopo un
+  // permesso negato. Serve perché negare l'accesso per sbaglio è facilissimo
+  // e prima l'unica via d'uscita era rinunciare allo scanner.
+  const [attempt, setAttempt] = useState(0)
   const navigate = useNavigate()
   const { t } = useLang()
 
@@ -56,7 +60,7 @@ export default function ScanPage() {
       clearTimeout(navigateTimeout)
       controls?.stop()
     }
-  }, [navigate])
+  }, [navigate, attempt])
 
   return (
     <div>
@@ -115,10 +119,27 @@ export default function ScanPage() {
             aria-live="polite"
             className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface px-6 text-center"
           >
-            <p aria-hidden className="text-3xl">📷</p>
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-surface-3 text-ink-dim">
+              <CameraOffIcon className="h-7 w-7" />
+            </span>
+            <p className="font-display text-base font-bold">
+              {state === 'denied' ? t.scan.deniedTitle : t.scan.unavailableTitle}
+            </p>
             <p className="text-sm text-ink-dim">
               {state === 'denied' ? t.scan.denied : t.scan.unavailable}
             </p>
+            {state === 'denied' && (
+              <button
+                type="button"
+                onClick={() => {
+                  setState('starting')
+                  setAttempt((a) => a + 1)
+                }}
+                className="focus-ring rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-bg transition-colors duration-[var(--duration-fast)]"
+              >
+                {t.scan.retry}
+              </button>
+            )}
             <Link to="/" className="focus-ring rounded text-sm font-medium text-accent">
               {t.scan.searchInstead}
             </Link>
@@ -126,7 +147,18 @@ export default function ScanPage() {
         )}
       </div>
 
-      <p className="mt-4 text-center text-xs text-ink-dim">{t.scan.hint}</p>
+      {state === 'denied' ? (
+        /* Su iPhone, una volta negato il permesso, il browser non lo richiede
+           piu' da solo: senza queste istruzioni "Riprova" fallirebbe sempre e
+           l'utente resterebbe bloccato senza sapere perche'. */
+        <div className="card mt-4 p-4 text-left">
+          <h2 className="mb-2 text-xs font-semibold text-ink-dim">{t.scan.howToTitle}</h2>
+          <p className="text-xs leading-relaxed text-ink-dim">{t.scan.howToIos}</p>
+          <p className="mt-1.5 text-xs leading-relaxed text-ink-dim">{t.scan.howToAndroid}</p>
+        </div>
+      ) : (
+        <p className="mt-4 text-center text-xs text-ink-dim">{t.scan.hint}</p>
+      )}
     </div>
   )
 }

@@ -40,12 +40,20 @@ const it = {
     title: 'Scansiona',
     subtitle: 'Inquadra il codice a barre del prodotto',
     starting: 'Avvio fotocamera…',
+    deniedTitle: 'Fotocamera non autorizzata',
     denied:
-      "Accesso alla fotocamera negato. Consenti l'uso della fotocamera nelle impostazioni del browser e ricarica la pagina.",
+      "Senza fotocamera non possiamo leggere il codice a barre. Se hai negato l'accesso per sbaglio, puoi riattivarlo.",
+    unavailableTitle: 'Fotocamera non disponibile',
     unavailable:
-      'Fotocamera non disponibile su questo dispositivo. Usa la ricerca manuale.',
+      'Questo dispositivo non espone una fotocamera utilizzabile dal browser.',
+    retry: 'Riprova',
+    howToTitle: 'Come riattivarla',
+    howToIos:
+      'iPhone: tocca «aA» nella barra dell\'indirizzo → Impostazioni sito web → Fotocamera → Consenti.',
+    howToAndroid:
+      'Android: tocca il lucchetto accanto all\'indirizzo → Autorizzazioni → Fotocamera.',
     hint: 'Il codice viene riconosciuto automaticamente: nessuno scatto necessario.',
-    searchInstead: 'Vai alla ricerca manuale',
+    searchInstead: 'Cerca il prodotto a mano',
   },
   history: {
     title: 'Storico',
@@ -258,11 +266,19 @@ const en: Translations = {
     title: 'Scan',
     subtitle: 'Frame the product barcode',
     starting: 'Starting camera…',
+    deniedTitle: 'Camera not allowed',
     denied:
-      'Camera access denied. Allow camera access in your browser settings and reload the page.',
-    unavailable: 'Camera not available on this device. Use manual search instead.',
+      'Without the camera we cannot read the barcode. If you denied access by mistake, you can turn it back on.',
+    unavailableTitle: 'Camera not available',
+    unavailable: 'This device has no camera the browser can use.',
+    retry: 'Try again',
+    howToTitle: 'How to turn it back on',
+    howToIos:
+      'iPhone: tap "aA" in the address bar → Website Settings → Camera → Allow.',
+    howToAndroid:
+      'Android: tap the padlock next to the address → Permissions → Camera.',
     hint: 'The barcode is recognized automatically: no need to take a picture.',
-    searchInstead: 'Go to manual search',
+    searchInstead: 'Search for the product manually',
   },
   history: {
     title: 'History',
