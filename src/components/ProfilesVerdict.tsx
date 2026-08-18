@@ -6,37 +6,31 @@ import { TONE_ICON, TONE_TEXT, type Tone } from '../lib/allergyTone'
 import type { Product } from '../types/product'
 
 /**
- * Confronto multi-profilo: una riga di verdetto per ogni profilo salvato.
- * Visibile solo con almeno 2 profili; il banner grande resta per l'attivo.
+ * Confronto fra i profili SELEZIONATI: una riga di esito per ciascuno.
+ *
+ * Solo quelli selezionati, e solo quando sono piu' d'uno: un profilo salvato
+ * ma non spuntato non deve comparire da nessuna parte, altrimenti l'app
+ * risponde per persone che l'utente non ha chiesto di controllare. Con un
+ * solo profilo attivo il verdetto grande dice gia' tutto e questo blocco
+ * sparisce.
  */
 export default function ProfilesVerdict({ product }: { product: Product }) {
-  const { profiles, activeProfiles } = useAllergyProfile()
-  const activeIds = new Set(activeProfiles.map((p) => p.id))
+  const { activeProfiles } = useAllergyProfile()
   const { lang, t } = useLang()
-  if (profiles.length < 2) return null
+  if (activeProfiles.length < 2) return null
 
   return (
     <section className="card p-4">
       <h2 className="mb-3 text-sm font-semibold text-ink-dim">{t.profilesVerdict.title}</h2>
       <ul className="flex flex-col gap-2">
-        {profiles.map((p) => {
+        {activeProfiles.map((p) => {
           const v = verdictFor(product, p.allergens, lang, t)
-          const active = activeIds.has(p.id)
           const Icon = TONE_ICON[v.tone]
           return (
-            <li
-              key={p.id}
-              className={`card-row flex flex-col gap-0.5 px-3 py-2 ${
-                active ? 'border-accent/40' : ''
-              }`}
-            >
+            <li key={p.id} className="card-row flex flex-col gap-0.5 px-3 py-2">
+              {/* niente badge "attivo": qui sono attivi tutti per definizione */}
               <span className="flex items-center gap-1.5 text-sm font-medium">
                 <span className="truncate">{p.name}</span>
-                {active && (
-                  <span className="shrink-0 text-[0.65rem] text-accent">
-                    {t.profilesVerdict.active}
-                  </span>
-                )}
               </span>
               <span className={`flex items-center gap-1 text-xs font-medium ${TONE_TEXT[v.tone]}`}>
                 <Icon className="h-3.5 w-3.5 shrink-0" /> {v.text}

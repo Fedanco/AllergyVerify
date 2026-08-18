@@ -216,8 +216,7 @@ const it = {
     multiTracesTitle: 'Possibili tracce',
   },
   profilesVerdict: {
-    title: 'Tutti i profili',
-    active: 'attivo',
+    title: 'Profili selezionati',
     noData: 'Dati mancanti',
     contains: (list: string) => `Contiene: ${list}`,
     traces: (list: string) => `Tracce: ${list}`,
@@ -449,8 +448,7 @@ const en: Translations = {
     multiTracesTitle: 'Possible traces',
   },
   profilesVerdict: {
-    title: 'All profiles',
-    active: 'active',
+    title: 'Selected profiles',
     noData: 'No data',
     contains: (list: string) => `Contains: ${list}`,
     traces: (list: string) => `Traces: ${list}`,
