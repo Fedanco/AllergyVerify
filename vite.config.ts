@@ -5,17 +5,18 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // base './' + HashRouter: funziona su hosting statico senza redirect 404
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   base: './',
   plugins: [
     react(),
     tailwindcss(),
-    // HTTPS con certificato autofirmato in sviluppo. Non è un vezzo: la
-    // fotocamera (e crypto.randomUUID) esistono solo in "secure context",
-    // cioè https o localhost. Provando l'app dal telefono via IP di rete in
-    // http, lo scanner non è nemmeno richiedibile. Nessun effetto sulla
-    // build di produzione, dove ci pensa Vercel.
-    basicSsl(),
+    // HTTPS con certificato autofirmato, solo con `npm run dev:https`.
+    // Serve per provare l'app dal telefono via IP di rete: la fotocamera (e
+    // crypto.randomUUID) esistono solo in "secure context", cioè https o
+    // localhost, quindi in http lo scanner non è nemmeno richiedibile.
+    // Non è il default perché il certificato autofirmato costringe ogni
+    // browser a un avviso di sicurezza da accettare a mano.
+    ...(mode === 'https' ? [basicSsl()] : []),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
@@ -60,4 +61,4 @@ export default defineConfig({
       },
     }),
   ],
-})
+}))

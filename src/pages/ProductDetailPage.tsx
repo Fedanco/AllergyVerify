@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getProductByBarcode } from '../api/openFoodFacts'
 import AllergyBanner from '../components/AllergyBanner'
-import { BackIcon } from '../components/Icons'
+import { BackIcon, NotFoundIcon, PackageIcon } from '../components/Icons'
 import IngredientsCard from '../components/IngredientsCard'
 import ProfilesVerdict from '../components/ProfilesVerdict'
 import ScoreStrip from '../components/ScoreStrip'
@@ -18,23 +18,27 @@ import {
   type Product,
 } from '../types/product'
 
+// Niente emoji per riga: nove pittogrammi in colonna su una tabella di numeri
+// sono rumore (un panetto di burro per "Grassi" si decodifica peggio della
+// parola stessa), si disegnano diversi su ogni sistema operativo, e rubavano
+// l'occhio all'unico segnale che porta davvero informazione: il pallino di
+// livello accanto al valore.
 const NUTRIMENT_ROWS: {
   key: keyof Nutriments
   labelKey: keyof Translations['productDetail']['nutriments']
-  emoji: string
   unit: string
   /** chiave in nutrient_levels, se OFF fornisce il livello per questo valore */
   levelKey?: keyof NutrientLevels
 }[] = [
-  { key: 'energy-kcal_100g', labelKey: 'energy', emoji: '⚡', unit: 'kcal' },
-  { key: 'carbohydrates_100g', labelKey: 'carbohydrates', emoji: '🍞', unit: 'g' },
-  { key: 'sugars_100g', labelKey: 'sugars', emoji: '🍬', unit: 'g', levelKey: 'sugars' },
-  { key: 'fat_100g', labelKey: 'fat', emoji: '🧈', unit: 'g', levelKey: 'fat' },
-  { key: 'saturated-fat_100g', labelKey: 'saturatedFat', emoji: '🥓', unit: 'g', levelKey: 'saturated-fat' },
-  { key: 'proteins_100g', labelKey: 'proteins', emoji: '💪', unit: 'g' },
-  { key: 'fiber_100g', labelKey: 'fiber', emoji: '🌿', unit: 'g' },
-  { key: 'salt_100g', labelKey: 'salt', emoji: '🧂', unit: 'g', levelKey: 'salt' },
-  { key: 'sodium_100g', labelKey: 'sodium', emoji: '⚗️', unit: 'g' },
+  { key: 'energy-kcal_100g', labelKey: 'energy', unit: 'kcal' },
+  { key: 'carbohydrates_100g', labelKey: 'carbohydrates', unit: 'g' },
+  { key: 'sugars_100g', labelKey: 'sugars', unit: 'g', levelKey: 'sugars' },
+  { key: 'fat_100g', labelKey: 'fat', unit: 'g', levelKey: 'fat' },
+  { key: 'saturated-fat_100g', labelKey: 'saturatedFat', unit: 'g', levelKey: 'saturated-fat' },
+  { key: 'proteins_100g', labelKey: 'proteins', unit: 'g' },
+  { key: 'fiber_100g', labelKey: 'fiber', unit: 'g' },
+  { key: 'salt_100g', labelKey: 'salt', unit: 'g', levelKey: 'salt' },
+  { key: 'sodium_100g', labelKey: 'sodium', unit: 'g' },
 ]
 
 const LEVEL_DOTS: Record<'low' | 'moderate' | 'high', string> = {
@@ -87,9 +91,11 @@ export default function ProductDetailPage() {
       </button>
 
       {errorKind && (
-        <div className="card px-5 py-6 text-center">
-          <p aria-hidden className="text-3xl">🤷</p>
-          <p className="mt-2 text-sm text-ink-dim">{t.productDetail.errors[errorKind]}</p>
+        <div className="card flex flex-col items-center px-5 py-6 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-2 text-ink-dim">
+            <NotFoundIcon className="h-6 w-6" />
+          </span>
+          <p className="mt-3 text-sm text-ink-dim">{t.productDetail.errors[errorKind]}</p>
           <p className="mt-1 font-mono text-xs text-ink-dim/60">{code}</p>
         </div>
       )}
@@ -111,7 +117,9 @@ export default function ProductDetailPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div aria-hidden className="flex h-full w-full items-center justify-center text-3xl">🍎</div>
+                <div className="flex h-full w-full items-center justify-center text-ink-dim">
+                  <PackageIcon className="h-8 w-8" />
+                </div>
               )}
             </div>
             <div className="min-w-0">
@@ -180,12 +188,12 @@ function NutrimentTable({
   return (
     <>
       <ul className="divide-y divide-edge">
-        {rows.map(({ key, labelKey, emoji, unit, levelKey }) => {
+        {rows.map(({ key, labelKey, unit, levelKey }) => {
           const level = levelKey ? levels?.[levelKey] : undefined
           return (
             <li key={key} className="flex items-center justify-between py-2.5">
-              <span className="flex items-center gap-2.5 text-sm">
-                <span aria-hidden>{emoji}</span> {t.productDetail.nutriments[labelKey]}
+              <span className="flex items-center gap-2 text-sm">
+                {t.productDetail.nutriments[labelKey]}
                 {level && (
                   <span
                     title={t.productDetail.levelTitle(t.productDetail.levels[level])}

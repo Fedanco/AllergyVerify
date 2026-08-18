@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { labelForTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
-import { AlertIcon, ChevronRightIcon } from './Icons'
+import { AlertIcon, ChevronRightIcon, PackageIcon } from './Icons'
 
 interface Props {
   code: string
@@ -27,13 +27,14 @@ export default function ProductCard({
   return (
     <Link
       to={`/product/${code}`}
-      className="card group flex items-center gap-3 p-3 transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)] hover:border-accent/40 hover:shadow-md active:scale-[0.99]"
+      className="card group flex items-center gap-3 p-3 transition-[background-color,box-shadow,transform] duration-[var(--duration-fast)] hover:bg-surface-2 hover:shadow-md active:scale-[0.99]"
     >
-      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-surface-2">
+      {/* immagine incassata: l'oggetto sporge, la foto ci affonda dentro */}
+      <div className="inset-surface h-14 w-14 shrink-0 overflow-hidden rounded-xl">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
         ) : (
-          <div aria-hidden className="flex h-full w-full items-center justify-center text-lg">🍎</div>
+          <div className="flex h-full w-full items-center justify-center text-ink-dim"><PackageIcon className="h-6 w-6" /></div>
         )}
       </div>
       <div className="min-w-0 flex-1">
