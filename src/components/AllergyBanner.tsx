@@ -108,9 +108,14 @@ function MultiVerdict({
           tone="danger"
           Icon={AlertIcon}
           title={t.allergyBanner.multiDangerTitle}
-          rows={hit.map((r) => ({
+          /* Elenca TUTTI i profili scelti, compresi quelli a posto: sapere
+             chi PUO' mangiare una cosa e' utile quanto sapere chi non puo',
+             e cosi' questo blocco basta da solo (il riquadro che ripeteva le
+             stesse righe piu' sotto e' stato tolto). */
+          rows={results.map((r) => ({
             name: r.profile.name,
-            tags: r.detected,
+            tags: r.detected.length > 0 ? r.detected : r.traces,
+            ok: r.detected.length === 0 && r.traces.length === 0,
           }))}
         >
           {t.allergyBanner.multiDangerBody(hit.length, profiles.length)}
@@ -209,9 +214,9 @@ function Pill({
   /** allergeni da elencare come chip sotto il titolo (tag normalizzati) */
   tags?: string[]
   /** una riga per profilo coinvolto, con i suoi allergeni (modalità famiglia) */
-  rows?: { name: string; tags: string[] }[]
+  rows?: { name: string; tags: string[]; ok?: boolean }[]
 }) {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const glow = TONE_GLOW[tone]
   return (
     <div
@@ -234,15 +239,34 @@ function Pill({
           {children}
         </p>
         {rows && rows.length > 0 && (
-          <ul className="mt-2.5 flex flex-col gap-2">
+          /* Una riga per persona, separate da un filo: dentro un blocco che
+             e' gia' una superficie, incassare altri riquadri crea scatole
+             dentro scatole. Il disco con l'iniziale porta il colore
+             dell'esito, cosi' chi puo' e chi non puo' mangiare si distingue
+             prima di leggere i nomi. */
+          <ul className="mt-3 divide-y divide-black/25 border-t border-black/25">
             {rows.map((row) => (
-              <li key={row.name} className="rounded-xl bg-bg/45 px-3 py-2">
-                <p className="text-xs font-bold" style={{ color: BODY_COLOR[tone] }}>
-                  {row.name}
-                </p>
-                <p className="mt-0.5 text-xs text-ink-dim">
-                  {row.tags.map((tag) => labelForTag(tag, lang)).join(' · ')}
-                </p>
+              <li key={row.name} className="flex items-center gap-3 py-2.5">
+                <span
+                  aria-hidden
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-bg"
+                  style={{ background: row.ok ? 'var(--color-safe)' : `var(--color-${tone})` }}
+                >
+                  {row.name.slice(0, 1).toUpperCase()}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-ink">
+                    {row.name}
+                  </span>
+                  <span
+                    className="block truncate text-xs"
+                    style={{ color: row.ok ? 'var(--color-safe)' : BODY_COLOR[tone] }}
+                  >
+                    {row.ok
+                      ? t.allergyBanner.multiRowSafe
+                      : row.tags.map((tag) => labelForTag(tag, lang)).join(' · ')}
+                  </span>
+                </span>
               </li>
             ))}
           </ul>

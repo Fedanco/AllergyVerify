@@ -165,7 +165,7 @@ body {
 
    `border` resta dichiarato trasparente: diversi componenti sovrascrivono
    il bordo della card per segnalare lo stato attivo (`border-accent/40` in
-   ScoreStrip, ProfilePage, ProfilesVerdict, SettingsPage). Senza questa
+   ScoreStrip, ProfilePage, SettingsPage). Senza questa
    riga quelle override cambierebbero il box model e sposterebbero il
    layout di 1px a ogni toggle. */
 @utility card {
@@ -179,7 +179,7 @@ body {
   box-shadow: inset 0 1px 0 0 var(--clay-rim);
 }
 
-/* Riga di lista dentro una card (es. ProfilesVerdict): un livello di
+/* Riga di lista dentro una card: un livello di
    superficie, non una card annidata dentro un'altra card. */
 @utility card-row {
   background: var(--color-surface-2);
