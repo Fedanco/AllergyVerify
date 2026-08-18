@@ -35,6 +35,11 @@
   --color-danger: #ff6b6b;
 
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Font dei soli titoli: geometrica rotonda, sceglie la personalità dove
+     serve (nome pagina, nome prodotto, verdetto). Il testo di lettura e i
+     dati restano su Inter: lì la neutralità è una qualità, e un carattere
+     marcato renderebbe la lista ingredienti più faticosa. */
+  --font-display: "Outfit Variable", var(--font-sans);
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
 
   /* Raggi più generosi della media: un oggetto con volume ha bisogno di
@@ -55,12 +60,10 @@
   --clay-rim-strong: rgba(214, 232, 255, 0.16);
   --clay-base: rgba(0, 0, 0, 0.3);
 
-  /* Scala di ombre: il palette è quasi nero, servono strati (contatto +
-     ambient) invece di un'ombra piatta per leggersi davvero. Nessun uso
-     preesistente di shadow-sm/md/lg nel progetto: override sicuro dei
-     default Tailwind. */
   /* Ombre tinte del fondo (blu-nere), non nero puro: un nero neutro su una
-     superficie blu legge come sporco invece che come assenza di luce. */
+     superficie blu legge come sporco invece che come assenza di luce.
+     Servono a due strati (contatto + ambient); override sicuro dei default
+     Tailwind, che il progetto non usava. */
   --shadow-sm: 0 1px 2px rgba(3, 7, 14, 0.5), 0 2px 6px -2px rgba(3, 7, 14, 0.55);
   --shadow-md: 0 2px 8px -2px rgba(3, 7, 14, 0.55), 0 10px 28px -6px rgba(3, 7, 14, 0.65);
   --shadow-lg: 0 4px 14px -4px rgba(3, 7, 14, 0.6), 0 20px 48px -12px rgba(3, 7, 14, 0.7);
@@ -156,11 +159,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Card standard: un oggetto con volume, non un rettangolo con un bordo.
-   Il rilievo nasce da tre cose insieme, tutte coerenti con una luce sola
-   in alto: un gradiente verticale corto (delta ~5%, sotto la soglia del
-   banding su OLED), un filo di luce sul bordo superiore, uno stacco scuro
-   su quello inferiore. Il bordo grigio 1px sparisce.
+/* Card standard: un oggetto, non un rettangolo con un bordo. Si stacca dal
+   fondo per salto di superficie (bg -> surface) piu' un filo di luce sul
+   bordo alto. Il bordo grigio 1px sparisce.
 
    `border` resta dichiarato trasparente: diversi componenti sovrascrivono
    il bordo della card per segnalare lo stato attivo (`border-accent/40` in

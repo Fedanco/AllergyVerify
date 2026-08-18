@@ -115,7 +115,7 @@ export default function ProductDetailPage() {
               )}
             </div>
             <div className="min-w-0">
-              <h1 className="text-lg font-bold leading-tight">
+              <h1 className="font-display text-lg font-bold leading-tight">
                 {product.product_name ?? t.common.unnamedProduct}
               </h1>
               {product.brands && (
