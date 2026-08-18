@@ -15,7 +15,11 @@ export default function App() {
   const { t } = useLang()
   return (
     <HashRouter>
-      <div className="min-h-dvh bg-bg pt-[env(safe-area-inset-top)] pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0 md:pl-20">
+      {/* pb: la dock è alta 4rem e galleggia a 0.75rem dal fondo, piu' un
+          respiro sotto l'ultimo elemento. Va tenuto d'accordo con l'offset
+          `bottom` della dock in TabBar.tsx. Su md la dock diventa una colonna
+          staccata a sinistra (0.75 + 5 + 0.75 rem). */}
+      <div className="min-h-dvh bg-bg pt-[env(safe-area-inset-top)] pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-0 md:pl-[6.5rem]">
         {/* in standalone iOS la pagina si estende sotto la status bar (viewport-fit=cover):
             questo velo evita che il contenuto scrollato si sovrapponga a orologio e notch */}
         <div className="fixed inset-x-0 top-0 z-50 h-[env(safe-area-inset-top)] bg-bg/90 backdrop-blur-md md:hidden" />
