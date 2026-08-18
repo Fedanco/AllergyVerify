@@ -25,8 +25,11 @@ export default function ProfilePage() {
             return (
               <li
                 key={p.id}
+                /* Il profilo attivo si distingue per superficie, non solo per
+                   un bordo colorato: e' lo stato che decide tutti i verdetti
+                   dell'app, deve vedersi senza cercarlo. */
                 className={`card flex items-center gap-3 p-4 transition-colors duration-[var(--duration-fast)] ${
-                  isActive ? 'border-accent/50' : ''
+                  isActive ? 'border-accent/50 bg-surface-2' : ''
                 }`}
               >
                 <button
@@ -91,7 +94,9 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setEditing('new')}
-          className="focus-ring w-full rounded-2xl border border-dashed border-edge py-3 text-sm text-ink-dim transition-colors hover:border-accent/50 hover:text-accent"
+          /* Incavo vuoto invece del bordo tratteggiato: legge come uno spazio
+             ancora da riempire, che e' esattamente cosa. */
+          className="focus-ring inset-surface w-full rounded-2xl py-3 text-sm text-ink-dim transition-colors duration-[var(--duration-fast)] hover:text-accent"
         >
           {t.profile.newProfile}
         </button>
@@ -161,10 +166,13 @@ function ProfileEditor({
               key={tag}
               type="button"
               onClick={() => toggle(tag)}
-              className={`focus-ring rounded-full border px-3 py-1.5 text-xs font-medium transition-[background-color,border-color,color,transform] duration-[var(--duration-fast)] active:scale-95 ${
+              /* Selezionato = premuto: la pillola passa da superficie in
+                 rilievo a incavo. È un feedback fisico che si capisce prima
+                 di leggere, e sostituisce il vecchio ingrandimento del 3%. */
+              className={`focus-ring rounded-full px-3 py-1.5 text-xs transition-[background-color,box-shadow,color] duration-[var(--duration-fast)] ${
                 on
-                  ? 'scale-[1.03] border-accent bg-accent/15 text-accent'
-                  : 'border-edge bg-surface-2 text-ink-dim hover:text-ink'
+                  ? 'inset-surface font-semibold text-accent'
+                  : 'chip font-medium text-ink-dim hover:text-ink'
               }`}
               aria-pressed={on}
             >
