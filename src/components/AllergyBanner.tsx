@@ -127,7 +127,7 @@ function Pill({
         <Icon className="h-5 w-5" />
       </span>
       <div>
-        <p className="text-base font-bold">{title}</p>
+        <p className="font-display text-base font-bold">{title}</p>
         <p className="mt-0.5 text-sm" style={{ color: BODY_COLOR[tone] }}>
           {children}
         </p>
