@@ -214,13 +214,7 @@ const it = {
     multiSafeBody: (tot: number) =>
       `Sicuro per tutti i ${tot} profili attivi, secondo i dati disponibili.`,
     multiTracesTitle: 'Possibili tracce',
-  },
-  profilesVerdict: {
-    title: 'Profili selezionati',
-    noData: 'Dati mancanti',
-    contains: (list: string) => `Contiene: ${list}`,
-    traces: (list: string) => `Tracce: ${list}`,
-    ok: 'OK',
+    multiRowSafe: 'Nessun allergene',
   },
   ingredients: {
     title: 'Ingredienti',
@@ -446,13 +440,7 @@ const en: Translations = {
     multiSafeBody: (tot: number) =>
       `Safe for all ${tot} active profiles, according to available data.`,
     multiTracesTitle: 'Possible traces',
-  },
-  profilesVerdict: {
-    title: 'Selected profiles',
-    noData: 'No data',
-    contains: (list: string) => `Contains: ${list}`,
-    traces: (list: string) => `Traces: ${list}`,
-    ok: 'OK',
+    multiRowSafe: 'No allergens',
   },
   ingredients: {
     title: 'Ingredients',

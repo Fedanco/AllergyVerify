@@ -4,7 +4,6 @@ import { getProductByBarcode } from '../api/openFoodFacts'
 import AllergyBanner from '../components/AllergyBanner'
 import { BackIcon, NotFoundIcon, PackageIcon } from '../components/Icons'
 import IngredientsCard from '../components/IngredientsCard'
-import ProfilesVerdict from '../components/ProfilesVerdict'
 import ScoreStrip from '../components/ScoreStrip'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useScanHistory } from '../hooks/useScanHistory'
@@ -161,8 +160,6 @@ export default function ProductDetailPage() {
               punteggi nutrizionali stavano sopra al verdetto, cioe' l'app
               rispondeva a una domanda che nessuno le aveva fatto. */}
           <AllergyBanner product={product} profiles={activeProfiles} />
-
-          <ProfilesVerdict product={product} />
 
           <IngredientsCard product={product} allergens={activeAllergens} />
 

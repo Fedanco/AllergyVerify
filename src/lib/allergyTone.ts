@@ -1,9 +1,8 @@
 import { AlertIcon, CheckIcon, InfoIcon } from '../components/Icons'
 
 /**
- * Tono semantico condiviso per il verdetto allergeni: usato sia dal banner
- * principale (AllergyBanner) sia dal confronto multi-profilo
- * (ProfilesVerdict), così le due UI non possono disallinearsi.
+ * Tono semantico condiviso per il verdetto allergeni (AllergyBanner):
+ * icona, colore testo, superficie tonale e glow in un posto solo.
  */
 export type Tone = 'danger' | 'warn' | 'safe' | 'neutral'
 
@@ -16,7 +15,7 @@ export const TONE_ICON: Record<Tone, IconComponent> = {
   neutral: InfoIcon,
 }
 
-/** Colore testo isolato, per righe compatte (es. ProfilesVerdict). */
+/** Colore testo isolato, per righe compatte. */
 export const TONE_TEXT: Record<Tone, string> = {
   danger: 'text-danger',
   warn: 'text-warn',
