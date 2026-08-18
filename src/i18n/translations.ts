@@ -211,13 +211,14 @@ const it = {
     safeTitle: 'Nessun tuo allergene rilevato',
     safeBody: (name: string) =>
       `Sicuro per il profilo "${name}" secondo i dati disponibili.`,
-    multiDangerTitle: 'Attenzione!',
-    multiDangerBody: (n: number, tot: number) =>
-      `Allergeni rilevati per ${n} profil${n === 1 ? 'o' : 'i'} su ${tot} attiv${tot === 1 ? 'o' : 'i'}.`,
-    multiSafeTitle: 'Nessun allergene rilevato',
-    multiSafeBody: (tot: number) =>
-      `Sicuro per tutti i ${tot} profili attivi, secondo i dati disponibili.`,
-    multiTracesTitle: 'Possibili tracce',
+    /* Riga di sintesi sopra le tessere del verdetto multi-profilo: sta su
+       una riga sola in maiuscoletto, quindi è più corta delle frasi di
+       verdetto a profilo singolo. Il dettaglio sta nelle tessere. */
+    multiSummaryDanger: (n: number, tot: number) =>
+      `Allergeni per ${n} profil${n === 1 ? 'o' : 'i'} su ${tot}`,
+    multiSummaryTraces: (n: number, tot: number) =>
+      `Possibili tracce per ${n} profil${n === 1 ? 'o' : 'i'} su ${tot}`,
+    multiSummarySafe: (tot: number) => `Nessun allergene per i ${tot} profili attivi`,
     multiRowSafe: 'Nessun allergene',
   },
   ingredients: {
@@ -501,13 +502,11 @@ const en: Translations = {
     safeTitle: 'None of your allergens detected',
     safeBody: (name: string) =>
       `Safe for the "${name}" profile according to available data.`,
-    multiDangerTitle: 'Warning!',
-    multiDangerBody: (n: number, tot: number) =>
-      `Allergens found for ${n} of ${tot} active profile${tot === 1 ? '' : 's'}.`,
-    multiSafeTitle: 'No allergens detected',
-    multiSafeBody: (tot: number) =>
-      `Safe for all ${tot} active profiles, according to available data.`,
-    multiTracesTitle: 'Possible traces',
+    multiSummaryDanger: (n: number, tot: number) =>
+      `Allergens for ${n} of ${tot} profile${tot === 1 ? '' : 's'}`,
+    multiSummaryTraces: (n: number, tot: number) =>
+      `Possible traces for ${n} of ${tot} profile${tot === 1 ? '' : 's'}`,
+    multiSummarySafe: (tot: number) => `No allergens for the ${tot} active profiles`,
     multiRowSafe: 'No allergens',
   },
   ingredients: {

@@ -1,6 +1,6 @@
 import { checkAllergens, emojiForTag, labelForTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
-import { TONE_GLOW, TONE_SURFACE, type Tone } from '../lib/allergyTone'
+import { TONE_GLOW, TONE_ICON, TONE_SURFACE, type Tone } from '../lib/allergyTone'
 import type { AllergyProfile, Product } from '../types/product'
 import { AlertIcon, CheckIcon, InfoIcon } from './Icons'
 
@@ -81,9 +81,12 @@ export default function AllergyBanner({ product, profiles }: Props) {
 }
 
 /**
- * Verdetto con più profili attivi. Il tono è quello del caso peggiore fra i
- * profili (se anche uno solo è a rischio, il verdetto è rosso), ma il corpo
- * elenca riga per riga chi è coinvolto e con quali allergeni.
+ * Verdetto con più profili attivi: una tessera per persona, ciascuna col
+ * proprio tono. Non c'è più una scatola unica del colore del caso peggiore —
+ * con due o tre persone la domanda vera non è "c'è un allergene?" ma "per
+ * chi?", e il verde di chi può mangiarlo si vede prima di leggere il nome.
+ * Sopra le tessere resta una riga di sintesi col pallino del caso peggiore,
+ * per chi guarda la pagina da lontano.
  */
 function MultiVerdict({
   product,
@@ -98,61 +101,9 @@ function MultiVerdict({
     profile: p,
     ...checkAllergens(product, p.allergens),
   }))
-  const hit = results.filter((r) => r.detected.length > 0)
-  const withTraces = results.filter((r) => r.detected.length === 0 && r.traces.length > 0)
-
-  if (hit.length > 0) {
-    return (
-      <>
-        <Pill
-          tone="danger"
-          Icon={AlertIcon}
-          title={t.allergyBanner.multiDangerTitle}
-          /* Elenca TUTTI i profili scelti, compresi quelli a posto: sapere
-             chi PUO' mangiare una cosa e' utile quanto sapere chi non puo',
-             e cosi' questo blocco basta da solo (il riquadro che ripeteva le
-             stesse righe piu' sotto e' stato tolto). */
-          rows={results.map((r) => ({
-            name: r.profile.name,
-            tags: r.detected.length > 0 ? r.detected : r.traces,
-            ok: r.detected.length === 0 && r.traces.length === 0,
-          }))}
-        >
-          {t.allergyBanner.multiDangerBody(hit.length, profiles.length)}
-        </Pill>
-        {withTraces.length > 0 && (
-          <Pill
-            tone="warn"
-            Icon={AlertIcon}
-            title={t.allergyBanner.multiTracesTitle}
-            rows={withTraces.map((r) => ({ name: r.profile.name, tags: r.traces }))}
-          >
-            {t.allergyBanner.mayContainLabel}
-          </Pill>
-        )}
-      </>
-    )
-  }
-
-  if (withTraces.length > 0) {
-    return (
-      <>
-        <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.safeWithTracesTitle}>
-          {t.allergyBanner.safeWithTracesBody}
-        </Pill>
-        <Pill
-          tone="warn"
-          Icon={AlertIcon}
-          title={t.allergyBanner.multiTracesTitle}
-          rows={withTraces.map((r) => ({ name: r.profile.name, tags: r.traces }))}
-        >
-          {t.allergyBanner.mayContainLabel}
-        </Pill>
-      </>
-    )
-  }
 
   // Nessun dato allergeni per nessuno: non è un "sicuro", è un "non lo so".
+  // Qui le tessere direbbero "nessun allergene" per tutti, che è falso.
   if (results.every((r) => !r.hasData)) {
     return (
       <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noDataTitle}>
@@ -161,11 +112,72 @@ function MultiVerdict({
     )
   }
 
-  void lang
+  const cards = results.map(({ profile, detected, traces }) => {
+    const tone: Tone = detected.length > 0 ? 'danger' : traces.length > 0 ? 'warn' : 'safe'
+    return { profile, tone, tags: detected.length > 0 ? detected : traces }
+  })
+
+  const hit = cards.filter((c) => c.tone === 'danger').length
+  const withTraces = cards.filter((c) => c.tone === 'warn').length
+  const worst: Tone = hit > 0 ? 'danger' : withTraces > 0 ? 'warn' : 'safe'
+  const summary =
+    worst === 'danger'
+      ? t.allergyBanner.multiSummaryDanger(hit, profiles.length)
+      : worst === 'warn'
+        ? t.allergyBanner.multiSummaryTraces(withTraces, profiles.length)
+        : t.allergyBanner.multiSummarySafe(profiles.length)
+
   return (
-    <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.multiSafeTitle}>
-      {t.allergyBanner.multiSafeBody(profiles.length)}
-    </Pill>
+    <div
+      role="status"
+      aria-live="polite"
+      className="animate-banner-in flex flex-col gap-2.5"
+    >
+      <p className="flex items-center gap-2 text-[0.6875rem] font-semibold tracking-[0.12em] text-ink-dim uppercase">
+        <span
+          aria-hidden
+          className={`h-2 w-2 shrink-0 rounded-full ${TONE_DOT[worst]}`}
+        />
+        {summary}
+      </p>
+      {/* auto-fit invece di un numero fisso di colonne: su telefono entrano
+          due tessere, su schermo largo tutte in fila, senza breakpoint. */}
+      <ul className="grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))]">
+        {cards.map(({ profile, tone, tags }, i) => {
+          const Icon = TONE_ICON[tone]
+          return (
+            <li
+              key={profile.id}
+              style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
+              className={`animate-step-in flex flex-col gap-2 rounded-card border p-3.5 [animation-delay:calc(var(--i)*60ms)] ${TONE_SURFACE[tone]}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${ICON_CHIP[tone]}`}
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
+                <p className="min-w-0 flex-1 truncate font-display text-base font-semibold text-ink">
+                  {profile.name}
+                </p>
+              </div>
+              <p className="text-[0.8125rem] font-medium" style={{ color: BODY_COLOR[tone] }}>
+                {tone === 'safe'
+                  ? t.allergyBanner.multiRowSafe
+                  : `${tone === 'danger' ? t.allergyBanner.containsLabel : t.allergyBanner.mayContainLabel} ${tags
+                      .map((tag) => {
+                        const emoji = emojiForTag(tag)
+                        return emoji
+                          ? `${emoji} ${labelForTag(tag, lang)}`
+                          : labelForTag(tag, lang)
+                      })
+                      .join(' · ')}`}
+              </p>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }
 
@@ -199,13 +211,21 @@ const ICON_CHIP: Record<Tone, string> = {
   neutral: 'bg-surface-3 text-ink-dim',
 }
 
+// Pallino della riga di sintesi multi-profilo: porta il tono del caso
+// peggiore dove il testo è troppo piccolo per farlo da solo.
+const TONE_DOT: Record<Tone, string> = {
+  danger: 'bg-danger',
+  warn: 'bg-warn',
+  safe: 'bg-safe',
+  neutral: 'bg-surface-3',
+}
+
 function Pill({
   tone,
   Icon,
   title,
   children,
   tags,
-  rows,
 }: {
   tone: Tone
   Icon: (p: { className?: string }) => React.ReactNode
@@ -213,10 +233,8 @@ function Pill({
   children: React.ReactNode
   /** allergeni da elencare come chip sotto il titolo (tag normalizzati) */
   tags?: string[]
-  /** una riga per profilo coinvolto, con i suoi allergeni (modalità famiglia) */
-  rows?: { name: string; tags: string[]; ok?: boolean }[]
 }) {
-  const { lang, t } = useLang()
+  const { lang } = useLang()
   const glow = TONE_GLOW[tone]
   return (
     <div
@@ -238,39 +256,6 @@ function Pill({
         <p className="mt-1 text-sm" style={{ color: BODY_COLOR[tone] }}>
           {children}
         </p>
-        {rows && rows.length > 0 && (
-          /* Una riga per persona, separate da un filo: dentro un blocco che
-             e' gia' una superficie, incassare altri riquadri crea scatole
-             dentro scatole. Il disco con l'iniziale porta il colore
-             dell'esito, cosi' chi puo' e chi non puo' mangiare si distingue
-             prima di leggere i nomi. */
-          <ul className="mt-3 divide-y divide-black/25 border-t border-black/25">
-            {rows.map((row) => (
-              <li key={row.name} className="flex items-center gap-3 py-2.5">
-                <span
-                  aria-hidden
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-bg"
-                  style={{ background: row.ok ? 'var(--color-safe)' : `var(--color-${tone})` }}
-                >
-                  {row.name.slice(0, 1).toUpperCase()}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-semibold text-ink">
-                    {row.name}
-                  </span>
-                  <span
-                    className="block truncate text-xs"
-                    style={{ color: row.ok ? 'var(--color-safe)' : BODY_COLOR[tone] }}
-                  >
-                    {row.ok
-                      ? t.allergyBanner.multiRowSafe
-                      : row.tags.map((tag) => labelForTag(tag, lang)).join(' · ')}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
         {tags && tags.length > 0 && (
           /* Gli allergeni come chip invece che in una riga separata da
              virgole: si contano a colpo d'occhio e ognuno resta leggibile
