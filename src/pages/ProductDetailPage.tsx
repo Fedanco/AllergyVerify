@@ -99,13 +99,29 @@ export default function ProductDetailPage() {
             <NotFoundIcon className="h-6 w-6" />
           </span>
           <p className="mt-3 text-sm text-ink-dim">{t.productDetail.errors[errorKind]}</p>
-          <p className="mt-1 font-mono text-xs text-ink-dim/60">{code}</p>
+          <p className="mt-1 font-mono text-xs text-ink-dim">{code}</p>
         </div>
       )}
 
       {!product && !errorKind && (
-        <div className="card px-5 py-10 text-center text-sm text-ink-dim">
-          {t.productDetail.loading}
+        /* La forma di quello che sta arrivando, non una scritta al centro del
+           vuoto: quando i dati atterrano il contenuto prende il posto dei
+           blocchi senza far saltare la pagina. */
+        <div aria-busy="true" aria-label={t.productDetail.loading} className="flex flex-col gap-3 sm:gap-4">
+          <div className="card flex items-center gap-3.5 p-3.5 sm:gap-4 sm:p-4">
+            <div className="skeleton h-20 w-20 shrink-0 sm:h-24 sm:w-24" />
+            <div className="min-w-0 flex-1">
+              <div className="skeleton h-5 w-2/3" />
+              <div className="skeleton mt-2 h-3.5 w-1/3" />
+              <div className="skeleton mt-2 h-3 w-1/4" />
+            </div>
+          </div>
+          <div className="skeleton h-24 rounded-banner" />
+          <div className="card p-4">
+            <div className="skeleton h-3.5 w-24" />
+            <div className="skeleton mt-3 h-3 w-full" />
+            <div className="skeleton mt-2 h-3 w-5/6" />
+          </div>
         </div>
       )}
 
@@ -135,7 +151,7 @@ export default function ProductDetailPage() {
               {product.quantity && (
                 <p className="mt-0.5 text-xs text-ink-dim">{product.quantity}</p>
               )}
-              <p className="mt-1 font-mono text-xs text-ink-dim/60">{product.code}</p>
+              <p className="mt-1 font-mono text-xs text-ink-dim">{product.code}</p>
             </div>
           </div>
 

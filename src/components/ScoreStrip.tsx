@@ -123,7 +123,7 @@ function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
               className={`animate-step-in flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-sm font-bold [animation-delay:calc(var(--i)*25ms)] ${
                 current
                   ? BADGE_CLASS[toneFor(i / (score.scale.length - 1))]
-                  : 'border-edge bg-surface-2 text-ink-dim/50'
+                  : 'border-edge bg-surface-2 text-ink-dim'
               }`}
             >
               {step.toUpperCase()}
@@ -134,7 +134,7 @@ function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
 
       <p className="mt-3 text-sm leading-relaxed text-ink">{score.meaning}</p>
       <p className="mt-2 text-xs leading-relaxed text-ink-dim">{score.about}</p>
-      <p className="mt-2 text-[0.65rem] text-ink-dim/70">{dataBy}</p>
+      <p className="mt-2 text-[0.65rem] text-ink-dim">{dataBy}</p>
     </section>
   )
 }

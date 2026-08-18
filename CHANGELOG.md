@@ -2,6 +2,31 @@
 
 Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
 
+## v0.6.0 — 2026-08-18
+
+Redesign completo dell'interfaccia ("Inchiostro") — la pelle era ancora quella del progetto precedente, nome e logo no.
+
+- **Palette rifatta.** Fondo blu notte profondo (`#070b12`) al posto del nero-blu da dashboard, superfici a tre livelli, ombre tinte del fondo invece che nere. Provate sei varianti dal vivo sul telefono (da inchiostro a cacao) con un selettore temporaneo, poi rimosso.
+- **Colore di marca separato dai toni semantici.** Prima `--color-accent` (verde) era insieme il colore delle azioni e il verde di "sicuro per te". Ora il grano del logo (`--color-accent`) copre solo interazione e stato, mentre `--color-safe` significa una cosa sola: nessun allergene per te. Senza questa separazione, col grano come colore di marca un verdetto positivo sarebbe diventato giallo.
+- **Superfici materiche.** Le card si staccano dal fondo per salto di tono più un filo di luce sul bordo alto, senza bordo grigio; nuova `inset-surface` per gli elementi che affondano (campi di testo, immagini nelle liste, chip selezionati). Raggi da 16 a 24px. Riferimento visivo indicato da Fede: family.co.
+- **Outfit per i titoli** (`--font-display`, +47 KB in due subset): nome pagina, nome prodotto e riga del verdetto. Il testo di lettura e i dati restano su Inter. Scala tipografica di un gradino più contenuta sotto i 640px.
+- **Verdetto allergeni ridisegnato**: disco icona a colore pieno, titolo più grande, allergeni elencati come chip invece che in una riga di virgole, superficie tonale dal 10% al 20% (sul nuovo fondo il 10% era un grigio appena colorato).
+- **Pagina prodotto riordinata**: nome → verdetto → confronto profili → ingredienti (la prova del verdetto) → punteggi → nutrienti. Prima Nutri-Score e NOVA stavano sopra al verdetto.
+- **Navigazione staccata dai bordi**: dock flottante con angoli da 28px e sfocatura (l'unico punto dove il contenuto passa davvero sotto), tab attivo con disco pieno dorato. Su desktop la sidebar diventa una colonna staccata. Aggiornati coerentemente i tre punti che governano la safe area iOS.
+- **Più profili attivi insieme.** In famiglia ogni persona ha allergie diverse e la spesa è una sola: si spuntano i profili che servono (caselle quadrate, nessuna modalità da attivare) e il verdetto dice **per chi** c'è il problema, non solo che c'è. Ricerca, storico ed evidenziazione ingredienti seguono l'unione dei profili selezionati. L'ultimo profilo attivo non è disattivabile.
+- **Icone al posto delle emoji**: nuove `PackageIcon`, `NotFoundIcon`, `CameraOffIcon`, `PlusIcon`, `CheckMarkIcon`. Le nove emoji della tabella nutrienti sono state rimosse, non sostituite: rubavano l'occhio al pallino di livello, che è l'unico segnale informativo della riga. Restano le emoji degli allergeni e dei badge dieta, che sono etichette di cibo e non icone di sistema.
+- **Segnaposto di caricamento** (`skeleton`) al posto della scritta "Caricamento prodotto…" al centro del vuoto.
+- **Inglese come lingua iniziale** (era italiano), con `lang` allineato in `index.html` e nel manifest, e descrizione dell'app tradotta. L'italiano resta selezionabile da Info → Lingua.
+- Audit contrasti su tutte le schermate con misurazione dei colori compositi via canvas: eliminate le opacità sul testo (`text-ink-dim/50-70`), che scendevano fino a 3,2:1. Nessun testo sotto AA.
+
+### Correzioni
+
+- **Il salvataggio profilo non funzionava** aprendo l'app da un indirizzo di rete in http: `crypto.randomUUID()` esiste solo in contesto sicuro (https o localhost) e l'errore usciva solo nel log del server. Ora c'è un fallback. Il difetto non si vedeva online, dove Vercel serve in https.
+- **Allergeni dichiarati assenti segnalati come presenti**: la ricerca testuale trovava "glutine" dentro "Senza glutine" e dava "Contiene: Glutine" su prodotti gluten-free. Ora le negazioni vengono riconosciute in italiano, inglese, francese e tedesco ("senza X", "X free"), con criterio volutamente prudente — un falso negativo è molto più grave di un falso positivo, quindi un match si scarta solo quando la negazione è inequivocabile. Stessa regola nell'evidenziazione degli ingredienti, così verdetto e testo non si contraddicono.
+- **Fotocamera**: distinti tre casi prima confusi in uno — permesso negato (con "Riprova" e istruzioni per riattivarlo), connessione non sicura (`navigator.mediaDevices` non esiste in http), dispositivo senza fotocamera. Prima l'app diceva che il telefono non aveva una fotocamera utilizzabile, il che era falso e non suggeriva nulla da fare. Aggiunto `npm run dev:https` per provare lo scanner dal telefono in rete locale.
+- **Nome del profilo non più obbligatorio**: il salva restava disabilitato senza spiegare perché, e con l'accento dorato il bottone spento sembrava attivo. Se il nome manca ne viene messo uno predefinito.
+- Il logo non si nascondeva nella dock su mobile e si sovrapponeva all'icona Storico: `inline-flex` nel componente vinceva su `hidden` passato dall'esterno.
+
 ## v0.5.3 — 2026-08-17
 
 - Sostituito il logo (avocado della vecchia app iOS) con il nuovo logo creato da Fede — spiga di grano, lente d'ingrandimento, badge d'allerta. Icone di sistema (favicon, apple-touch-icon, icone PWA) rigenerate dal nuovo artwork; cache-busting favicon/apple-touch-icon aggiornato a `-v3` (iOS/Safari le cachea per URL). Dentro l'interfaccia scura (sidebar, pagina Info, modale installa) usato `LogoTile`, un piccolo riquadro con bordo/ombra che incornicia l'immagine vera (un primo tentativo di ridisegnarla come icona piatta era irriconoscibile ed è stato scartato).

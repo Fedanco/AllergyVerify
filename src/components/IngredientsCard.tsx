@@ -102,7 +102,7 @@ export default function IngredientsCard({ product, allergens }: Props) {
             {highlightAllergens(displayText, allergens)}
           </p>
           {translating && (
-            <p className="mt-1 text-[0.65rem] text-ink-dim/60">
+            <p className="mt-1 text-[0.65rem] text-ink-dim">
               {t.ingredients.translating}
             </p>
           )}

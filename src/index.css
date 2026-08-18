@@ -237,6 +237,20 @@ body {
   box-shadow: inset 0 1px 0 0 var(--clay-rim);
 }
 
+/* Segnaposto di caricamento: un blocco che pulsa piano al posto del testo
+   "caricamento…". Mostra fin da subito la forma di quello che sta per
+   arrivare, così la pagina non salta quando i dati atterrano. */
+@utility skeleton {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-chip);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
 /* Elementi interattivi: sopprime l'outline nativo (blu su Safari iOS)
    e lo sostituisce con un anello a tema, solo per navigazione da tastiera */
 @utility focus-ring {
