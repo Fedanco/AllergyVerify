@@ -101,9 +101,9 @@ export default function ProductDetailPage() {
       )}
 
       {product && (
-        <div className="flex flex-col gap-4">
-          <div className="card flex items-center gap-4 p-4">
-            <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-surface-2">
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <div className="card flex items-center gap-3.5 p-3.5 sm:gap-4 sm:p-4">
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-2 sm:h-24 sm:w-24">
               {product.image_front_url ? (
                 <img
                   src={product.image_front_url}
