@@ -142,6 +142,28 @@ export function ShareIcon({ className }: IconProps) {
   )
 }
 
+/** Confezione: segnaposto quando un prodotto non ha foto. */
+export function PackageIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M21 8.5 12 13 3 8.5" />
+      <path d="M12 13v8.5" />
+      <path d="M20.5 7.6v8.8a1 1 0 0 1-.55.9l-7.5 3.6a1 1 0 0 1-.9 0l-7.5-3.6a1 1 0 0 1-.55-.9V7.6a1 1 0 0 1 .55-.9l7.5-3.6a1 1 0 0 1 .9 0l7.5 3.6a1 1 0 0 1 .55.9Z" />
+    </svg>
+  )
+}
+
+/** Punto interrogativo in cerchio: prodotto non trovato. */
+export function NotFoundIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.5.2-.7.6-.7 1.1v.5" />
+      <path d="M12 17h.01" />
+    </svg>
+  )
+}
+
 /** Fotocamera sbarrata: permesso negato o dispositivo senza camera. */
 export function CameraOffIcon({ className }: IconProps) {
   return (

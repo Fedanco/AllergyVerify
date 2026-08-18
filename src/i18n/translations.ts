@@ -65,8 +65,8 @@ const it = {
     clear: 'Svuota',
     confirmClear: 'Svuotare tutto lo storico?',
     empty: 'Lo storico è vuoto: i prodotti che scansioni o cerchi appariranno qui.',
-    sourceScan: '📷 Scansione',
-    sourceSearch: '🔍 Ricerca',
+    sourceScan: 'Scansione',
+    sourceSearch: 'Ricerca',
     dateLocale: 'it-IT',
   },
   profile: {
@@ -293,8 +293,8 @@ const en: Translations = {
     clear: 'Clear',
     confirmClear: 'Clear all history?',
     empty: 'History is empty: products you scan or search will appear here.',
-    sourceScan: '📷 Scan',
-    sourceSearch: '🔍 Search',
+    sourceScan: 'Scan',
+    sourceSearch: 'Search',
     dateLocale: 'en-US',
   },
   profile: {

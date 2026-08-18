@@ -1,6 +1,6 @@
 import PageHeader from '../components/PageHeader'
 import ProductCard from '../components/ProductCard'
-import { TrashIcon } from '../components/Icons'
+import { HistoryIcon, TrashIcon } from '../components/Icons'
 import { checkAllergensFromHistoryEntry } from '../data/allergenCatalog'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useScanHistory } from '../hooks/useScanHistory'
@@ -32,9 +32,11 @@ export default function HistoryPage() {
       />
 
       {history.length === 0 ? (
-        <div className="card px-5 py-8 text-center">
-          <p aria-hidden className="text-3xl">🕘</p>
-          <p className="mt-2 text-sm text-ink-dim">{t.history.empty}</p>
+        <div className="card flex flex-col items-center px-5 py-8 text-center">
+          <span className="inset-surface flex h-14 w-14 items-center justify-center rounded-full text-ink-dim">
+            <HistoryIcon className="h-6 w-6" />
+          </span>
+          <p className="mt-3 text-sm text-ink-dim">{t.history.empty}</p>
         </div>
       ) : (
         <ul className="flex flex-col gap-2">

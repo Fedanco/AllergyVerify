@@ -113,9 +113,11 @@ export default function SearchPage() {
       )}
 
       {!results && !error && !loading && (
-        <div className="card mt-4 px-5 py-6 text-center">
-          <p aria-hidden className="text-3xl">🔍</p>
-          <p className="mt-2 text-sm text-ink-dim">
+        <div className="card mt-4 flex flex-col items-center px-5 py-7 text-center">
+          <span className="inset-surface flex h-14 w-14 items-center justify-center rounded-full text-ink-dim">
+            <SearchIcon className="h-6 w-6" />
+          </span>
+          <p className="mt-3 text-sm text-ink-dim">
             {t.search.emptyHint1}
             <br />
             {t.search.emptyHint2}
