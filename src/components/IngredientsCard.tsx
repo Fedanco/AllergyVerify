@@ -7,7 +7,7 @@ import {
   normalizeTag,
 } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
-import type { AllergyProfile, Product } from '../types/product'
+import type { Product } from '../types/product'
 
 const ANALYSIS_BADGES = [
   { tag: 'vegan', emoji: '🌱' },
@@ -20,10 +20,11 @@ const ANALYSIS_BADGES = [
 
 interface Props {
   product: Product
-  profile: AllergyProfile | null
+  /** allergeni da evidenziare: l'unione di quelli dei profili attivi */
+  allergens: string[]
 }
 
-export default function IngredientsCard({ product, profile }: Props) {
+export default function IngredientsCard({ product, allergens }: Props) {
   const { lang, t } = useLang()
   const [expanded, setExpanded] = useState(false)
   // il testo eccede davvero le 4 righe del clamp? (misurato, non stimato)
@@ -98,7 +99,7 @@ export default function IngredientsCard({ product, profile }: Props) {
               expanded ? '' : 'line-clamp-4'
             }`}
           >
-            {highlightAllergens(displayText, profile)}
+            {highlightAllergens(displayText, allergens)}
           </p>
           {translating && (
             <p className="mt-1 text-[0.65rem] text-ink-dim/60">
@@ -149,13 +150,10 @@ export default function IngredientsCard({ product, profile }: Props) {
 }
 
 /** Evidenzia nel testo le parole legate agli allergeni del profilo. */
-function highlightAllergens(
-  text: string,
-  profile: AllergyProfile | null,
-): React.ReactNode {
-  if (!profile || profile.allergens.length === 0) return text
+function highlightAllergens(text: string, allergens: string[]): React.ReactNode {
+  if (allergens.length === 0) return text
 
-  const words = profile.allergens
+  const words = allergens
     .flatMap((tag) => ALLERGEN_KEYWORDS[tag] ?? [])
     .sort((a, b) => b.length - a.length) // match più lunghi per primi
   if (words.length === 0) return text

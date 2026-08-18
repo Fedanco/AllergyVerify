@@ -10,7 +10,8 @@ import type { Product } from '../types/product'
  * Visibile solo con almeno 2 profili; il banner grande resta per l'attivo.
  */
 export default function ProfilesVerdict({ product }: { product: Product }) {
-  const { profiles, activeProfile } = useAllergyProfile()
+  const { profiles, activeProfiles } = useAllergyProfile()
+  const activeIds = new Set(activeProfiles.map((p) => p.id))
   const { lang, t } = useLang()
   if (profiles.length < 2) return null
 
@@ -20,7 +21,7 @@ export default function ProfilesVerdict({ product }: { product: Product }) {
       <ul className="flex flex-col gap-2">
         {profiles.map((p) => {
           const v = verdictFor(product, p.allergens, lang, t)
-          const active = p.id === activeProfile?.id
+          const active = activeIds.has(p.id)
           const Icon = TONE_ICON[v.tone]
           return (
             <li

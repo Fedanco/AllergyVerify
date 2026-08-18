@@ -142,6 +142,25 @@ export function ShareIcon({ className }: IconProps) {
   )
 }
 
+/** Spunta nuda, per caselle e radio: CheckIcon ha un cerchio attorno che
+ *  dentro un quadrato di selezione stona. */
+export function CheckMarkIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={2.4}>
+      <path d="m5 12.5 4.5 4.5L19 7" />
+    </svg>
+  )
+}
+
+/** Piu': aggiungere un elemento. */
+export function PlusIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  )
+}
+
 /** Confezione: segnaposto quando un prodotto non ha foto. */
 export function PackageIcon({ className }: IconProps) {
   return (
