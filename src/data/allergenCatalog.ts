@@ -92,6 +92,34 @@ function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
+// Un'etichetta che dichiara "senza glutine" contiene comunque la parola
+// "glutine": cercarla e basta faceva dire all'app "Contiene: Glutine" su un
+// prodotto gluten-free. Queste due forme coprono i modi normali di negare un
+// allergene in etichetta ("senza X", "X free") e restano volutamente strette:
+// qui un falso negativo è molto più grave di un falso positivo, quindi un
+// match si scarta solo quando la negazione è inequivocabile.
+const NEGATION_BEFORE = /\b(?:senza|sans|ohne|sin|sem|without)\s+(?:[a-zà-öø-ÿ]+\s+)?$/i
+const FREE_AFTER = /^\s*[-–—]?\s*(?:free|frei|libre)\b/i
+
+/**
+ * True se l'occorrenza trovata a `index` è in realtà una dichiarazione di
+ * assenza ("senza glutine", "gluten free") e non di presenza.
+ */
+export function isNegatedAllergenMatch(
+  text: string,
+  index: number,
+  matchLength: number,
+): boolean {
+  const before = text.slice(Math.max(0, index - 24), index)
+  const after = text.slice(index + matchLength)
+  return NEGATION_BEFORE.test(before) || FREE_AFTER.test(after)
+}
+
+/** Regex delle parole chiave di un allergene, con boundary di parola. */
+export function keywordPattern(words: string[], flags = 'gi'): RegExp {
+  return new RegExp(`\\b(${words.map(escapeRegExp).join('|')})\\b`, flags)
+}
+
 /**
  * Cerca nel testo ingredienti le parole chiave di ciascun allergene del
  * profilo. Fallback quando `allergens_tags` non basta (vedi sopra).
@@ -107,8 +135,12 @@ export function matchAllergensInText(
   return profileAllergens.filter((tag) => {
     const words = ALLERGEN_KEYWORDS[tag]
     if (!words || words.length === 0) return false
-    const pattern = new RegExp(`\\b(${words.map(escapeRegExp).join('|')})\\b`, 'i')
-    return pattern.test(text)
+    const re = keywordPattern(words)
+    // Basta una sola occorrenza non negata per considerare l'allergene presente.
+    for (let m = re.exec(text); m !== null; m = re.exec(text)) {
+      if (!isNegatedAllergenMatch(text, m.index, m[0].length)) return true
+    }
+    return false
   })
 }
 

@@ -1,6 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { translateIngredients } from '../api/translate'
-import { ALLERGEN_KEYWORDS, normalizeTag } from '../data/allergenCatalog'
+import {
+  ALLERGEN_KEYWORDS,
+  isNegatedAllergenMatch,
+  keywordPattern,
+  normalizeTag,
+} from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
 import type { AllergyProfile, Product } from '../types/product'
 
@@ -155,18 +160,23 @@ function highlightAllergens(
     .sort((a, b) => b.length - a.length) // match più lunghi per primi
   if (words.length === 0) return text
 
-  const pattern = new RegExp(
-    `(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`,
-    'gi',
-  )
-
-  return text.split(pattern).map((part, i) =>
-    i % 2 === 1 ? (
-      <mark key={i} className="rounded bg-danger/20 px-0.5 font-semibold text-danger">
-        {part}
-      </mark>
-    ) : (
-      part
-    ),
-  )
+  // Le occorrenze negate ("Senza glutine") vengono saltate, come nel verdetto:
+  // se il banner dice che il glutine non c'è, evidenziarlo qui in rosso
+  // racconterebbe il contrario nella stessa schermata.
+  const re = keywordPattern(words)
+  const out: React.ReactNode[] = []
+  let last = 0
+  for (let m = re.exec(text); m !== null; m = re.exec(text)) {
+    if (isNegatedAllergenMatch(text, m.index, m[0].length)) continue
+    if (m.index > last) out.push(text.slice(last, m.index))
+    out.push(
+      <mark key={m.index} className="rounded bg-danger/20 px-0.5 font-semibold text-danger">
+        {m[0]}
+      </mark>,
+    )
+    last = m.index + m[0].length
+  }
+  if (last === 0) return text
+  if (last < text.length) out.push(text.slice(last))
+  return out
 }
