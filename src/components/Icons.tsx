@@ -152,6 +152,28 @@ export function CheckMarkIcon({ className }: IconProps) {
   )
 }
 
+/** Globo: selezione della lingua. */
+export function GlobeIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3.5 9h17M3.5 15h17" />
+      <path d="M12 3a14 14 0 0 0 0 18a14 14 0 0 0 0-18Z" />
+    </svg>
+  )
+}
+
+/** Cilindri sovrapposti: origine dei dati. */
+export function DatabaseIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <ellipse cx="12" cy="6" rx="7.5" ry="3" />
+      <path d="M4.5 6v12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6" />
+      <path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3" />
+    </svg>
+  )
+}
+
 /** Piu': aggiungere un elemento. */
 export function PlusIcon({ className }: IconProps) {
   return (
