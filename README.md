@@ -1,15 +1,21 @@
-# AllergyVerify Web 🍎🚫
+<p align="center">
+  <img src="public/logo-v2.png" alt="Logo di AllergyVerify" width="120">
+</p>
 
-Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al tuo profilo personale. PWA installabile, mobile-first, utilizzabile anche da desktop.
+<h1 align="center">AllergyVerify</h1>
 
-**Demo live**: https://allergyverify.vercel.app
+<p align="center">Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al tuo profilo personale. PWA installabile, mobile-first, utilizzabile anche da desktop.</p>
 
-[![CI](https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml/badge.svg)](https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
-![PWA](https://img.shields.io/badge/PWA-installabile-5A0FC8?logo=pwa&logoColor=white)
+<p align="center"><strong>Demo live</strong>: <a href="https://allergyverify.vercel.app">allergyverify.vercel.app</a></p>
+
+<p align="center">
+  <a href="https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white">
+  <img alt="PWA" src="https://img.shields.io/badge/PWA-installabile-5A0FC8?logo=pwa&logoColor=white">
+</p>
 
 |                                     Verdetto allergeni                                     |                              Ricerca                              |                                  Desktop                                  |
 | :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------: | :--------------------------------------------------------------------------: |

@@ -1,6 +1,6 @@
 # Changelog
 
-Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
+Cronologia delle versioni di AllergyVerify (ex AllergyScan), dalla più recente alla più vecchia.
 
 ## v0.6.3 — 2026-08-19
 
