@@ -6,6 +6,7 @@ import {
   ChevronRightIcon,
   DatabaseIcon,
   DocumentIcon,
+  GithubIcon,
   GlobeIcon,
   HomeAddIcon,
   InfoIcon,
@@ -50,10 +51,19 @@ export default function SettingsPage() {
           logo galleggiava scollegato sopra le sezioni. */}
       <div className="card mb-3 flex items-center gap-3.5 p-4">
         <LogoTile className="h-14" />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="font-display text-base font-bold">AllergyVerify</p>
           <p className="mt-0.5 text-xs text-ink-dim">{APP_VERSION}</p>
         </div>
+        <a
+          href="https://github.com/Fedanco/AllergyVerify"
+          target="_blank"
+          rel="noreferrer"
+          aria-label={t.settings.githubLabel}
+          className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim transition-colors duration-[var(--duration-fast)] hover:text-ink"
+        >
+          <GithubIcon className="h-5 w-5" />
+        </a>
       </div>
 
       <div className="card mb-3 divide-y divide-edge">
