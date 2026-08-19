@@ -14,7 +14,7 @@ Il verdetto con più profili attivi diventa una scheda per persona.
 
 ## v0.6.1 — 2026-08-18
 
-Il logo dell'app torna a essere il file disegnato da Fede, ovunque.
+Il logo dell'app torna a essere il file che ho disegnato, ovunque.
 
 - **Nomi accorciati ovunque**: il dominio passa da `allergyverify-web.vercel.app` a **https://allergyverify.vercel.app**, e il repo GitHub da `AllergyVerifyWebApp` ad `AllergyVerify`. Il suffisso `-web` distingueva la webapp dalla vecchia app iOS AllergyScan, che non è più un progetto attivo. Il vecchio indirizzo è stato rimosso, non lasciato in redirect: chi aveva la webapp installata dal vecchio indirizzo deve riaggiungerla, e i profili salvati là restano su quell'origine — il `localStorage` non attraversa i domini.
 
@@ -30,7 +30,7 @@ Redesign completo dell'interfaccia ("Inchiostro") — la pelle era ancora quella
 
 - **Palette rifatta.** Fondo blu notte profondo (`#070b12`) al posto del nero-blu da dashboard, superfici a tre livelli, ombre tinte del fondo invece che nere. Provate sei varianti dal vivo sul telefono (da inchiostro a cacao) con un selettore temporaneo, poi rimosso.
 - **Colore di marca separato dai toni semantici.** Prima `--color-accent` (verde) era insieme il colore delle azioni e il verde di "sicuro per te". Ora il grano del logo (`--color-accent`) copre solo interazione e stato, mentre `--color-safe` significa una cosa sola: nessun allergene per te. Senza questa separazione, col grano come colore di marca un verdetto positivo sarebbe diventato giallo.
-- **Superfici materiche.** Le card si staccano dal fondo per salto di tono più un filo di luce sul bordo alto, senza bordo grigio; nuova `inset-surface` per gli elementi che affondano (campi di testo, immagini nelle liste, chip selezionati). Raggi da 16 a 24px. Riferimento visivo indicato da Fede: family.co.
+- **Superfici materiche.** Le card si staccano dal fondo per salto di tono più un filo di luce sul bordo alto, senza bordo grigio; nuova `inset-surface` per gli elementi che affondano (campi di testo, immagini nelle liste, chip selezionati). Raggi da 16 a 24px. Riferimento visivo: family.co.
 - **Outfit per i titoli** (`--font-display`, +47 KB in due subset): nome pagina, nome prodotto e riga del verdetto. Il testo di lettura e i dati restano su Inter. Scala tipografica di un gradino più contenuta sotto i 640px.
 - **Verdetto allergeni ridisegnato**: disco icona a colore pieno, titolo più grande, allergeni elencati come chip invece che in una riga di virgole, superficie tonale dal 10% al 20% (sul nuovo fondo il 10% era un grigio appena colorato).
 - **Pagina prodotto riordinata**: nome → verdetto → confronto profili → ingredienti (la prova del verdetto) → punteggi → nutrienti. Prima Nutri-Score e NOVA stavano sopra al verdetto.
@@ -51,7 +51,7 @@ Redesign completo dell'interfaccia ("Inchiostro") — la pelle era ancora quella
 
 ## v0.5.3 — 2026-08-17
 
-- Sostituito il logo (avocado della vecchia app iOS) con il nuovo logo creato da Fede — spiga di grano, lente d'ingrandimento, badge d'allerta. Icone di sistema (favicon, apple-touch-icon, icone PWA) rigenerate dal nuovo artwork; cache-busting favicon/apple-touch-icon aggiornato a `-v3` (iOS/Safari le cachea per URL). Dentro l'interfaccia scura (sidebar, pagina Info, modale installa) usato `LogoTile`, un piccolo riquadro con bordo/ombra che incornicia l'immagine vera (un primo tentativo di ridisegnarla come icona piatta era irriconoscibile ed è stato scartato).
+- Sostituito il logo (avocado della vecchia app iOS) con il nuovo logo che ho disegnato — spiga di grano, lente d'ingrandimento, badge d'allerta. Icone di sistema (favicon, apple-touch-icon, icone PWA) rigenerate dal nuovo artwork; cache-busting favicon/apple-touch-icon aggiornato a `-v3` (iOS/Safari le cachea per URL). Dentro l'interfaccia scura (sidebar, pagina Info, modale installa) usato `LogoTile`, un piccolo riquadro con bordo/ombra che incornicia l'immagine vera (un primo tentativo di ridisegnarla come icona piatta era irriconoscibile ed è stato scartato).
 - Rebrand completato anche su repo GitHub (`AllergyVerifyWebApp`) e dominio Vercel (`allergyverify-web.vercel.app`), con redirect attivi dai vecchi indirizzi.
 
 ## v0.5.2 — 2026-08-06

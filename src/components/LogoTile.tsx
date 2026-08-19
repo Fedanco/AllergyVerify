@@ -3,7 +3,7 @@ interface LogoTileProps {
 }
 
 /**
- * Il logo di Fede (spiga di grano + lente d'ingrandimento + badge d'allerta).
+ * Il logo dell'app (spiga di grano + lente d'ingrandimento + badge d'allerta).
  *
  * Nessuna cornice intorno: il file è già un'icona finita, con la sua forma a
  * squircle, la sua luce e la sua ombra. Incorniciarlo in una `card` aggiungeva

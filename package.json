@@ -1,7 +1,15 @@
 {
   "name": "allergyverify",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.6.2",
+  "description": "PWA per verificare allergeni nei prodotti alimentari da profilo personale, tramite scansione barcode o ricerca — dati Open Food Facts, nessun backend.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fedanco/AllergyVerify.git"
+  },
+  "homepage": "https://allergyverify.vercel.app",
+  "license": "MIT",
+  "keywords": ["pwa", "allergens", "food", "openfoodfacts", "react", "typescript"],
   "type": "module",
   "scripts": {
     "dev": "vite",

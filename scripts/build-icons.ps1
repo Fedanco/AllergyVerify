@@ -1,5 +1,5 @@
 # Genera tutte le icone dell'app da un'unica sorgente: assets/logo-source.png,
-# il file disegnato da Fede (tile squircle bianco su sfondo trasparente).
+# il file sorgente del logo (tile squircle bianco su sfondo trasparente).
 #
 # Uso:  powershell -ExecutionPolicy Bypass -File scripts/build-icons.ps1
 #
@@ -126,7 +126,7 @@ function Build-AppLogo([int]$maxSide, [string]$name) {
 
 # --- 2. icone di sistema: il tile intero, senza ritagli ---------------------
 # Scala uniforme sul lato lungo del tile, centrato su bianco. L'inquadratura
-# resta identica a quella disegnata da Fede: nessun ingrandimento, nessun
+# resta identica a quella del sorgente: nessun ingrandimento, nessun
 # ritaglio.
 #
 # Gli angoli restano bianchi come il tile, quindi non si vedono: iOS e Android
@@ -152,7 +152,7 @@ function Build-SystemIcon([int]$size, [string]$name) {
 # a seconda del telefono): il disegno deve stare nel 62% centrale, il resto e'
 # sfondo sacrificabile.
 #
-# Qui lo squircle di Fede NON va incluso: la maschera di Android lo
+# Qui lo squircle sorgente NON va incluso: la maschera di Android lo
 # ritaglierebbe dentro un cerchio, che e' esattamente l'accostamento sbagliato
 # (una forma dentro un'altra). Si prende quindi il solo soggetto piu' un bordo
 # stretto di tile - abbastanza da non toccarne mai il rim, cosi' il passaggio
@@ -183,6 +183,10 @@ Write-Host 'generati:'
 Build-AppLogo 260 'logo-v2.png'
 Build-SystemIcon 180 'favicon-v5.png'
 Build-SystemIcon 180 'apple-touch-icon-v5.png'
+# Copia senza suffisso di versione: alcuni flussi "aggiungi a Home" (iOS/Safari
+# e altri) cercano /apple-touch-icon.png alla radice per convenzione, ignorando
+# il <link rel="apple-touch-icon"> in <head>. È un fallback voluto, non un
+# residuo da ripulire.
 Build-SystemIcon 180 'apple-touch-icon.png'
 Build-SystemIcon 192 'pwa-192-v2.png'
 Build-SystemIcon 512 'pwa-512-v2.png'
