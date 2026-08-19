@@ -20,7 +20,7 @@ import { useInstallPrompt } from '../hooks/useInstallPrompt'
 import { useLang } from '../i18n/useLang'
 import type { Lang } from '../i18n/translations'
 
-const APP_VERSION = 'v0.6.1'
+const APP_VERSION = 'v0.6.3'
 
 const LANG_OPTIONS: { value: Lang; label: string }[] = [
   { value: 'it', label: '🇮🇹 Italiano' },
@@ -66,7 +66,7 @@ export default function SettingsPage() {
         </a>
       </div>
 
-      <div className="card mb-3 divide-y divide-edge">
+      <div className="card card-list mb-3 divide-y divide-edge">
         <Row
           Icon={GlobeIcon}
           label={t.settings.languageTitle}
@@ -121,7 +121,7 @@ export default function SettingsPage() {
         )}
       </div>
 
-      <div className="card mb-3 divide-y divide-edge">
+      <div className="card card-list mb-3 divide-y divide-edge">
         <Row
           Icon={InfoIcon}
           label={t.settings.aboutTitle}

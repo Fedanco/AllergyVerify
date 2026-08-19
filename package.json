@@ -1,7 +1,7 @@
 {
   "name": "allergyverify",
   "private": true,
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "PWA per verificare allergeni nei prodotti alimentari da profilo personale, tramite scansione barcode o ricerca — dati Open Food Facts, nessun backend.",
   "repository": {
     "type": "git",
