@@ -90,7 +90,7 @@ const it = {
   },
   settings: {
     title: 'Info',
-    subtitle: 'AllergyVerify Web',
+    subtitle: 'AllergyVerify',
     languageTitle: 'Lingua',
     aboutTitle: "Che cos'è",
     aboutBody:
@@ -384,7 +384,7 @@ const en: Translations = {
   },
   settings: {
     title: 'Info',
-    subtitle: 'AllergyVerify Web',
+    subtitle: 'AllergyVerify',
     languageTitle: 'Language',
     aboutTitle: 'What it is',
     aboutBody:
