@@ -190,6 +190,32 @@ body {
   box-shadow: inset 0 1px 0 0 var(--clay-rim);
 }
 
+/* Card che contiene una pila di righe cliccabili (pagina Info). Lo sfondo
+   :hover di una riga è un rettangolo pieno: sulla prima e sull'ultima riga
+   copre gli angoli arrotondati della card, che al passaggio del mouse sembra
+   diventare squadrata. Qui si arrotondano gli angoli esterni della riga
+   stessa invece di ritagliare la card con `overflow: hidden`, che taglierebbe
+   anche l'anello di focus (`focus-ring` sta 3px FUORI dal bordo).
+   Il raggio è quello della card meno il bordo di 1px, così le due curve
+   restano concentriche. */
+@utility card-list {
+  /* La riga può essere figlia diretta (Link) o dentro un wrapper (Row).
+     Restringere a button/a evita di toccare i dischi icona `rounded-full`. */
+  & > :is(button, a):first-child,
+  & > :first-child > :is(button, a):first-child {
+    border-top-left-radius: calc(var(--radius-card) - 1px);
+    border-top-right-radius: calc(var(--radius-card) - 1px);
+  }
+  /* `:last-child` anche dentro il wrapper: se la riga è aperta, l'ultimo
+     elemento è il pannello di testo e il bottone non va arrotondato — si
+     troverebbe in mezzo alla pila. */
+  & > :is(button, a):last-child,
+  & > :last-child > :is(button, a):last-child {
+    border-bottom-left-radius: calc(var(--radius-card) - 1px);
+    border-bottom-right-radius: calc(var(--radius-card) - 1px);
+  }
+}
+
 /* Superficie interattiva/espansa (es. chip aperto e pannello di
    ScoreStrip): un tono più chiaro + ombra più marcata segnalano
    "attivo/sollevato" invece di un semplice cambio di bordo. */
@@ -225,6 +251,22 @@ body {
      (un campo di ricerca la vuole più morbida di un disco icona). */
   box-shadow:
     inset 0 2px 4px -1px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 0 var(--clay-rim);
+}
+
+/* Campo di testo appoggiato direttamente sul fondo pagina (barra di ricerca).
+   `inset-surface` qui non funziona: il suo sfondo È il fondo pagina, quindi
+   del campo si vedeva solo il filo di luce inferiore e sembrava una riga
+   sottolineata invece di un campo. Un incavo ha bisogno di una superficie in
+   cui affondare, e sul fondo pagina non ce n'è: il campo sale di un livello
+   di tono (regola del progetto: le superfici si staccano per salto di tono,
+   non per bordo) e tiene l'ombra interna in alto, che gli lascia la lettura
+   di "conca in cui scrivere". Dentro una card resta giusto `inset-surface`. */
+@utility field {
+  background: var(--color-surface);
+  border: 1px solid transparent;
+  box-shadow:
+    inset 0 2px 4px -1px rgba(0, 0, 0, 0.45),
     inset 0 -1px 0 0 var(--clay-rim);
 }
 

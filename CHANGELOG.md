@@ -2,6 +2,15 @@
 
 Cronologia delle versioni di AllergyVerify Web (ex AllergyScan Web), dalla più recente alla più vecchia.
 
+## v0.6.3 — 2026-08-19
+
+Due difetti visivi segnalati durante l'uso.
+
+- **Gli angoli della pagina Info non si squadrano più al passaggio del mouse.** Le righe delle card (Lingua, Installa, Che cos'è, Privacy…) si illuminano al passaggio del cursore, ma quello sfondo è un rettangolo pieno: sulla prima e sull'ultima riga copriva gli angoli arrotondati della card, che per un attimo sembrava un rettangolo a 90°. Ora la riga di testa e quella di coda prendono il raggio della card. Non si è usato `overflow: hidden`, che avrebbe tagliato anche l'anello di focus della tastiera (sta 3px fuori dal bordo). Quando una riga è aperta il bottone resta squadrato in basso, perché lì si trova in mezzo alla pila.
+- **La barra di ricerca adesso si vede.** Usava la superficie "a incavo", il cui sfondo è esattamente il fondo pagina: appoggiata direttamente sulla pagina non aveva niente in cui affondare, e ne restava visibile solo il filo di luce inferiore — sembrava una riga sottolineata, non un campo. Ora sale di un livello di tono (nuova utility `field`) e tiene l'ombra interna in alto, così resta una conca in cui scrivere ma con una forma chiusa. Dentro una card il campo continua a usare l'incavo, dove funziona.
+- Il testo segnaposto dei campi (ricerca e nome profilo) era a opacità ridotta, contro la regola del progetto sul contrasto: ora usa il token pieno `ink-dim`.
+- La versione mostrata in Info era rimasta a v0.6.1 mentre il progetto era già alla 0.6.2.
+
 ## v0.6.2 — 2026-08-19
 
 Il verdetto con più profili attivi diventa una scheda per persona.

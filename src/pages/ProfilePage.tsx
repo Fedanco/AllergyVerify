@@ -171,7 +171,7 @@ function ProfileEditor({
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder={t.profile.namePlaceholder}
-        className="inset-surface mb-4 w-full rounded-xl px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim/60 focus:border-accent"
+        className="inset-surface mb-4 w-full rounded-xl px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim focus:border-accent"
       />
 
       <p id="allergens-label" className="mb-2 text-xs text-ink-dim">
