@@ -22,8 +22,18 @@ Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi alle
 - ⚠️ **Verdetto allergie**: banner rosso/verde in base al profilo attivo (14 allergeni UE)
 - 📊 **Valori nutrizionali** per 100 g, con Nutri-Score / NOVA / Green-Score
 - 🕘 **Storico** di scansioni e ricerche
-- 👤 **Profili allergie** multipli, salvati solo sul dispositivo
+- 👤 **Profili allergie** multipli, salvati solo sul dispositivo — con più profili attivi il verdetto mostra una scheda per persona
 - 🌍 **Multilingua** italiano/inglese, con traduzione automatica degli ingredienti
+
+## Struttura del progetto
+
+```
+src/          codice sorgente (componenti, pagine, dati, i18n, hook)
+public/       asset statici serviti così come sono (icone PWA, favicon)
+assets/       sorgente grafica non pubblicata (logo)
+docs/         documentazione pubblica (screenshot del README)
+scripts/      script di supporto (rigenerazione icone dal logo sorgente)
+```
 
 ## Dati e privacy
 
@@ -49,3 +59,7 @@ Stack: Vite · React · TypeScript · Tailwind CSS 4 · react-router · @zxing/b
 Il sito è pubblicato su **Vercel**: https://allergyverify.vercel.app
 
 Deploy manuale dalla cartella del progetto: `npx vercel --prod`. Con la Git integration di Vercel attiva, ogni push su `main` viene pubblicato automaticamente (dopo che la CI su GitHub Actions ha verificato lint e build).
+
+## Licenza
+
+Distribuito con licenza MIT. Vedi [LICENSE](LICENSE).

@@ -14,7 +14,7 @@ Il verdetto con più profili attivi diventa una scheda per persona.
 
 ## v0.6.1 — 2026-08-18
 
-Il logo dell'app torna a essere il file originale, ovunque.
+Il logo dell'app torna a essere il file che ho disegnato, ovunque.
 
 - **Nomi accorciati ovunque**: il dominio passa da `allergyverify-web.vercel.app` a **https://allergyverify.vercel.app**, e il repo GitHub da `AllergyVerifyWebApp` ad `AllergyVerify`. Il suffisso `-web` distingueva la webapp dalla vecchia app iOS AllergyScan, che non è più un progetto attivo. Il vecchio indirizzo è stato rimosso, non lasciato in redirect: chi aveva la webapp installata dal vecchio indirizzo deve riaggiungerla, e i profili salvati là restano su quell'origine — il `localStorage` non attraversa i domini.
 
@@ -51,7 +51,7 @@ Redesign completo dell'interfaccia ("Inchiostro") — la pelle era ancora quella
 
 ## v0.5.3 — 2026-08-17
 
-- Sostituito il logo (avocado della vecchia app iOS) con il nuovo logo originale — spiga di grano, lente d'ingrandimento, badge d'allerta. Icone di sistema (favicon, apple-touch-icon, icone PWA) rigenerate dal nuovo artwork; cache-busting favicon/apple-touch-icon aggiornato a `-v3` (iOS/Safari le cachea per URL). Dentro l'interfaccia scura (sidebar, pagina Info, modale installa) usato `LogoTile`, un piccolo riquadro con bordo/ombra che incornicia l'immagine vera (un primo tentativo di ridisegnarla come icona piatta era irriconoscibile ed è stato scartato).
+- Sostituito il logo (avocado della vecchia app iOS) con il nuovo logo che ho disegnato — spiga di grano, lente d'ingrandimento, badge d'allerta. Icone di sistema (favicon, apple-touch-icon, icone PWA) rigenerate dal nuovo artwork; cache-busting favicon/apple-touch-icon aggiornato a `-v3` (iOS/Safari le cachea per URL). Dentro l'interfaccia scura (sidebar, pagina Info, modale installa) usato `LogoTile`, un piccolo riquadro con bordo/ombra che incornicia l'immagine vera (un primo tentativo di ridisegnarla come icona piatta era irriconoscibile ed è stato scartato).
 - Rebrand completato anche su repo GitHub (`AllergyVerifyWebApp`) e dominio Vercel (`allergyverify-web.vercel.app`), con redirect attivi dai vecchi indirizzi.
 
 ## v0.5.2 — 2026-08-06

@@ -68,9 +68,11 @@ export function matchAllergens(
 // qui per il matching del verdetto, sia in IngredientsCard per l'highlight
 // visivo. Copre IT/EN oltre a FR/DE/ES/PT: i prodotti europei su OFF hanno
 // spesso il testo ingredienti in una lingua diversa da quella dell'app (es.
-// packaging multilingua OCR-ato in una sola lingua a caso, vedi nota su
-// ingredients_text_en in CLAUDE.md) — senza queste varianti il fallback
-// testuale mancherebbe comunque il match.
+// packaging multilingua OCR-ato in una sola lingua a caso — es. su Nutella
+// venduto in Francia, ingredients_text_en su OFF è spesso testo OCR
+// spazzatura non allineato al prodotto, quindi non va usato come fonte
+// primaria) — senza queste varianti il fallback testuale mancherebbe
+// comunque il match.
 export const ALLERGEN_KEYWORDS: Record<string, string[]> = {
   gluten: ['glutine', 'grano', 'frumento', 'orzo', 'segale', 'avena', 'farro', 'kamut', 'gluten', 'wheat', 'barley', 'rye', 'oat', 'blé', 'froment', 'orge', 'seigle', 'avoine', 'épeautre', 'weizen', 'gerste', 'roggen', 'hafer', 'dinkel', 'trigo', 'cebada', 'centeno', 'centeio', 'espelta'],
   crustaceans: ['crostacei', 'gambero', 'gamberi', 'granchio', 'aragosta', 'scampi', 'crustaceans', 'shrimp', 'crab', 'lobster', 'crustacés', 'crevette', 'homard', 'krebstiere', 'garnele', 'krabbe', 'hummer', 'crustáceos', 'camarón', 'camarão', 'cangrejo', 'caranguejo', 'langosta', 'lagosta'],
