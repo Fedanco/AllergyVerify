@@ -81,7 +81,7 @@ const it = {
     editorTitleEdit: (name: string) => `Modifica "${name}"`,
     editorTitleNew: 'Nuovo profilo',
     nameLabel: 'Nome',
-    namePlaceholder: 'Nome (es. Valentina)',
+    namePlaceholder: 'Nome (es. Marco)',
     allergensLabel: 'I tuoi allergeni (14 allergeni UE):',
     save: 'Salva profilo',
     /** usato quando si salva senza aver scritto un nome */
@@ -376,7 +376,7 @@ const en: Translations = {
     editorTitleEdit: (name: string) => `Edit "${name}"`,
     editorTitleNew: 'New profile',
     nameLabel: 'Name',
-    namePlaceholder: 'Name (e.g. Valentina)',
+    namePlaceholder: 'Name (e.g. Alex)',
     allergensLabel: 'Your allergens (14 EU allergens):',
     save: 'Save profile',
     defaultName: 'My profile',
