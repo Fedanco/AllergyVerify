@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* La landing (src/landing) ha un foglio Tailwind separato con i suoi token:
+   le sue classi non devono finire nel CSS dell'app. */
+@source not "./landing";
 
 @theme {
   /* Palette "Inchiostro": blu notte profondo. La direzione di design è la

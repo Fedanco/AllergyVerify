@@ -5,7 +5,11 @@ description: Come buildare, lanciare e verificare AllergyVerify end-to-end nel b
 
 # Verifica AllergyVerify
 
-SPA statica (Vite + React), nessun backend. Superficie: GUI browser.
+Due pagine nello stesso build (Vite multi-page), nessun backend. Superficie: GUI browser.
+
+- **Landing** alla radice: `http://localhost:4173/` (codice in `src/landing/`, CSS e token propri).
+- **App** (SPA con HashRouter) su `http://localhost:4173/app/`: tutte le route sotto sono
+  `http://localhost:4173/app/#/profile`, `#/product/<barcode>`, ecc.
 
 ## Build e lancio
 
@@ -30,11 +34,14 @@ va eseguito **dalla root del progetto** (o copiato lì): da una cartella esterna
 fallisce con `ERR_MODULE_NOT_FOUND` perché non risolve il `node_modules` del progetto.
 
 Viewport mobile 390×844 per il layout principale, 1280×800 per la sidebar desktop.
-Le route usano HashRouter: `http://localhost:4173/#/profile`, `#/product/<barcode>`, ecc.
+Le route dell'app usano HashRouter sotto `/app/`: `http://localhost:4173/app/#/profile`,
+`/app/#/product/<barcode>`, ecc. Un link vecchio come `http://localhost:4173/#/profile`
+deve redirigere a `/app/#/profile` (script inline nell'`index.html` della landing).
 
 ## Flussi da coprire
 
-1. **Profilo**: `#/profile` → nome + toggle pill allergeni (es. "🥛 Latte") → "Salva profilo". Persistito in localStorage (`as_profiles`, `as_active_profile`).
+0. **Landing** (da v0.7.0): `/` mostra la landing (titolo "Read the label. Before the bite."), i due bottoni "Open the app" portano a `/app/`; lo switch `it`/`en` cambia i testi e persiste in `as_lang`, che l'app legge; a 400px di larghezza nessuno scroll orizzontale. `/?og` mostra solo la card 1200×630 per l'anteprima social. `/privacy/` e `/terms/` sono le pagine legali della landing (stessi testi dell'app, da `src/i18n/legal.ts`); i link nel footer devono portare lì, non a `/app/#/privacy`.
+1. **Profilo**: `/app/#/profile` → nome + toggle pill allergeni (es. "🥛 Latte") → "Salva profilo". Persistito in localStorage (`as_profiles`, `as_active_profile`).
 2. **Barcode reale**: dalla Search inserire `3017620422003` (Nutella: contiene latte + frutta a guscio) → naviga a `#/product/3017620422003` → banner rosso "Attenzione, …! Contiene: Latte, Frutta a guscio" + tabella nutrimenti.
 3. **Ricerca testuale**: query non numerica (es. "biscotti") → lista risultati con card cliccabili.
 4. **Storico**: `#/history` deve contenere i prodotti aperti.
@@ -46,6 +53,6 @@ Le route usano HashRouter: `http://localhost:4173/#/profile`, `#/product/<barcod
 
 - Le chiamate vanno direttamente a `world.openfoodfacts.org`: serve rete; i lookup barcode sono cachati 24h in localStorage (`as_product_cache_v3:*`), quindi per ritestare il fetch pulire lo storage.
 - Il chunk dello scanner (zxing) è lazy: la pagina Scan mostra prima "Caricamento scanner…".
-- **PWA/service worker** (da v0.2.0): la build genera `dist/sw.js` + `manifest.webmanifest`; il SW precache-a l'app shell, quindi dopo la prima visita un reload nello stesso context può servire file stale — per ritestare una nuova build usare un browser context fresco. Test offline: `ctx.setOffline(true)` + reload deve funzionare. `images.openfoodfacts.org` a volte è lentissimo (>15s): un'immagine prodotto vuota nello screenshot non è un bug.
+- **PWA/service worker** (da v0.2.0): la build genera `dist/sw.js` + `manifest.webmanifest`; il SW precache-a l'app shell (landing compresa), quindi dopo la prima visita un reload nello stesso context può servire file stale — per ritestare una nuova build usare un browser context fresco, oppure da console `navigator.serviceWorker.getRegistrations()` → `unregister()` + `caches.keys()` → `caches.delete()`. Il manifest ha `start_url`/`scope` su `/app/`; il fallback di navigazione vale solo sotto `/app`. Test offline: `ctx.setOffline(true)` + reload deve funzionare. `images.openfoodfacts.org` a volte è lentissimo (>15s): un'immagine prodotto vuota nello screenshot non è un bug.
 - Per lo stato "scanning" della camera in headless: lanciare Chrome con `--use-fake-device-for-media-stream --use-fake-ui-for-media-stream` e `permissions: ['camera']`.
 - Le safe area iOS (`env(safe-area-inset-*)`) valgono 0 in Chrome desktop: notch/status bar in standalone e le icone Home/Preferiti si verificano solo su iPhone reale dopo il deploy (iOS cachea le icone per URL: per vederne una nuova serve un nome file nuovo).

@@ -21,7 +21,7 @@ interface LogoTileProps {
 export default function LogoTile({ className }: LogoTileProps) {
   return (
     <img
-      src="./logo-v2.png"
+      src="/logo-v2.png"
       alt=""
       aria-hidden="true"
       width={248}
