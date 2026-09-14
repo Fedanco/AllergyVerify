@@ -6,7 +6,7 @@
 
 <p align="center">Scansiona o cerca un prodotto alimentare e scopri subito se contiene i tuoi allergeni, in base al tuo profilo personale. PWA installabile, mobile-first, utilizzabile anche da desktop.</p>
 
-<p align="center"><strong>Demo live</strong>: <a href="https://allergyverify.vercel.app">allergyverify.vercel.app</a></p>
+<p align="center"><strong>Sito</strong>: <a href="https://allergyverify.vercel.app">allergyverify.vercel.app</a> · <strong>App</strong>: <a href="https://allergyverify.vercel.app/app/">allergyverify.vercel.app/app/</a></p>
 
 <p align="center">
   <a href="https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Fedanco/AllergyVerify/actions/workflows/ci.yml/badge.svg"></a>
@@ -34,6 +34,8 @@
 ## Struttura del progetto
 
 ```
+index.html    landing page (entry Vite; il codice sta in src/landing/)
+app/          entry HTML dell'app, servita su /app/
 src/          codice sorgente (componenti, pagine, dati, i18n, hook)
 public/       asset statici serviti così come sono (icone PWA, favicon)
 assets/       sorgente grafica non pubblicata (logo)

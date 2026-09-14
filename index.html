@@ -2,20 +2,38 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- favicon su sfondo bianco: iOS usa anche questo per i Preferiti e rende la trasparenza come nero -->
-    <link rel="icon" type="image/png" href="./favicon-v5.png" />
-    <!-- nome file versionato: iOS cachea le touch icon per URL, cambiare il nome forza il refresh -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon-v5.png" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0B1017" />
-    <meta name="description" content="AllergyVerify — scan food products and instantly find out whether they contain your allergens." />
+    <script>
+      // Chi ha già la webapp in Home (start_url vecchia: "/") o un vecchio link
+      // con route hash (/#/product/…) deve finire sull'app, non sulla landing.
+      // iOS non aggiorna la start_url delle webapp già installate, quindi il
+      // controllo va fatto qui, prima di caricare qualsiasi altra cosa.
+      (function () {
+        var standalone =
+          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+          window.navigator.standalone === true
+        var oldRoute = location.hash.indexOf('#/') === 0
+        if (standalone || oldRoute) location.replace('/app/' + location.hash)
+      })()
+    </script>
+    <link rel="icon" type="image/png" href="/favicon-v5.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-v5.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f1e3" />
+    <meta name="description" content="AllergyVerify scans a food product's barcode and tells you right away whether it contains your allergens. Free, no account, everything stays on your phone." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AllergyVerify" />
+    <meta property="og:title" content="AllergyVerify — Read the label. Before the bite." />
+    <meta property="og:description" content="Scan a barcode, get a verdict for every person in the family. Free, no account, data stays on your phone." />
+    <meta property="og:url" content="https://allergyverify.vercel.app/" />
+    <meta property="og:image" content="https://allergyverify.vercel.app/og-v1.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://allergyverify.vercel.app/" />
     <title>AllergyVerify</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/landing/main.tsx"></script>
   </body>
 </html>

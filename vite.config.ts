@@ -4,9 +4,24 @@ import tailwindcss from '@tailwindcss/vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// base './' + HashRouter: funziona su hosting statico senza redirect 404
+// Due pagine nello stesso build: la landing alla radice (`index.html`) e
+// l'app in `app/index.html`, servita su /app/. L'app resta una SPA con
+// HashRouter (/app/#/scan), quindi nessun rewrite lato server è necessario.
+// La base è assoluta ('/'): con una entry annidata la base relativa './'
+// avrebbe fatto puntare manifest e icone a /app/manifest.webmanifest.
 export default defineConfig(({ mode }) => ({
-  base: './',
+  base: '/',
+  appType: 'mpa',
+  build: {
+    rollupOptions: {
+      input: {
+        landing: 'index.html',
+        privacy: 'privacy/index.html',
+        terms: 'terms/index.html',
+        app: 'app/index.html',
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -25,6 +40,12 @@ export default defineConfig(({ mode }) => ({
         description:
           'Scan food products and instantly find out whether they contain your allergens.',
         lang: 'en',
+        // L'app vive su /app/: la landing alla radice non fa parte della
+        // webapp installata. `id` fisso così Chrome riconosce la stessa app
+        // anche se start_url cambiasse ancora.
+        id: '/app/',
+        start_url: '/app/',
+        scope: '/app/',
         display: 'standalone',
         theme_color: '#0b1017',
         background_color: '#0b1017',
@@ -43,7 +64,18 @@ export default defineConfig(({ mode }) => ({
         // include i font self-hosted (@fontsource) nel precache dell'app
         // shell, altrimenti al primo avvio offline il testo ripiegherebbe
         // silenziosamente su system-ui
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
+        // L'anteprima social serve solo ai crawler: non va scaricata da ogni
+        // telefono che installa l'app.
+        globIgnores: ['og-v1.png'],
+        // Navigazioni sotto /app non in precache (es. /app senza barra
+        // finale) cadono sull'app. L'allowlist è indispensabile: senza, anche
+        // "/?x=1" finiva sull'app, perché una query non prevista non trova la
+        // landing nel precache e scatta il fallback.
+        navigateFallback: 'app/index.html',
+        navigateFallbackAllowlist: [/^\/app(\/|$)/],
+        // Qualunque query string trova comunque la pagina nel precache.
+        ignoreURLParametersMatching: [/.*/],
         // foto prodotto: cache-first, il barcode identifica un'immagine stabile
         runtimeCaching: [
           {

@@ -181,6 +181,11 @@ function Build-Maskable([int]$size, [double]$safe, [string]$name) {
 
 Write-Host 'generati:'
 Build-AppLogo 260 'logo-v2.png'
+# Logo grande per l'hero della landing: stessa sorgente, stessa scala
+# uniforme, solo piu' pixel (a schermo arriva a ~420px, il doppio per retina).
+# Il PNG pesa ~790 kB: subito dopo va lanciato `python scripts/hero-webp.py`,
+# che lo converte in logo-hero-v1.webp (<100 kB) e rimuove il PNG.
+Build-AppLogo 840 'logo-hero-v1.png'
 Build-SystemIcon 180 'favicon-v5.png'
 Build-SystemIcon 180 'apple-touch-icon-v5.png'
 # Copia senza suffisso di versione: alcuni flussi "aggiungi a Home" (iOS/Safari

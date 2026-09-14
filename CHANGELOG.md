@@ -2,6 +2,19 @@
 
 Cronologia delle versioni di AllergyVerify (ex AllergyScan), dalla più recente alla più vecchia.
 
+## v0.7.0 — 2026-09-15
+
+La landing page, e l'app che si sposta su `/app/`.
+
+- **Landing pubblica alla radice del dominio** (https://allergyverify.vercel.app/), in italiano e inglese con lo stesso interruttore di lingua dell'app (chiave `as_lang`: la scelta fatta sulla landing vale anche aprendo l'app). Direzione visiva "carta e pennarello", scelta tra quattro proposte: fondo carta, cartellini strappati, timbri colorati, titolo scritto a mano (Permanent Marker) con sottolineatura a pennarello, testo in JetBrains Mono, tratti a pastello disegnati in SVG. Blu per l'interazione, rosso per "contiene", verde per "sicuro", il grano del logo per le tracce. Nessuno screenshot dell'app: la schermata del verdetto è ridisegnata su carta (una tessera per persona, ingredienti sottolineati), e le funzioni sono raccontate come un'etichetta alimentare (Ingredienti / Senza / Valori medi per 100 g di spesa). Il logo entra nell'hero tale e quale, come un adesivo incollato storto.
+- **L'app vive su `/app/`** (`app/index.html`, seconda entry del build Vite, base assoluta `/`). Le route hash restano uguali (`/app/#/scan`). Il manifest PWA ha `start_url`, `scope` e `id` su `/app/`: installando dalla landing si apre direttamente l'app. Il `localStorage` non cambia origine, quindi profili e storico restano.
+- **Chi aveva già la webapp in Home** (start_url vecchia `/`) o un vecchio link con `#/…` viene rediretto a `/app/` da uno script inline nella landing, prima di caricare qualsiasi altra cosa: iOS non aggiorna la start_url delle webapp già installate.
+- Service worker: il fallback di navigazione punta a `app/index.html` ma **solo sotto `/app`** (senza l'allowlist, `/?x=1` finiva sull'app perché una query non prevista non trovava la landing nel precache); qualunque query string trova comunque la pagina nel precache.
+- Le animazioni dei tratti a pastello agiscono sul `clip-path` dell'`<svg>`, mai sui path filtrati: animare un path con `feTurbulence` ricalcolava il filtro a ogni frame e bloccava il rendering.
+- **Privacy e Termini anche sulla landing** (`/privacy/`, `/terms/`), nella stessa veste di carta: dal sito non si finisce più dentro l'app per leggerli. I testi sono stati spostati in `src/i18n/legal.ts`, condiviso con le pagine dell'app, così restano una copia sola.
+- Dopo il primo giro di feedback: "Come funziona" ha un titolo e un'introduzione come le altre sezioni (prima la fascia partiva subito sotto l'hero e non si leggeva come sezione), le righe blu riprese dal mock sono state tolte (terzo contenitore intorno a timbro e cartellino, e unica cornice di tutta la pagina) e l'installazione è diventata il quarto cartellino, su carta gialla. Il bottone secondario dell'hero, che portava alla sezione subito sotto, ora è "Guarda un esempio" e salta al verdetto ridisegnato. Per separare meglio le sezioni, scelta tra quattro prove confrontate in un artefatto (fogli alternati, tratto di pastello, entrambi, sezione blu): **fogli alternati**. "Come funziona" e "Cosa c'è dentro" stanno su un cartoncino più scuro a tutta larghezza con lo strappo sopra e sotto (`Sheet`), così la pagina si legge come una pila di fogli anche scorrendo in fretta.
+- Meta Open Graph e immagine di anteprima (`og-v1.png`, fotografata dalla modalità `/?og`), `robots.txt` che esclude `/app/` dall'indicizzazione, versione mostrata in Info aggiornata.
+
 ## v0.6.3 — 2026-08-19
 
 Due difetti visivi segnalati durante l'uso.
