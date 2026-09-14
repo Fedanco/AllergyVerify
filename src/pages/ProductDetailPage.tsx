@@ -247,7 +247,7 @@ function NutrimentTable({
               </span>
             ))}
           </p>
-          <p className="mt-1 opacity-80">{t.productDetail.levelLegend}</p>
+          <p className="mt-1">{t.productDetail.levelLegend}</p>
         </div>
       )}
     </>
