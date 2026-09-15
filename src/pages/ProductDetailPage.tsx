@@ -141,7 +141,7 @@ export default function ProductDetailPage() {
               )}
             </div>
             <div className="min-w-0">
-              <h1 className="font-display text-lg font-bold leading-tight">
+              <h1 className="font-hand text-[clamp(1.35rem,5vw,1.75rem)] leading-[1.15] line-clamp-2 [overflow-wrap:anywhere]">
                 {product.product_name ?? t.common.unnamedProduct}
               </h1>
               {product.brands && (

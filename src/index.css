@@ -1,103 +1,64 @@
 @import "tailwindcss";
-/* La landing (src/landing) ha un foglio Tailwind separato con i suoi token:
-   le sue classi non devono finire nel CSS dell'app. */
+/* Token, base e utility della carta (torn, stamp, focus-ring, grain…) sono
+   condivisi con la landing in src/paper/paper.css. */
+@import "./paper/paper.css";
+/* La landing (src/landing) ha un foglio Tailwind separato: le sue classi non
+   devono finire nel CSS dell'app. */
 @source not "./landing";
 
 @theme {
-  /* Palette "Inchiostro": blu notte profondo. La direzione di design è la
-     materia (superfici in rilievo, luce direzionale) — non la temperatura:
-     il fondo resta freddo e fa da contrasto al grano dorato del logo, e
-     soprattutto fa risaltare il rosso del verdetto più di un fondo caldo. */
-  --color-bg: #070b12;
-  --color-surface: #151d29;
-  --color-surface-2: #202b3a;
-  /* Terzo livello: superfici sollevate/attive (dock, chip premuto). Serve
-     perché con la materia in rilievo due soli livelli non bastano a
-     distinguere "a riposo" da "sollevato" da "aperto". */
-  --color-surface-3: #2c3a4c;
-  --color-edge: #34445a;
-  --color-ink: #eaf0f8;
-  --color-ink-dim: #93a3b8;
+  /* Alias transitori sui token carta: tengono in vita i nomi semantici usati
+     nel JSX (text-ink-dim, bg-surface, bg-accent…) mentre l'app passa alla
+     carta un pezzo alla volta. I file riscritti usano i nomi carta
+     (paper, sheet, ink-soft, blue, red, green); gli alias si tolgono in un
+     giro di pulizia quando non li usa più nessuno. */
+  --color-bg: var(--color-paper);
+  --color-surface: var(--color-paper-2);
+  --color-surface-2: var(--color-sheet);
+  --color-ink-dim: var(--color-ink-soft);
+  /* Colore di interazione: il blu, come sulla landing. Il grano del logo
+     non è più il colore dei bottoni: sulla carta è la tinta delle tracce. */
+  --color-accent: var(--color-blue);
 
-  /* Colore di MARCA, non semantico: grano del logo. Usato solo per
-     interazione e stato (CTA, tab attiva, focus, selezione). */
-  --color-accent: #f2c14e;
+  /* Toni semantici del verdetto e delle scale. Rosso e verde sono quelli
+     della carta; come TESTO reggono 4,5:1 solo su paper/paper-2. */
+  --color-danger: var(--color-red);
+  --color-safe: var(--color-green);
+  /* Ambra scura, leggibile come testo sul crema (5,6:1 su paper, 4,9 su
+     sheet, 5,4 su wheat-tint): errori, livelli "moderato", pallini. Il
+     grano chiaro (#f2c14e) resta solo timbro/tinta, mai testo. */
+  --color-warn: #9a4a00;
+  /* Gradino intermedio delle scale a 4+ livelli (Nutri-Score C): oliva,
+     5,4:1 su paper. */
+  --color-caution: #4f6b0a;
+  /* Filo di matita per i divisori: inchiostro trasparente, mai un grigio. */
+  --color-edge: rgba(22, 22, 22, 0.14);
 
-  /* Toni SEMANTICI, tenuti separati dalla marca. Prima `accent` faceva
-     entrambi i mestieri: era il colore dei bottoni E il verde di "sicuro
-     per te". Col grano come colore di marca un verdetto positivo sarebbe
-     diventato giallo — su un'app di allergeni è inaccettabile, quindi il
-     verde ha un token suo e significa una cosa sola. */
-  --color-safe: #57d97a;
-  /* Gradino "intermedio" nelle scale a 4+ livelli (es. ScoreStrip):
-     resta francamente lime, così non si confonde col grano di marca. */
-  --color-caution: #a8d84a;
-  /* Ambra spostata verso l'arancio rispetto al vecchio #ffb454: prende
-     distanza dal grano, che ora vive nella stessa famiglia calda. */
-  --color-warn: #ffa24d;
-  --color-danger: #ff6b6b;
+  /* Angoli quasi vivi: i fogli di carta non sono arrotondati. */
+  --radius-card: 6px;
+  --radius-chip: 4px;
 
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  /* Font dei soli titoli: geometrica rotonda, sceglie la personalità dove
-     serve (nome pagina, nome prodotto, verdetto). Il testo di lettura e i
-     dati restano su Inter: lì la neutralità è una qualità, e un carattere
-     marcato renderebbe la lista ingredienti più faticosa. */
-  --font-display: "Outfit Variable", var(--font-sans);
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  /* Ombre "a foglio": un'ombra dura di contatto più una morbida tinta
+     carta. Override dei default Tailwind, che il progetto non usava. */
+  --shadow-sm: 1px 2px 0 rgba(22, 22, 22, 0.1);
+  --shadow-md: 1px 2px 0 rgba(22, 22, 22, 0.1), 0 6px 12px -6px rgba(70, 50, 20, 0.18);
+  --shadow-lg: 2px 4px 0 rgba(22, 22, 22, 0.12), 0 16px 22px -8px rgba(70, 50, 20, 0.2);
 
-  /* Raggi più generosi della media: un oggetto con volume ha bisogno di
-     spigoli morbidi, altrimenti il rilievo legge come un errore di rendering.
-     20px su una card larga ~358px (iPhone) è il punto in cui la superficie
-     sembra morbida senza perdere la struttura di lista. */
-  --radius-card: 1.5rem;
-  /* Radius dedicati (nomi non standard Tailwind: evitano di sovrascrivere
-     rounded-sm/rounded-lg già in uso altrove per componenti non correlati). */
-  --radius-chip: 1rem;
-  --radius-banner: 1.75rem;
-
-  /* Luce dell'ambiente. Tutta la materia sotto nasce da qui: una sorgente
-     sola, in alto, che accende il bordo superiore degli oggetti e lascia
-     il bordo inferiore in ombra. Tinta verso l'azzurro come il fondo:
-     un rim bianco puro su superficie blu sembra un bordo, non luce. */
-  --clay-rim: rgba(214, 232, 255, 0.1);
-  --clay-rim-strong: rgba(214, 232, 255, 0.16);
-  --clay-base: rgba(0, 0, 0, 0.3);
-
-  /* Ombre tinte del fondo (blu-nere), non nero puro: un nero neutro su una
-     superficie blu legge come sporco invece che come assenza di luce.
-     Servono a due strati (contatto + ambient); override sicuro dei default
-     Tailwind, che il progetto non usava. */
-  --shadow-sm: 0 1px 2px rgba(3, 7, 14, 0.5), 0 2px 6px -2px rgba(3, 7, 14, 0.55);
-  --shadow-md: 0 2px 8px -2px rgba(3, 7, 14, 0.55), 0 10px 28px -6px rgba(3, 7, 14, 0.65);
-  --shadow-lg: 0 4px 14px -4px rgba(3, 7, 14, 0.6), 0 20px 48px -12px rgba(3, 7, 14, 0.7);
-  /* Glow semantico riservato al banner allergeni (danger/safe): mai su
-     card generiche, altrimenti perde di significato. */
-  --shadow-glow-danger: 0 0 0 1px rgba(255, 107, 107, 0.38), 0 8px 28px -6px rgba(255, 107, 107, 0.35);
-  --shadow-glow-safe: 0 0 0 1px rgba(87, 217, 122, 0.34), 0 8px 28px -6px rgba(87, 217, 122, 0.3);
-
-  /* Token di movimento: nessuna libreria, solo CSS/WAAPI. Curve
-     ease-out (mai bounce/elastic), durate corte per feedback di stato. */
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Token di movimento: nessuna libreria, solo CSS. Curve ease-out (mai
+     bounce/elastic), durate corte per feedback di stato. */
   --duration-fast: 150ms;
   --duration-base: 220ms;
   --duration-slow: 400ms;
 
   --animate-scanline: scanline 2.2s ease-in-out infinite;
   --animate-fade-up: fade-up var(--duration-base) var(--ease-out-quart) both;
-
-  /* Momento firma del banner allergeni (AllergyBanner): reveal all'ingresso.
-     Il tono danger ha in più un fade-in del glow, non ripetuto — mai un
-     pulse in loop su un avviso di pericolo alimentare. */
+  /* Momento firma del verdetto (AllergyBanner): reveal all'ingresso del
+     cartellino; il timbro sopra arriva con `slap` (paper.css). */
   --animate-banner-in: banner-in var(--duration-slow) var(--ease-out-quint) both;
-  --animate-banner-in-danger:
-    banner-in var(--duration-slow) var(--ease-out-quint) both,
-    glow-in-danger var(--duration-slow) var(--ease-out-quint) both;
   --animate-icon-pop: icon-pop var(--duration-base) var(--ease-out-quint) 70ms both;
   /* Reveal in sequenza: gradini della scala punteggio (ScorePanel) e voci
-     di una lista (risultati ricerca, storico) — sempre un ordine reale da
-     rivelare, mai un fade applicato per riflesso a ogni sezione. */
+     di una lista (risultati ricerca, storico, tessere del verdetto) — sempre
+     un ordine reale da rivelare, mai un fade applicato per riflesso. */
   --animate-step-in: step-in var(--duration-fast) var(--ease-out-quart) both;
 
   @keyframes scanline {
@@ -112,14 +73,6 @@
     from { opacity: 0; transform: scale(0.96); }
     to { opacity: 1; transform: scale(1); }
   }
-  @keyframes glow-in-danger {
-    from {
-      box-shadow: 0 0 0 1px rgba(255, 107, 107, 0), 0 8px 28px -6px rgba(255, 107, 107, 0);
-    }
-    to {
-      box-shadow: var(--shadow-glow-danger);
-    }
-  }
   @keyframes icon-pop {
     from { opacity: 0; transform: scale(0.7); }
     to { opacity: 1; transform: scale(1); }
@@ -130,182 +83,155 @@
   }
 }
 
-/* Rispetta sempre la preferenza di riduzione del movimento: azzera
-   automaticamente ogni animazione/transizione CSS, inclusi i momenti
-   "firma" (reveal, glow, stagger) senza bisogno di logica per componente. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+/* Foglio di carta: piatto, ombra dura, angoli quasi vivi, NIENTE filtro —
+   costa zero anche in una lista di 50 righe. `torn` (paper.css) è
+   riservato agli oggetti firma: hero prodotto, verdetto, banner installa.
 
-html {
-  background: var(--color-bg);
-  color-scheme: dark;
-}
-
-/* Niente flash/anello di focus nativo del browser al tap su mobile
-   (Safari iOS disegna una riga blu sui bottoni toccati) */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  color: var(--color-ink);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Card standard: un oggetto, non un rettangolo con un bordo. Si stacca dal
-   fondo per salto di superficie (bg -> surface) piu' un filo di luce sul
-   bordo alto. Il bordo grigio 1px sparisce.
-
-   `border` resta dichiarato trasparente: diversi componenti sovrascrivono
-   il bordo della card per segnalare lo stato attivo (`border-accent/40` in
-   ScoreStrip, ProfilePage, SettingsPage). Senza questa
-   riga quelle override cambierebbero il box model e sposterebbero il
-   layout di 1px a ogni toggle. */
+   `border` resta dichiarato trasparente (2px): diversi componenti lo
+   colorano per segnalare lo stato attivo (`border-blue` in ScoreStrip,
+   ProfilePage) senza cambiare il box model e spostare il layout. */
 @utility card {
-  background: var(--color-surface);
-  border: 1px solid transparent;
+  background: var(--color-paper-2);
+  border: 2px solid transparent;
   border-radius: var(--radius-card);
-  /* Solo un filo di luce sul bordo alto. La card si stacca dal fondo per
-     salto di superficie, non per ombra: su un fondo quasi nero le ombre
-     non si vedono comunque, e cercare di renderle visibili produce quegli
-     aloni grigi che fanno sembrare tutto appiccicato. */
-  box-shadow: inset 0 1px 0 0 var(--clay-rim);
-}
-
-/* Riga di lista dentro una card: un livello di
-   superficie, non una card annidata dentro un'altra card. */
-@utility card-row {
-  background: var(--color-surface-2);
-  border: 1px solid transparent;
-  border-radius: var(--radius-chip);
-  /* Solo il filo di luce, nessuna ombra esterna: è già dentro un oggetto,
-     e una card dentro una card è sempre un errore di gerarchia. */
-  box-shadow: inset 0 1px 0 0 var(--clay-rim);
+  box-shadow: var(--shadow-md);
 }
 
 /* Card che contiene una pila di righe cliccabili (pagina Info). Lo sfondo
    :hover di una riga è un rettangolo pieno: sulla prima e sull'ultima riga
-   copre gli angoli arrotondati della card, che al passaggio del mouse sembra
-   diventare squadrata. Qui si arrotondano gli angoli esterni della riga
-   stessa invece di ritagliare la card con `overflow: hidden`, che taglierebbe
-   anche l'anello di focus (`focus-ring` sta 3px FUORI dal bordo).
-   Il raggio è quello della card meno il bordo di 1px, così le due curve
+   coprirebbe gli angoli della card. Qui si arrotondano gli angoli esterni
+   della riga stessa invece di ritagliare la card con `overflow: hidden`, che
+   taglierebbe anche l'anello di focus (`focus-ring` sta 4px FUORI dal bordo).
+   Il raggio è quello della card meno il bordo di 2px, così le due curve
    restano concentriche. */
 @utility card-list {
   /* La riga può essere figlia diretta (Link) o dentro un wrapper (Row).
      Restringere a button/a evita di toccare i dischi icona `rounded-full`. */
   & > :is(button, a):first-child,
   & > :first-child > :is(button, a):first-child {
-    border-top-left-radius: calc(var(--radius-card) - 1px);
-    border-top-right-radius: calc(var(--radius-card) - 1px);
+    border-top-left-radius: calc(var(--radius-card) - 2px);
+    border-top-right-radius: calc(var(--radius-card) - 2px);
   }
   /* `:last-child` anche dentro il wrapper: se la riga è aperta, l'ultimo
      elemento è il pannello di testo e il bottone non va arrotondato — si
      troverebbe in mezzo alla pila. */
   & > :is(button, a):last-child,
   & > :last-child > :is(button, a):last-child {
-    border-bottom-left-radius: calc(var(--radius-card) - 1px);
-    border-bottom-right-radius: calc(var(--radius-card) - 1px);
+    border-bottom-left-radius: calc(var(--radius-card) - 2px);
+    border-bottom-right-radius: calc(var(--radius-card) - 2px);
   }
 }
 
-/* Superficie interattiva/espansa (es. chip aperto e pannello di
-   ScoreStrip): un tono più chiaro + ombra più marcata segnalano
-   "attivo/sollevato" invece di un semplice cambio di bordo. */
+/* Cartoncino sollevato/aperto (chip del punteggio aperto e suo pannello):
+   il cartoncino più scuro con l'ombra di contatto sola. */
 @utility panel {
-  background: var(--color-surface-2);
-  border: 1px solid transparent;
+  background: var(--color-sheet);
+  border: 2px solid transparent;
   border-radius: var(--radius-card);
-  /* "Sollevato" si legge dal salto di superficie (surface → surface-2),
-     rinforzato da un filo di luce più acceso. */
-  box-shadow: inset 0 1px 0 0 var(--clay-rim-strong);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Dock di navigazione: galleggia sopra il contenuto che le scorre sotto,
-   quindi è l'unico posto dove il blur serve davvero (non è decorazione: il
-   contenuto passa realmente dietro). Superficie più chiara delle card, così
-   la dock resta sopra tutto anche nella gerarchia dei toni. */
-@utility clay-dock {
-  background: color-mix(in oklab, var(--color-surface-2) 88%, transparent);
-  backdrop-filter: blur(16px);
-  box-shadow:
-    inset 0 1px 0 0 var(--clay-rim-strong),
-    var(--shadow-lg);
-}
-
-/* Incavo: la superficie scende invece di salire — luce e ombra invertite
-   rispetto a `card`. Serve per i campi in cui si scrive e per i dischi
-   dietro le icone. È il contro-canto che rende credibile il rilievo:
-   senza qualcosa che affonda, tutto ciò che sporge sembra finto. */
-@utility inset-surface {
-  background: var(--color-bg);
-  border: 1px solid transparent;
-  /* Nessun border-radius, come `chip`: la forma la decide il call site
-     (un campo di ricerca la vuole più morbida di un disco icona). */
-  box-shadow:
-    inset 0 2px 4px -1px rgba(0, 0, 0, 0.5),
-    inset 0 -1px 0 0 var(--clay-rim);
-}
-
-/* Campo di testo appoggiato direttamente sul fondo pagina (barra di ricerca).
-   `inset-surface` qui non funziona: il suo sfondo È il fondo pagina, quindi
-   del campo si vedeva solo il filo di luce inferiore e sembrava una riga
-   sottolineata invece di un campo. Un incavo ha bisogno di una superficie in
-   cui affondare, e sul fondo pagina non ce n'è: il campo sale di un livello
-   di tono (regola del progetto: le superfici si staccano per salto di tono,
-   non per bordo) e tiene l'ombra interna in alto, che gli lascia la lettura
-   di "conca in cui scrivere". Dentro una card resta giusto `inset-surface`. */
+/* Campo di testo: una riga di pennarello intorno, blu quando ci si scrive.
+   Unica utility per i campi, ovunque stiano (sulla pagina o in una card). */
 @utility field {
-  background: var(--color-surface);
-  border: 1px solid transparent;
-  box-shadow:
-    inset 0 2px 4px -1px rgba(0, 0, 0, 0.45),
-    inset 0 -1px 0 0 var(--clay-rim);
+  background: var(--color-paper-2);
+  border: 2px solid var(--color-ink-soft);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+  &::placeholder {
+    color: var(--color-ink-soft);
+  }
+  &:focus {
+    border-color: var(--color-blue);
+  }
 }
 
-/* Badge/chip piccoli (additivi, diete): solo sfondo+bordo condivisi, niente
-   border-radius qui — le forme (pill vs rettangolo arrotondato) restano
-   quelle già in uso in ciascun punto di chiamata, zero cambio visivo. */
+/* Superficie "affondata" della vecchia app (miniature, dischi icona, chip
+   selezionati): sulla carta è semplicemente cartoncino. Alias transitorio,
+   da togliere quando i call site passano a `bg-sheet`/`field`. */
+@utility inset-surface {
+  background: var(--color-sheet);
+  border: 2px solid transparent;
+}
+
+/* Etichetta piccola (additivi, diete, allergeni non selezionati). */
 @utility chip {
-  background: var(--color-surface-2);
-  border: 1px solid transparent;
-  box-shadow: inset 0 1px 0 0 var(--clay-rim);
+  background: var(--color-sheet);
+  border: 2px solid transparent;
+  border-radius: var(--radius-chip);
 }
 
-/* Segnaposto di caricamento: un blocco che pulsa piano al posto del testo
-   "caricamento…". Mostra fin da subito la forma di quello che sta per
-   arrivare, così la pagina non salta quando i dati atterrano. */
+/* Dock di navigazione: un foglietto di carta opaco appoggiato sopra la
+   pagina, con l'ombra dura. Niente blur: la carta non è traslucida. La
+   geometria (fixed, inset, bottom con la safe area) resta nel JSX. */
+@utility dock {
+  background: var(--color-paper-2);
+  box-shadow: var(--shadow-lg);
+}
+/* Alias transitorio del vecchio nome, finché TabBar non passa a `dock`. */
+@utility clay-dock {
+  background: var(--color-paper-2);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Segnaposto di caricamento: un blocco di cartoncino che pulsa piano.
+   Mostra fin da subito la forma di quello che sta per arrivare. */
 @utility skeleton {
-  background: var(--color-surface-2);
+  background: var(--color-sheet);
   border-radius: var(--radius-chip);
   animation: skeleton-pulse 1.4s ease-in-out infinite;
 }
 
-@keyframes skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+/* Bottoni: due registri, gli stessi della landing. Primario blu pieno,
+   secondario col bordo blu da 3px. Stesse metriche, così stanno in fila. */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 5px;
+  background: var(--color-blue);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  line-height: 1.1;
+  padding: 0.75rem 1.25rem;
+  transition: background-color var(--duration-fast), transform 60ms;
+  &:hover {
+    background: var(--color-blue-deep);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  &:disabled {
+    background: var(--color-sheet);
+    color: var(--color-ink-soft);
+    cursor: not-allowed;
+    transform: none;
+  }
 }
-
-/* Elementi interattivi: sopprime l'outline nativo (blu su Safari iOS)
-   e lo sostituisce con un anello a tema, solo per navigazione da tastiera */
-@utility focus-ring {
-  outline: none;
-
-  &:focus-visible {
-    outline: 2px solid var(--color-accent);
-    /* offset maggiore di prima: con raggi più generosi un anello aderente
-       taglia visivamente gli angoli morbidi */
-    outline-offset: 3px;
-    border-radius: inherit;
+@utility btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 5px;
+  border: 3px solid var(--color-blue);
+  background: var(--color-paper-2);
+  color: var(--color-blue);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  line-height: 1.1;
+  padding: calc(0.75rem - 3px) calc(1.25rem - 3px);
+  transition: background-color var(--duration-fast), transform 60ms;
+  &:hover {
+    background: var(--color-paper);
+  }
+  &:active {
+    transform: translateY(1px);
   }
 }
