@@ -1,6 +1,6 @@
 import type { LandingDict, Tone } from '../i18n'
-import Torn from './Torn'
-import Stamp from './Stamp'
+import Torn from '../../paper/Torn'
+import Stamp from '../../paper/Stamp'
 import Underline from './Underline'
 import { useInView } from '../useInView'
 

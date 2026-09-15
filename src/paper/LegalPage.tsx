@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Lang } from '../i18n/langStore'
 import { legal } from '../i18n/legal'
-import Torn from './art/Torn'
-import Stamp from './art/Stamp'
+import Torn from './Torn'
+import Stamp from './Stamp'
 
 const LINK = 'focus-ring font-bold text-blue underline underline-offset-4'
 
@@ -14,16 +14,17 @@ interface LegalPageProps {
 }
 
 /**
- * Privacy e Termini nella veste della landing: un foglio di carta con le
- * sezioni una sotto l'altra. I testi sono gli stessi dell'app (`legal.ts`),
- * così restano allineati; cambia solo la carta su cui sono stampati.
+ * Privacy e Termini su carta: un foglio con le sezioni una sotto l'altra.
+ * Usata sia dalla landing (/privacy/, /terms/) sia dall'app (#/privacy,
+ * #/terms): i testi sono gli stessi (`legal.ts`) e ora anche la carta.
+ * Nessun `<main>` qui dentro: lo mette chi la monta.
  */
 export default function LegalPage({ kind, lang, warningLabel }: LegalPageProps) {
   const d = legal[lang]
   return (
-    <main className="mx-auto w-full max-w-6xl px-5 pb-20 pt-10 sm:px-8 md:pb-28 md:pt-14">
+    <div>
       {kind === 'privacy' ? <Privacy d={d.privacy} /> : <Terms d={d.terms} warningLabel={warningLabel} />}
-    </main>
+    </div>
   )
 }
 

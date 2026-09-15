@@ -9,7 +9,7 @@ import Verdict from './sections/Verdict'
 import Inside from './sections/Inside'
 import Footer from './sections/Footer'
 import OgCard from './OgCard'
-import LegalPage from './LegalPage'
+import LegalPage from '../paper/LegalPage'
 
 // `/?og`: solo la card per l'anteprima social, da fotografare (vedi OgCard).
 const OG_MODE = new URLSearchParams(window.location.search).has('og')
@@ -56,7 +56,9 @@ export default function Landing() {
           <Inside t={t} />
         </main>
       ) : (
-        <LegalPage kind={PAGE} lang={lang} warningLabel={t.warning.stamp} />
+        <main className="mx-auto w-full max-w-6xl px-5 pb-20 pt-10 sm:px-8 md:pb-28 md:pt-14">
+          <LegalPage kind={PAGE} lang={lang} warningLabel={t.warning.stamp} />
+        </main>
       )}
       <Footer t={t} />
     </>

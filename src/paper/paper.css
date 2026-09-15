@@ -1,0 +1,183 @@
+/* Design system "carta e pennarello", condiviso da landing (src/landing) e
+   app (src/): token, base e utility della materia di carta. Ogni entry ha il
+   proprio `@import "tailwindcss"` e importa questo file subito dopo; i due
+   fogli non convivono mai nello stesso documento.
+
+   `@source "./"` si risolve rispetto a QUESTO file (verificato in Tailwind
+   4.3): chiunque importi paper.css scansiona anche i componenti qui accanto
+   (Torn, Stamp, Sheet, LegalPage), altrimenti le loro classi mancherebbero
+   dal bundle della landing, che limita la scansione a src/landing.
+
+   Tre colori primari con un ruolo ciascuno — blu = interazione, rosso =
+   contiene, verde = sicuro — più il grano del logo per le tracce. */
+@source "./";
+
+@theme {
+  --color-paper: #f7f1e3;
+  --color-paper-2: #fdf9f0;
+  /* Cartoncino più scuro del fondo (sezioni alternate della landing,
+     superfici "sollevate" dell'app): i cartellini chiari ci risaltano sopra. */
+  --color-sheet: #ede3cc;
+  --color-ink: #161616;
+  /* Secondo livello di testo: un token, non un'opacità (8:1 sul crema). */
+  --color-ink-soft: #4b4742;
+  --color-blue: #2457d6;
+  --color-blue-deep: #1a44b0;
+  /* Rosso e verde scuriti rispetto al mock di riferimento: devono reggere
+     testo bianco sopra (5,2:1 e 5,3:1) e testo colorato sul crema (≥4,5:1).
+     Come TESTO reggono solo su paper/paper-2: sulle tinte e sul cartoncino
+     il tono lo porta il timbro, il testo resta ink/ink-soft. */
+  --color-red: #c9372c;
+  --color-green: #2f7a2a;
+  /* Il grano è chiaro: solo timbro/tinta, mai colore di testo. */
+  --color-wheat: #f2c14e;
+  /* Fondi tenui delle tessere del verdetto: il colore vero sta nel timbro,
+     il fondo serve solo a raggruppare. */
+  --color-red-tint: #f5d8d4;
+  --color-wheat-tint: #fbeec6;
+  --color-green-tint: #d7e9d1;
+
+  --font-hand: "Permanent Marker", "Segoe Print", "Comic Sans MS", cursive;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* L'adesivo "schiaffato" sulla carta: parte più grande e si posa. Usato
+     dal logo dell'hero e dai timbri del verdetto. */
+  --animate-slap: slap 0.5s var(--ease-out-quint) both;
+
+  @keyframes slap {
+    from { opacity: 0; transform: scale(1.14); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+/* Fuori da @theme: la utility `skeleton` dell'app la richiama per nome. */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color-scheme: light;
+  }
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Niente flash/anello nativo al tap su mobile (Safari iOS disegna una
+     riga blu sui bottoni toccati). */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    background: var(--color-wheat);
+    color: var(--color-ink);
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  /* Rispetta sempre la preferenza di riduzione del movimento: azzera ogni
+     animazione/transizione, inclusi i momenti "firma" (slap, reveal,
+     stagger), senza logica per componente. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Grana della carta su tutta la pagina: rumore SVG, sopra tutto ma
+   trasparente ai click. Bassa opacità: deve sentirsi, non vedersi. Niente
+   mix-blend-mode: un livello fisso in moltiplicazione costringeva a
+   ricomporre tutta la pagina a ogni scroll. */
+@utility grain {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.34 0.34 0.34 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Cartellino di carta strappata. Il bordo irregolare sta su ::before (fondo +
+   clip-path), così il drop-shadow dell'elemento segue lo strappo invece del
+   rettangolo. `--torn-clip` e `--torn-bg` arrivano inline dal componente
+   Torn, che genera un poligono diverso per ogni seme.
+   È un filtro: costa a ogni ridisegno. Riservato agli oggetti firma (max 3
+   per schermata), mai in una lista, e mai animato direttamente: le
+   animazioni con transform stanno su un wrapper. */
+@utility torn {
+  position: relative;
+  isolation: isolate;
+  filter: drop-shadow(1px 2px 0 rgba(22, 22, 22, 0.1))
+    drop-shadow(0 10px 14px rgba(70, 50, 20, 0.16));
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--torn-bg, var(--color-paper-2));
+    clip-path: var(--torn-clip);
+  }
+}
+
+/* Cartoncino a tutta larghezza con lo strappo sopra e sotto (`--sheet-clip`
+   da sheetClip). Niente ombra: il clip-path la taglierebbe comunque, e il
+   salto di tono basta. */
+@utility sheet {
+  background: var(--color-sheet);
+  clip-path: var(--sheet-clip);
+}
+
+/* Timbro: etichetta colorata con testo bianco, leggermente storta. */
+@utility stamp {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  color: #fff;
+  padding: 0.4em 0.85em;
+  transform: rotate(var(--stamp-tilt, -1.5deg));
+  clip-path: polygon(1% 5%, 28% 0, 61% 3%, 100% 1%, 99% 42%, 100% 95%, 72% 100%, 34% 96%, 0 100%, 2% 58%);
+}
+
+/* Anello di focus: solo da tastiera, blu come ogni interazione. */
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 4px;
+  }
+}
+
+/* Bottone/link di carta: si solleva al passaggio, si posa al click. Anche
+   questo è un filtro in hover: non va sulle righe di una lista. */
+@utility lift {
+  transition: transform 180ms var(--ease-out-quart), filter 180ms var(--ease-out-quart);
+  &:hover {
+    transform: translate(-1px, -2px) rotate(var(--lift-tilt, 0deg));
+    filter: drop-shadow(2px 4px 0 rgba(22, 22, 22, 0.12))
+      drop-shadow(0 16px 22px rgba(70, 50, 20, 0.2));
+  }
+  &:active {
+    transform: translate(0, 1px);
+    transition-duration: 60ms;
+  }
+}
