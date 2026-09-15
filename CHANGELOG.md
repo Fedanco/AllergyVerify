@@ -2,6 +2,19 @@
 
 Cronologia delle versioni di AllergyVerify (ex AllergyScan), dalla più recente alla più vecchia.
 
+## v0.8.0 — 2026-09-15
+
+L'app sulla stessa carta della landing.
+
+- **Redesign completo dell'app su "carta e pennarello"**, la direzione scelta per la landing il giorno prima: fondo crema, fogli di carta con l'ombra dura, cartellini strappati per gli oggetti che contano, timbri colorati, titoli scritti a mano (Permanent Marker) e tutto il resto in JetBrains Mono. Inter e Outfit escono dal progetto. Il tema scuro "Inchiostro" (v0.6.0–v0.7.0) non c'è più: l'app è solo chiara, come il sito. Prima del codice, Fede ha approvato una bozza delle tre schermate chiave e scelto tra due varianti la dock e il verdetto multi-profilo.
+- **Il verdetto è un timbro.** Il cartellino del verdetto è carta strappata nella tinta del caso (rosa, gialla, verde) con il timbro a destra: CONTIENE rosso, TRACCE grano, OK verde; i cartellini neutri (nessun profilo, dati mancanti) non hanno timbro perché non sono un verdetto. Con più profili attivi, una riga per persona, ciascuna sulla propria tinta e col proprio timbro, come nel mockup della landing. Il testo resta sempre in inchiostro: rosso e verde come colore di testo non reggono il contrasto sulle tinte, e il colore lo porta il timbro.
+- **Ingredienti sottolineati a pennarello**: gli allergeni del profilo hanno un tratto rosso pieno da 3px sotto la parola invece dell'evidenziatore; "senza glutine" e simili restano senza tratto, come prima.
+- **Nome del prodotto scritto a mano** su un cartellino strappato, badge Nutri-Score/NOVA/Green-Score come timbri pieni con la lettera bianca, dock di navigazione come un foglietto di carta opaco (via il blur) con la tab attiva su un quadratino blu, campi con la riga di pennarello che diventa blu quando ci si scrive, bottoni blu maiuscoli come sulla landing, avviso in Info con il timbro rosso "Attenzione" su carta gialla, lingua scelta con la sottolineatura blu.
+- **Privacy e Termini dentro l'app sono la stessa pagina del sito**: un foglio di carta solo, con il bottone Indietro davanti. Il componente vive in `src/paper/LegalPage` ed è usato da entrambi.
+- **Design system condiviso in `src/paper/`**: token, base e utility della carta (`torn`, `stamp`, `sheet`, `grain`, `focus-ring`, `lift`) più i componenti `Torn`, `Stamp`, `Sheet` e il generatore dello strappo sono stati spostati fuori dalla landing e importati da entrambi i fogli Tailwind, così non esistono due copie. La landing è rimasta identica (stesse classi nel bundle, verificato).
+- Regole nate con questo giro: i cartellini strappati sono un filtro, quindi al massimo tre per schermata e mai in una lista; le animazioni stanno sempre su un wrapper, mai sull'elemento filtrato; il grano non è mai un colore di testo (l'ambra da testo è un token a parte); Permanent Marker mai sugli allergeni, sul verdetto o sul testo corrente.
+- Colori di sistema aggiornati (`theme-color` e manifest sul crema); su iPhone la status bar in modalità webapp passa da `black-translucent` a `default`, perché sulla carta chiara l'orologio bianco spariva. Le misure della safe area non cambiano.
+
 ## v0.7.0 — 2026-09-15
 
 La landing page, e l'app che si sposta su `/app/`.

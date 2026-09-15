@@ -42,7 +42,7 @@ deve redirigere a `/app/#/profile` (script inline nell'`index.html` della landin
 
 0. **Landing** (da v0.7.0): `/` mostra la landing (titolo "Read the label. Before the bite."), i due bottoni "Open the app" portano a `/app/`; lo switch `it`/`en` cambia i testi e persiste in `as_lang`, che l'app legge; a 400px di larghezza nessuno scroll orizzontale. `/?og` mostra solo la card 1200×630 per l'anteprima social. `/privacy/` e `/terms/` sono le pagine legali della landing (stessi testi dell'app, da `src/i18n/legal.ts`); i link nel footer devono portare lì, non a `/app/#/privacy`.
 1. **Profilo**: `/app/#/profile` → nome + toggle pill allergeni (es. "🥛 Latte") → "Salva profilo". Persistito in localStorage (`as_profiles`, `as_active_profile`).
-2. **Barcode reale**: dalla Search inserire `3017620422003` (Nutella: contiene latte + frutta a guscio) → naviga a `#/product/3017620422003` → banner rosso "Attenzione, …! Contiene: Latte, Frutta a guscio" + tabella nutrimenti.
+2. **Barcode reale**: dalla Search inserire `3017620422003` (Nutella: contiene latte + frutta a guscio) → naviga a `#/product/3017620422003` → cartellino rosa con timbro rosso CONTIENE, titolo "Attenzione, …!" e le etichette Latte e Frutta a guscio + ingredienti con gli allergeni sottolineati in rosso + tabella nutrimenti.
 3. **Ricerca testuale**: query non numerica (es. "biscotti") → lista risultati con card cliccabili.
 4. **Storico**: `#/history` deve contenere i prodotti aperti.
 5. **Probe not-found**: barcode `00000000000001` → messaggio "Nessun prodotto trovato".
