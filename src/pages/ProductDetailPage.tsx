@@ -5,6 +5,7 @@ import AllergyBanner from '../components/AllergyBanner'
 import { BackIcon, NotFoundIcon, PackageIcon } from '../components/Icons'
 import IngredientsCard from '../components/IngredientsCard'
 import ScoreStrip from '../components/ScoreStrip'
+import Torn from '../paper/Torn'
 import { useAllergyProfile } from '../hooks/useAllergyProfile'
 import { useScanHistory } from '../hooks/useScanHistory'
 import { useLang } from '../i18n/useLang'
@@ -87,18 +88,18 @@ export default function ProductDetailPage() {
       <button
         type="button"
         onClick={() => navigate(-1)}
-        className="focus-ring mb-4 flex items-center gap-1 rounded text-sm text-ink-dim transition-colors hover:text-ink"
+        className="focus-ring mb-4 flex items-center gap-1 rounded text-sm text-ink-soft transition-colors hover:text-ink"
       >
         <BackIcon className="h-4 w-4" /> {t.productDetail.back}
       </button>
 
       {errorKind && (
         <div className="card flex flex-col items-center px-5 py-6 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-2 text-ink-dim">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-sheet text-ink-soft">
             <NotFoundIcon className="h-6 w-6" />
           </span>
-          <p className="mt-3 text-sm text-ink-dim">{t.productDetail.errors[errorKind]}</p>
-          <p className="mt-1 font-mono text-xs text-ink-dim">{code}</p>
+          <p className="mt-3 text-sm text-ink-soft">{t.productDetail.errors[errorKind]}</p>
+          <p className="mt-1 text-xs tracking-[0.12em] text-ink-soft">{code}</p>
         </div>
       )}
 
@@ -115,7 +116,7 @@ export default function ProductDetailPage() {
               <div className="skeleton mt-2 h-3 w-1/4" />
             </div>
           </div>
-          <div className="skeleton h-24 rounded-banner" />
+          <div className="skeleton h-24 rounded-card" />
           <div className="card p-4">
             <div className="skeleton h-3.5 w-24" />
             <div className="skeleton mt-3 h-3 w-full" />
@@ -126,8 +127,16 @@ export default function ProductDetailPage() {
 
       {product && (
         <div className="flex flex-col gap-3 sm:gap-4">
-          <div className="card flex items-center gap-3.5 p-3.5 sm:gap-4 sm:p-4">
-            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-2 sm:h-24 sm:w-24">
+          {/* Cartellino strappato per l'oggetto della pagina (il prodotto) e
+              per il verdetto sotto: tre `torn` al massimo per schermata, il
+              resto della pagina sta su fogli piatti. */}
+          <Torn
+            seed={17}
+            amp={5}
+            teeth={14}
+            className="flex -rotate-[0.3deg] items-center gap-3.5 p-3.5 sm:gap-4 sm:p-4"
+          >
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-[3px] bg-sheet sm:h-24 sm:w-24">
               {product.image_front_url ? (
                 <img
                   src={product.image_front_url}
@@ -135,7 +144,7 @@ export default function ProductDetailPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-ink-dim">
+                <div className="flex h-full w-full items-center justify-center text-ink-soft">
                   <PackageIcon className="h-8 w-8" />
                 </div>
               )}
@@ -145,14 +154,14 @@ export default function ProductDetailPage() {
                 {product.product_name ?? t.common.unnamedProduct}
               </h1>
               {product.brands && (
-                <p className="mt-0.5 text-sm text-ink-dim">{product.brands}</p>
+                <p className="mt-0.5 text-sm text-ink-soft">{product.brands}</p>
               )}
               {product.quantity && (
-                <p className="mt-0.5 text-xs text-ink-dim">{product.quantity}</p>
+                <p className="mt-0.5 text-xs text-ink-soft">{product.quantity}</p>
               )}
-              <p className="mt-1 font-mono text-xs text-ink-dim">{product.code}</p>
+              <p className="mt-1 text-xs tracking-[0.12em] text-ink-soft">{product.code}</p>
             </div>
-          </div>
+          </Torn>
 
           {/* L'ordine segue la domanda di chi apre la pagina: "posso
               mangiarlo?" prima di tutto, poi "perche'?" (gli ingredienti, che
@@ -164,11 +173,11 @@ export default function ProductDetailPage() {
           {/* Una riga, non un altro banner: chi non apre mai le Impostazioni
               deve comunque vedere il disclaimer nel punto in cui prende la
               decisione, senza che pesi sul verdetto sopra. */}
-          <p className="-mt-1 px-1 text-[0.7rem] leading-relaxed text-ink-dim">
+          <p className="-mt-1 px-1 text-[0.7rem] leading-relaxed text-ink-soft">
             {t.productDetail.disclaimer1}
             <Link
               to="/terms"
-              className="focus-ring rounded text-accent underline-offset-2 hover:underline"
+              className="focus-ring font-bold text-blue underline underline-offset-4"
             >
               {t.productDetail.disclaimerLink}
             </Link>
@@ -179,7 +188,7 @@ export default function ProductDetailPage() {
           <ScoreStrip product={product} />
 
           <section className="card p-4">
-            <h2 className="mb-3 text-sm font-semibold text-ink-dim">
+            <h2 className="mb-3 text-[0.7rem] font-bold tracking-[0.12em] text-ink-soft uppercase">
               {t.productDetail.nutrimentsTitle}{' '}
               <span className="font-normal">{t.productDetail.per100g}</span>
             </h2>
@@ -206,7 +215,7 @@ function NutrimentTable({
 
   if (rows.length === 0) {
     return (
-      <p className="py-4 text-center text-sm text-ink-dim">
+      <p className="py-4 text-center text-sm text-ink-soft">
         {t.productDetail.nutrimentsUnavailable}
       </p>
     )
@@ -230,7 +239,7 @@ function NutrimentTable({
                   />
                 )}
               </span>
-              <span className="font-mono text-sm font-medium">
+              <span className="text-sm font-bold">
                 {formatValue(nutriments![key]!)} {unit}
               </span>
             </li>
@@ -238,7 +247,7 @@ function NutrimentTable({
         })}
       </ul>
       {hasLevels && (
-        <div className="mt-3 border-t border-edge pt-3 text-[0.65rem] leading-relaxed text-ink-dim">
+        <div className="mt-3 border-t border-edge pt-3 text-[0.65rem] leading-relaxed text-ink-soft">
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {(Object.keys(LEVEL_DOTS) as (keyof typeof LEVEL_DOTS)[]).map((l) => (
               <span key={l} className="flex items-center gap-1">

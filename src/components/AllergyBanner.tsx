@@ -1,8 +1,11 @@
 import { checkAllergens, emojiForTag, labelForTag } from '../data/allergenCatalog'
 import { useLang } from '../i18n/useLang'
-import { TONE_GLOW, TONE_ICON, TONE_SURFACE, type Tone } from '../lib/allergyTone'
+import type { Translations } from '../i18n/translations'
+import { TONE_DOT, TONE_STAMP, TONE_TINT, type Tone } from '../lib/allergyTone'
+import Stamp from '../paper/Stamp'
+import Torn from '../paper/Torn'
 import type { AllergyProfile, Product } from '../types/product'
-import { AlertIcon, CheckIcon, InfoIcon } from './Icons'
+import { InfoIcon } from './Icons'
 
 interface Props {
   product: Product
@@ -11,11 +14,12 @@ interface Props {
 }
 
 /**
- * Verdetto allergie: l'oggetto principale della pagina prodotto.
- * - rosso: almeno un allergene del profilo attivo e' presente
- * - arancio: nessun allergene diretto ma tracce ("può contenere") del profilo
- * - verde: nessun allergene del profilo rilevato
- * - neutro: nessun profilo attivo o dati allergeni mancanti
+ * Verdetto allergie: l'oggetto principale della pagina prodotto, un
+ * cartellino di carta strappata con il timbro del verdetto.
+ * - rosso CONTIENE: almeno un allergene del profilo attivo e' presente
+ * - grano TRACCE: nessun allergene diretto ma tracce ("può contenere")
+ * - verde OK: nessun allergene del profilo rilevato
+ * - neutro, senza timbro: nessun profilo attivo o dati allergeni mancanti
  */
 export default function AllergyBanner({ product, profiles }: Props) {
   const { t } = useLang()
@@ -30,7 +34,7 @@ export default function AllergyBanner({ product, profiles }: Props) {
 
   if (!profile) {
     return (
-      <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noProfileTitle}>
+      <Pill tone="neutral" title={t.allergyBanner.noProfileTitle}>
         {t.allergyBanner.noProfileBody}
       </Pill>
     )
@@ -40,7 +44,7 @@ export default function AllergyBanner({ product, profiles }: Props) {
 
   if (!hasData) {
     return (
-      <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noDataTitle}>
+      <Pill tone="neutral" title={t.allergyBanner.noDataTitle}>
         {t.allergyBanner.noDataBody}
       </Pill>
     )
@@ -49,12 +53,7 @@ export default function AllergyBanner({ product, profiles }: Props) {
   if (detected.length > 0) {
     return (
       <>
-        <Pill
-          tone="danger"
-          Icon={AlertIcon}
-          title={t.allergyBanner.dangerTitle(profile.name)}
-          tags={detected}
-        >
+        <Pill tone="danger" title={t.allergyBanner.dangerTitle(profile.name)} tags={detected}>
           {t.allergyBanner.containsLabel}
         </Pill>
         {traces.length > 0 && <TracesPill traces={traces} />}
@@ -65,7 +64,7 @@ export default function AllergyBanner({ product, profiles }: Props) {
   if (traces.length > 0) {
     return (
       <>
-        <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.safeWithTracesTitle}>
+        <Pill tone="safe" title={t.allergyBanner.safeWithTracesTitle}>
           {t.allergyBanner.safeWithTracesBody}
         </Pill>
         <TracesPill traces={traces} />
@@ -74,18 +73,28 @@ export default function AllergyBanner({ product, profiles }: Props) {
   }
 
   return (
-    <Pill tone="safe" Icon={CheckIcon} title={t.allergyBanner.safeTitle}>
+    <Pill tone="safe" title={t.allergyBanner.safeTitle}>
       {t.allergyBanner.safeBody(profile.name)}
     </Pill>
   )
 }
 
+/** Parola del timbro per un tono (il neutro non ha timbro). */
+function stampLabel(t: Translations, tone: Tone): string {
+  return tone === 'danger'
+    ? t.allergyBanner.stamp.contains
+    : tone === 'warn'
+      ? t.allergyBanner.stamp.traces
+      : t.allergyBanner.stamp.ok
+}
+
 /**
- * Verdetto con più profili attivi: una tessera per persona, ciascuna col
- * proprio tono. Non c'è più una scatola unica del colore del caso peggiore —
+ * Verdetto con più profili attivi: una riga per persona, ciascuna sulla
+ * propria tinta di carta con il proprio timbro a destra (come il mockup
+ * della landing). Non c'è una scatola unica del colore del caso peggiore —
  * con due o tre persone la domanda vera non è "c'è un allergene?" ma "per
  * chi?", e il verde di chi può mangiarlo si vede prima di leggere il nome.
- * Sopra le tessere resta una riga di sintesi col pallino del caso peggiore,
+ * Sopra le righe resta una riga di sintesi col pallino del caso peggiore,
  * per chi guarda la pagina da lontano.
  */
 function MultiVerdict({
@@ -103,22 +112,22 @@ function MultiVerdict({
   }))
 
   // Nessun dato allergeni per nessuno: non è un "sicuro", è un "non lo so".
-  // Qui le tessere direbbero "nessun allergene" per tutti, che è falso.
+  // Qui le righe direbbero "nessun allergene" per tutti, che è falso.
   if (results.every((r) => !r.hasData)) {
     return (
-      <Pill tone="neutral" Icon={InfoIcon} title={t.allergyBanner.noDataTitle}>
+      <Pill tone="neutral" title={t.allergyBanner.noDataTitle}>
         {t.allergyBanner.noDataBody}
       </Pill>
     )
   }
 
-  const cards = results.map(({ profile, detected, traces }) => {
+  const rows = results.map(({ profile, detected, traces }) => {
     const tone: Tone = detected.length > 0 ? 'danger' : traces.length > 0 ? 'warn' : 'safe'
     return { profile, tone, tags: detected.length > 0 ? detected : traces }
   })
 
-  const hit = cards.filter((c) => c.tone === 'danger').length
-  const withTraces = cards.filter((c) => c.tone === 'warn').length
+  const hit = rows.filter((c) => c.tone === 'danger').length
+  const withTraces = rows.filter((c) => c.tone === 'warn').length
   const worst: Tone = hit > 0 ? 'danger' : withTraces > 0 ? 'warn' : 'safe'
   const summary =
     worst === 'danger'
@@ -128,54 +137,47 @@ function MultiVerdict({
         : t.allergyBanner.multiSummarySafe(profiles.length)
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className="animate-banner-in flex flex-col gap-2.5"
-    >
-      <p className="flex items-center gap-2 text-[0.6875rem] font-semibold tracking-[0.12em] text-ink-dim uppercase">
-        <span
-          aria-hidden
-          className={`h-2 w-2 shrink-0 rounded-full ${TONE_DOT[worst]}`}
-        />
+    <div role="status" aria-live="polite" className="animate-banner-in flex flex-col gap-2.5">
+      <p className="flex items-center gap-2 text-[0.75rem] font-bold tracking-[0.06em] uppercase">
+        <span aria-hidden className={`h-2.5 w-2.5 shrink-0 rounded-full ${TONE_DOT[worst]}`} />
         {summary}
       </p>
-      {/* auto-fit invece di un numero fisso di colonne: su telefono entrano
-          due tessere, su schermo largo tutte in fila, senza breakpoint. */}
-      <ul className="grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))]">
-        {cards.map(({ profile, tone, tags }, i) => {
-          const Icon = TONE_ICON[tone]
-          return (
-            <li
-              key={profile.id}
-              style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
-              className={`animate-step-in flex flex-col gap-2 rounded-card border p-3.5 [animation-delay:calc(var(--i)*60ms)] ${TONE_SURFACE[tone]}`}
+      <ul className="flex flex-col gap-2">
+        {rows.map(({ profile, tone, tags }, i) => (
+          /* L'animazione sta sul <li>, la rotazione sul foglietto dentro:
+             `step-in` anima `transform` e col fill-mode `both` cancellerebbe
+             la rotazione inline. Rotazioni alternate di ±0,4°: fogliettini
+             appoggiati sul cartellino, non righe di una tabella. */
+          <li
+            key={profile.id}
+            style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
+            className="animate-step-in [animation-delay:calc(var(--i)*60ms)]"
+          >
+            <div
+              style={{ background: TONE_TINT[tone], transform: `rotate(${i % 2 ? 0.4 : -0.4}deg)` }}
+              className="flex items-center justify-between gap-3 rounded-[3px] px-3.5 py-2.5"
             >
-              <div className="flex items-center gap-2.5">
-                <span
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${ICON_CHIP[tone]}`}
-                >
-                  <Icon className="h-4 w-4" />
-                </span>
-                <p className="min-w-0 flex-1 truncate text-base font-bold text-ink">
-                  {profile.name}
+              <div className="min-w-0">
+                <p className="text-sm leading-tight font-bold">{profile.name}</p>
+                <p className="mt-0.5 text-[0.8125rem] leading-snug text-ink-soft">
+                  {tone === 'safe'
+                    ? t.allergyBanner.multiRowSafe
+                    : `${tone === 'danger' ? t.allergyBanner.containsLabel : t.allergyBanner.mayContainLabel} ${tags
+                        .map((tag) => {
+                          const emoji = emojiForTag(tag)
+                          return emoji
+                            ? `${emoji} ${labelForTag(tag, lang)}`
+                            : labelForTag(tag, lang)
+                        })
+                        .join(' · ')}`}
                 </p>
               </div>
-              <p className="text-[0.8125rem] font-medium" style={{ color: BODY_COLOR[tone] }}>
-                {tone === 'safe'
-                  ? t.allergyBanner.multiRowSafe
-                  : `${tone === 'danger' ? t.allergyBanner.containsLabel : t.allergyBanner.mayContainLabel} ${tags
-                      .map((tag) => {
-                        const emoji = emojiForTag(tag)
-                        return emoji
-                          ? `${emoji} ${labelForTag(tag, lang)}`
-                          : labelForTag(tag, lang)
-                      })
-                      .join(' · ')}`}
-              </p>
-            </li>
-          )
-        })}
+              <Stamp tone={TONE_STAMP[tone] ?? 'green'} tilt={i % 2 ? 2 : -2} className="shrink-0 text-[0.65rem]">
+                {stampLabel(t, tone)}
+              </Stamp>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   )
@@ -184,99 +186,78 @@ function MultiVerdict({
 function TracesPill({ traces }: { traces: string[] }) {
   const { t } = useLang()
   return (
-    <Pill tone="warn" Icon={AlertIcon} title={t.allergyBanner.tracesTitle} tags={traces}>
+    <Pill tone="warn" title={t.allergyBanner.tracesTitle} tags={traces} seed={42}>
       {t.allergyBanner.mayContainLabel}
     </Pill>
   )
 }
 
-// Colore del corpo testo a piena opacità, tinto verso --color-ink invece di
-// usare opacity sul colore di tono: l'opacità riduce la luminanza su uno
-// sfondo scuro (l'opposto di quel che serve per leggerlo bene); questi
-// valori restano riconoscibili come "quel tono" mantenendo il contrasto alto.
-const BODY_COLOR: Record<Tone, string> = {
-  danger: '#ffa8ae',
-  warn: '#ffd79a',
-  safe: '#8fefc4',
-  neutral: 'var(--color-ink-dim)',
-}
-
-// Disco a colore PIENO, non tinta trasparente: è il punto di colore più
-// saturo della schermata e si legge da lontano, prima ancora delle parole.
-// Una tinta al 15% su fondo scuro diventa un grigio colorato e sparisce.
-const ICON_CHIP: Record<Tone, string> = {
-  danger: 'bg-danger text-bg',
-  warn: 'bg-warn text-bg',
-  safe: 'bg-safe text-bg',
-  neutral: 'bg-surface-3 text-ink-dim',
-}
-
-// Pallino della riga di sintesi multi-profilo: porta il tono del caso
-// peggiore dove il testo è troppo piccolo per farlo da solo.
-const TONE_DOT: Record<Tone, string> = {
-  danger: 'bg-danger',
-  warn: 'bg-warn',
-  safe: 'bg-safe',
-  neutral: 'bg-surface-3',
-}
-
+/**
+ * Cartellino del verdetto a profilo singolo: carta strappata nella tinta
+ * del tono, testo in inchiostro, timbro a destra che si "schiaffa" sopra
+ * dopo il cartellino. L'animazione d'ingresso sta sul wrapper e quella del
+ * timbro su uno span: mai un transform animato sull'elemento filtrato
+ * (`torn` ha un drop-shadow) né sul timbro, che è già ruotato.
+ */
 function Pill({
   tone,
-  Icon,
   title,
   children,
   tags,
+  seed = 41,
 }: {
   tone: Tone
-  Icon: (p: { className?: string }) => React.ReactNode
   title: string
   children: React.ReactNode
-  /** allergeni da elencare come chip sotto il titolo (tag normalizzati) */
+  /** allergeni da elencare come etichette sotto il titolo (tag normalizzati) */
   tags?: string[]
+  /** seme dello strappo: due cartellini uno sopra l'altro non devono essere uguali */
+  seed?: number
 }) {
-  const { lang } = useLang()
-  const glow = TONE_GLOW[tone]
+  const { lang, t } = useLang()
+  const stampTone = TONE_STAMP[tone]
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className={`flex items-start gap-3.5 rounded-banner border px-4 py-4 sm:gap-4 sm:px-5 sm:py-5 ${TONE_SURFACE[tone]} ${glow ?? ''} ${
-        tone === 'danger' ? 'animate-banner-in-danger' : 'animate-banner-in'
-      }`}
-    >
-      <span
-        className={`animate-icon-pop flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${ICON_CHIP[tone]}`}
+    <div role="status" aria-live="polite" className="animate-banner-in">
+      <Torn
+        seed={seed}
+        amp={6}
+        teeth={16}
+        bg={TONE_TINT[tone]}
+        className="flex items-start justify-between gap-3 p-4 sm:p-5"
       >
-        <Icon className="h-6 w-6" />
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-[1.0625rem] leading-tight font-bold sm:text-lg">
-          {title}
-        </p>
-        <p className="mt-1 text-sm" style={{ color: BODY_COLOR[tone] }}>
-          {children}
-        </p>
-        {tags && tags.length > 0 && (
-          /* Gli allergeni come chip invece che in una riga separata da
-             virgole: si contano a colpo d'occhio e ognuno resta leggibile
-             anche quando sono tre o quattro. */
-          <ul className="mt-2.5 flex flex-wrap gap-1.5">
-            {tags.map((tag) => {
-              const emoji = emojiForTag(tag)
-              return (
-                <li
-                  key={tag}
-                  className="flex items-center gap-1.5 rounded-full bg-bg/55 px-2.5 py-1 text-xs font-semibold"
-                  style={{ color: BODY_COLOR[tone] }}
-                >
-                  {emoji && <span aria-hidden>{emoji}</span>}
-                  {labelForTag(tag, lang)}
-                </li>
-              )
-            })}
-          </ul>
+        <div className="min-w-0 flex-1">
+          <p className="text-[1.0625rem] leading-tight font-bold sm:text-lg">{title}</p>
+          <p className="mt-1 text-sm text-ink-soft">{children}</p>
+          {tags && tags.length > 0 && (
+            /* Gli allergeni come etichette invece che in una riga separata
+               da virgole: si contano a colpo d'occhio e ognuno resta
+               leggibile anche quando sono tre o quattro. */
+            <ul className="mt-2.5 flex flex-wrap gap-1.5">
+              {tags.map((tag) => {
+                const emoji = emojiForTag(tag)
+                return (
+                  <li
+                    key={tag}
+                    className="flex items-center gap-1.5 rounded-[3px] bg-paper-2 px-2 py-0.5 text-xs font-bold"
+                  >
+                    {emoji && <span aria-hidden>{emoji}</span>}
+                    {labelForTag(tag, lang)}
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+        {stampTone ? (
+          <span className="animate-slap inline-block shrink-0 [animation-delay:140ms]">
+            <Stamp tone={stampTone} tilt={-3} className="text-[0.8rem] sm:text-sm">
+              {stampLabel(t, tone)}
+            </Stamp>
+          </span>
+        ) : (
+          <InfoIcon className="h-6 w-6 shrink-0 text-ink-soft" />
         )}
-      </div>
+      </Torn>
     </div>
   )
 }
