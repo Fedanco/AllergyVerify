@@ -223,6 +223,8 @@ const it = {
       `Possibili tracce per ${n} profil${n === 1 ? 'o' : 'i'} su ${tot}`,
     multiSummarySafe: (tot: number) => `Nessun allergene per i ${tot} profili attivi`,
     multiRowSafe: 'Nessun allergene',
+    /* Timbri del verdetto su carta: una parola sola, in maiuscolo. */
+    stamp: { contains: 'Contiene', traces: 'Tracce', ok: 'Ok' },
   },
   ingredients: {
     title: 'Ingredienti',
@@ -454,6 +456,7 @@ const en: Translations = {
       `Possible traces for ${n} of ${tot} profile${tot === 1 ? '' : 's'}`,
     multiSummarySafe: (tot: number) => `No allergens for the ${tot} active profiles`,
     multiRowSafe: 'No allergens',
+    stamp: { contains: 'Contains', traces: 'Traces', ok: 'Ok' },
   },
   ingredients: {
     title: 'Ingredients',

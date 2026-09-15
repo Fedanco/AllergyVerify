@@ -1,47 +1,37 @@
-import { AlertIcon, CheckIcon, InfoIcon } from '../components/Icons'
+import type { StampTone } from '../paper/Stamp'
 
 /**
  * Tono semantico condiviso per il verdetto allergeni (AllergyBanner):
- * icona, colore testo, superficie tonale e glow in un posto solo.
+ * timbro, tinta della carta e pallino in un posto solo, così le facce del
+ * verdetto (cartellino singolo, righe multi-profilo, riga di sintesi) non
+ * possono disallinearsi sui colori.
+ *
+ * Sulla carta il colore sta nel TIMBRO, non nel testo: rosso e verde come
+ * colore di testo reggono 4,5:1 solo sul crema chiaro, non sulle tinte.
+ * Il testo dentro le tessere resta ink/ink-soft.
  */
 export type Tone = 'danger' | 'warn' | 'safe' | 'neutral'
 
-type IconComponent = typeof AlertIcon
-
-export const TONE_ICON: Record<Tone, IconComponent> = {
-  danger: AlertIcon,
-  warn: AlertIcon,
-  safe: CheckIcon,
-  neutral: InfoIcon,
+/** Timbro del verdetto: il neutro non ha timbro (non è un verdetto). */
+export const TONE_STAMP: Partial<Record<Tone, StampTone>> = {
+  danger: 'red',
+  warn: 'wheat',
+  safe: 'green',
 }
 
-/** Colore testo isolato, per righe compatte. */
-export const TONE_TEXT: Record<Tone, string> = {
-  danger: 'text-danger',
-  warn: 'text-warn',
-  safe: 'text-safe',
-  neutral: 'text-ink-dim',
+/** Tinta della carta del cartellino/tessera (valore CSS per `--torn-bg` o `background`). */
+export const TONE_TINT: Record<Tone, string> = {
+  danger: 'var(--color-red-tint)',
+  warn: 'var(--color-wheat-tint)',
+  safe: 'var(--color-green-tint)',
+  neutral: 'var(--color-sheet)',
 }
 
-/**
- * Bordo + sfondo tinto + testo, per superfici tonali (pill, banner).
- * La tinta e' al 20%, non al 10%: sul fondo blu quasi nero una velatura
- * del 10% diventa un grigio appena colorato e il verdetto smette di
- * riconoscersi da lontano, che e' l'unica cosa che deve saper fare.
- */
-export const TONE_SURFACE: Record<Tone, string> = {
-  danger: 'border-danger/45 bg-danger/20 text-danger',
-  warn: 'border-warn/45 bg-warn/20 text-warn',
-  safe: 'border-safe/45 bg-safe/20 text-safe',
-  neutral: 'border-edge bg-surface-2 text-ink-dim',
-}
-
-/**
- * Glow riservato al verdetto principale (AllergyBanner): solo danger/safe.
- * Mai su warn/neutral, altrimenti il glow smette di segnalare "questo è il
- * verdetto vero" e diventa decorazione generica.
- */
-export const TONE_GLOW: Partial<Record<Tone, string>> = {
-  danger: 'shadow-glow-danger',
-  safe: 'shadow-glow-safe',
+/** Pallino della riga di sintesi multi-profilo: porta il tono del caso
+ *  peggiore dove il testo è troppo piccolo per farlo da solo. */
+export const TONE_DOT: Record<Tone, string> = {
+  danger: 'bg-red',
+  warn: 'bg-wheat',
+  safe: 'bg-green',
+  neutral: 'bg-ink-soft',
 }

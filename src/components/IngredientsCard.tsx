@@ -89,7 +89,7 @@ export default function IngredientsCard({ product, allergens }: Props) {
 
   return (
     <section className="card p-4">
-      <h2 className="mb-3 text-sm font-semibold text-ink-dim">{t.ingredients.title}</h2>
+      <h2 className="mb-3 text-[0.7rem] font-bold tracking-[0.12em] text-ink-soft uppercase">{t.ingredients.title}</h2>
 
       {displayText ? (
         <>
@@ -102,7 +102,7 @@ export default function IngredientsCard({ product, allergens }: Props) {
             {highlightAllergens(displayText, allergens)}
           </p>
           {translating && (
-            <p className="mt-1 text-[0.65rem] text-ink-dim">
+            <p className="mt-1 text-[0.65rem] text-ink-soft">
               {t.ingredients.translating}
             </p>
           )}
@@ -111,20 +111,20 @@ export default function IngredientsCard({ product, allergens }: Props) {
               type="button"
               aria-expanded={expanded}
               onClick={() => setExpanded((e) => !e)}
-              className="focus-ring mt-2 rounded text-xs font-medium text-accent"
+              className="focus-ring mt-2 text-xs font-bold text-blue underline underline-offset-4"
             >
               {expanded ? t.ingredients.showLess : t.ingredients.showAll}
             </button>
           )}
         </>
       ) : (
-        <p className="text-sm text-ink-dim">{t.ingredients.unavailable}</p>
+        <p className="text-sm text-ink-soft">{t.ingredients.unavailable}</p>
       )}
 
       {badges.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {badges.map((b) => (
-            <span key={b.tag} className="chip rounded-full px-3 py-1 text-xs text-ink-dim">
+            <span key={b.tag} className="chip px-2.5 py-1 text-xs font-bold text-ink-soft">
               {b.emoji} {t.ingredients.badges[b.tag]}
             </span>
           ))}
@@ -132,17 +132,17 @@ export default function IngredientsCard({ product, allergens }: Props) {
       )}
 
       <div className="mt-4 border-t border-edge pt-3">
-        <h3 className="mb-2 text-xs font-semibold text-ink-dim">{t.ingredients.additivesTitle}</h3>
+        <h3 className="mb-2 text-[0.7rem] font-bold tracking-[0.12em] text-ink-soft uppercase">{t.ingredients.additivesTitle}</h3>
         {additives.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {additives.map((a) => (
-              <span key={a} className="chip rounded-md px-2 py-0.5 font-mono text-xs text-ink-dim">
+              <span key={a} className="chip px-2 py-0.5 text-xs font-bold text-ink-soft">
                 {a}
               </span>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-ink-dim">{t.ingredients.noAdditives}</p>
+          <p className="text-xs text-ink-soft">{t.ingredients.noAdditives}</p>
         )}
       </div>
     </section>
@@ -168,7 +168,13 @@ function highlightAllergens(text: string, allergens: string[]): React.ReactNode 
     if (isNegatedAllergenMatch(text, m.index, m[0].length)) continue
     if (m.index > last) out.push(text.slice(last, m.index))
     out.push(
-      <mark key={m.index} className="rounded bg-danger/20 px-0.5 font-semibold text-danger">
+      /* Sottolineatura a pennarello, in CSS: un tratto pieno da 3px sotto la
+         parola. Niente SVG filtrato per ogni allergene (si rifarebbe a ogni
+         cambio del testo tradotto e non andrebbe a capo dentro la frase). */
+      <mark
+        key={m.index}
+        className="bg-transparent font-bold text-inherit underline decoration-red decoration-[3px] underline-offset-[3px] [text-decoration-skip-ink:none]"
+      >
         {m[0]}
       </mark>,
     )

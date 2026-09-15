@@ -6,7 +6,7 @@ import type { Product } from '../types/product'
 /**
  * Striscia di chip punteggio: Nutri-Score (A-E), NOVA (1-4, grado di
  * trasformazione), Green-Score (A-F, impatto ambientale).
- * Design proprio: lettera mono grande colorata su card scura, niente loghi OFF.
+ * Design proprio: lettera grande su timbro colorato, niente loghi OFF.
  * Toccando un chip si apre sotto un pannello con la scala e la spiegazione.
  */
 
@@ -74,24 +74,24 @@ export default function ScoreStrip({ product }: { product: Product }) {
               aria-controls={`score-panel-${s.name}`}
               onClick={() => setOpen(isOpen ? null : s.name)}
               className={`focus-ring flex flex-col items-center gap-1.5 px-2 py-3 text-center transition-colors ${
-                isOpen ? 'panel border-accent/40' : 'card'
+                isOpen ? 'panel border-blue' : 'card'
               }`}
             >
               <span
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-mono text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[4px] text-lg font-bold ${BADGE_CLASS[toneFor(ratio)]}`}
               >
                 {s.value}
               </span>
-              <span className="text-xs font-semibold">{s.name}</span>
-              <span className="text-[0.65rem] leading-tight text-ink-dim">{s.hint}</span>
+              <span className="text-xs font-bold">{s.name}</span>
+              <span className="text-[0.65rem] leading-tight text-ink-soft">{s.hint}</span>
               {/* mt-auto: freccia ancorata al fondo della card, così i tre chip
                   restano allineati anche se un sottotitolo va su due righe */}
               <span
                 aria-hidden
-                className={`mt-auto flex h-5 w-5 items-center justify-center rounded-full border transition-[transform,background-color,border-color,color] duration-[var(--duration-fast)] ${
+                className={`mt-auto flex h-5 w-5 items-center justify-center rounded-full transition-[transform,background-color,color] duration-[var(--duration-fast)] ${
                   isOpen
-                    ? 'rotate-180 border-accent/40 bg-accent/10 text-accent'
-                    : 'border-edge bg-surface-2 text-ink-dim'
+                    ? 'rotate-180 bg-blue text-white'
+                    : 'bg-sheet text-ink-soft'
                 }`}
               >
                 <ChevronDownIcon className="h-3.5 w-3.5" />
@@ -108,9 +108,9 @@ export default function ScoreStrip({ product }: { product: Product }) {
 
 function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
   return (
-    <section id={`score-panel-${score.name}`} className="card animate-fade-up p-4">
-      <h3 className="text-sm font-semibold">
-        {score.name} <span className="font-normal text-ink-dim">— {score.hint}</span>
+    <section id={`score-panel-${score.name}`} className="panel animate-fade-up p-4">
+      <h3 className="text-sm font-bold">
+        {score.name} <span className="font-normal text-ink-soft">— {score.hint}</span>
       </h3>
 
       <div className="mt-3 flex items-center gap-1.5">
@@ -120,10 +120,10 @@ function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
             <span
               key={step}
               style={{ '--i': i } as React.CSSProperties}
-              className={`animate-step-in flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-sm font-bold [animation-delay:calc(var(--i)*25ms)] ${
+              className={`animate-step-in flex h-8 w-8 items-center justify-center rounded-[4px] text-sm font-bold [animation-delay:calc(var(--i)*25ms)] ${
                 current
                   ? BADGE_CLASS[toneFor(i / (score.scale.length - 1))]
-                  : 'border-edge bg-surface-2 text-ink-dim'
+                  : 'bg-paper-2 text-ink-soft'
               }`}
             >
               {step.toUpperCase()}
@@ -133,8 +133,8 @@ function ScorePanel({ score, dataBy }: { score: ScoreData; dataBy: string }) {
       </div>
 
       <p className="mt-3 text-sm leading-relaxed text-ink">{score.meaning}</p>
-      <p className="mt-2 text-xs leading-relaxed text-ink-dim">{score.about}</p>
-      <p className="mt-2 text-[0.65rem] text-ink-dim">{dataBy}</p>
+      <p className="mt-2 text-xs leading-relaxed text-ink-soft">{score.about}</p>
+      <p className="mt-2 text-[0.65rem] text-ink-soft">{dataBy}</p>
     </section>
   )
 }
@@ -149,11 +149,13 @@ function toneFor(ratio: number): ScoreTone {
   return 'danger'
 }
 
+// Lettere come timbri pieni con testo bianco, non tinte: rosso e verde come
+// testo su una tinta chiara scendono sotto 4,5:1.
 const BADGE_CLASS: Record<ScoreTone, string> = {
-  safe: 'text-safe border-safe/40 bg-safe/10',
-  caution: 'text-caution border-caution/40 bg-caution/10',
-  warn: 'text-warn border-warn/40 bg-warn/10',
-  danger: 'text-danger border-danger/40 bg-danger/10',
+  safe: 'bg-green text-white',
+  caution: 'bg-caution text-white',
+  warn: 'bg-warn text-white',
+  danger: 'bg-red text-white',
 }
 
 function gradeScore(
