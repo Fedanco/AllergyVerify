@@ -24,12 +24,14 @@ export default function TabBar() {
     <nav
       aria-label={t.app.mainNavAria}
       /* Dock che galleggia sopra il contenuto invece di una striscia
-         attaccata al bordo. La safe area iOS entra nell'offset `bottom`, non
+         attaccata al bordo: un foglietto di carta opaco (utility `dock`),
+         scelta tra le due varianti della bozza. La safe area iOS
+         entra nell'offset `bottom`, non
          in un padding interno: sommare i due farebbe scendere la dock sotto
          la home indicator. Gli altri due punti che devono restare d'accordo
          sono in App.tsx (padding di fondo della shell e velo della status
          bar). */
-      className="clay-dock fixed inset-x-3 z-40 rounded-[1.75rem]
+      className="dock fixed inset-x-3 z-40 rounded-card
         md:inset-x-auto md:top-3 md:bottom-3 md:left-3 md:w-20"
       style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
     >
@@ -44,23 +46,22 @@ export default function TabBar() {
           <li key={to} className="flex-1 md:flex-none">
             <NavLink
               to={to}
-              className="focus-ring group flex h-full flex-col items-center justify-center gap-1 text-[0.65rem] font-medium md:h-16"
+              className="focus-ring group flex h-full flex-col items-center justify-center gap-1 text-[0.65rem] font-bold tracking-[0.04em] uppercase md:h-16"
             >
               {({ isActive }) => (
                 <>
-                  {/* Il tab attivo è un disco a colore pieno, non una
-                      velatura del 15%: su questa superficie la tinta
-                      trasparente si leggeva appena. */}
+                  {/* Il tab attivo è un quadratino blu pieno, come un
+                      timbro: una velatura sul crema si leggerebbe appena. */}
                   <span
-                    className={`flex h-8 w-8 items-center justify-center rounded-full transition-[background-color,color] duration-[var(--duration-fast)] ${
-                      isActive ? 'bg-accent text-bg' : 'text-ink-dim group-hover:text-ink'
+                    className={`flex h-8 w-8 items-center justify-center rounded-[4px] transition-[background-color,color] duration-[var(--duration-fast)] ${
+                      isActive ? 'bg-blue text-white' : 'text-ink-soft group-hover:text-ink'
                     }`}
                   >
                     <Icon className="h-5 w-5" filled={isActive} />
                   </span>
                   <span
                     className={`transition-colors duration-[var(--duration-fast)] ${
-                      isActive ? 'text-accent' : 'text-ink-dim group-hover:text-ink'
+                      isActive ? 'text-blue' : 'text-ink-soft group-hover:text-ink'
                     }`}
                   >
                     {label}

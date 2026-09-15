@@ -30,7 +30,7 @@ export default function Modal({ open, onClose, titleId, children }: Props) {
 
   return (
     <div
-      className="animate-fade-up fixed inset-0 z-50 flex items-center justify-center bg-bg/70 p-4"
+      className="animate-fade-up fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4"
       onClick={onClose}
     >
       <div
@@ -40,7 +40,7 @@ export default function Modal({ open, onClose, titleId, children }: Props) {
         aria-labelledby={titleId}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        className="animate-banner-in w-full max-w-sm rounded-banner border border-edge bg-surface p-5 shadow-lg focus:outline-none"
+        className="card animate-banner-in w-full max-w-sm p-5 shadow-lg focus:outline-none"
       >
         {children}
       </div>
