@@ -11,7 +11,6 @@ export default function Footer({ t }: FooterProps) {
     { href: '/privacy/', label: t.footer.privacy },
     { href: '/terms/', label: t.footer.terms },
     { href: 'https://github.com/Fedanco/AllergyVerify', label: t.footer.github, external: true },
-    { href: 'mailto:AllergyVerify@protonmail.com', label: t.footer.contact },
   ]
   return (
     <footer className="mx-auto w-full max-w-6xl px-5 pb-12 pt-16 sm:px-8 md:pt-24">
