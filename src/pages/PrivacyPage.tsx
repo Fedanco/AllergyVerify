@@ -8,6 +8,8 @@ import { useLang } from '../i18n/useLang'
  * Sezioni in card separate invece di un unico blocco di testo, per restare
  * scorribile anche su schermi piccoli.
  */
+const LINK = 'focus-ring rounded text-accent underline-offset-2 hover:underline'
+
 export default function PrivacyPage() {
   const { t } = useLang()
   const navigate = useNavigate()
@@ -29,16 +31,7 @@ export default function PrivacyPage() {
         <p className="text-sm leading-relaxed text-ink-dim">{p.intro}</p>
 
         <Section title={p.controllerTitle}>
-          <p>
-            {p.controllerBody}
-            <a
-              href={`mailto:${p.contactEmail}`}
-              className="focus-ring rounded text-accent underline-offset-2 hover:underline"
-            >
-              {p.contactEmail}
-            </a>
-            .
-          </p>
+          <p>{p.controllerBody}</p>
         </Section>
 
         <Section title={p.dataTitle}>
@@ -62,6 +55,17 @@ export default function PrivacyPage() {
 
         <Section title={p.rightsTitle}>
           <p>{p.rightsBody}</p>
+        </Section>
+
+        <Section title={p.githubTitle}>
+          <p>{p.githubBody}</p>
+          <p className="mt-2">
+            {p.contactLead}
+            <a href={`mailto:${p.contactEmail}`} className={LINK}>
+              {p.contactEmail}
+            </a>
+            .
+          </p>
         </Section>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { legal } from '../i18n/legal'
 import Torn from './art/Torn'
 import Stamp from './art/Stamp'
 
+const LINK = 'focus-ring font-bold text-blue underline underline-offset-4'
+
 interface LegalPageProps {
   kind: 'privacy' | 'terms'
   lang: Lang
@@ -53,13 +55,7 @@ function Privacy({ d }: { d: (typeof legal)['it']['privacy'] }) {
   return (
     <Sheet title={d.title} updated={d.updated} intro={d.intro}>
       <Section title={d.controllerTitle}>
-        <p>
-          {d.controllerBody}
-          <a href={`mailto:${d.contactEmail}`} className="focus-ring font-bold text-blue underline underline-offset-4">
-            {d.contactEmail}
-          </a>
-          .
-        </p>
+        <p>{d.controllerBody}</p>
       </Section>
       <Section title={d.dataTitle}>
         <p>{d.dataBody}</p>
@@ -82,6 +78,16 @@ function Privacy({ d }: { d: (typeof legal)['it']['privacy'] }) {
       </Section>
       <Section title={d.rightsTitle}>
         <p>{d.rightsBody}</p>
+      </Section>
+      <Section title={d.githubTitle}>
+        <p>{d.githubBody}</p>
+        <p className="mt-2">
+          {d.contactLead}
+          <a href={`mailto:${d.contactEmail}`} className={LINK}>
+            {d.contactEmail}
+          </a>
+          .
+        </p>
       </Section>
     </Sheet>
   )

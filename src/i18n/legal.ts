@@ -10,12 +10,12 @@ import type { Lang } from './langStore'
 const it = {
   privacy: {
     title: 'Privacy',
-    updated: 'Ultimo aggiornamento: 18 agosto 2026',
+    updated: 'Ultimo aggiornamento: 15 settembre 2026',
     intro:
       "AllergyVerify è pensata per non raccogliere dati: non c'è un account, non c'è un server che conserva le tue informazioni. Questa pagina spiega nel dettaglio cosa succede ai tuoi dati mentre usi l'app.",
     controllerTitle: 'Titolare del trattamento',
     controllerBody:
-      'Il progetto è gestito da AllergyVerify. Per qualsiasi domanda su questa informativa o sui tuoi dati puoi scrivere a ',
+      'Il progetto è gestito da AllergyVerify, senza società né raccolta dati alle spalle. I contatti sono nella sezione in fondo a questa pagina.',
     contactEmail: 'AllergyVerify@protonmail.com',
     dataTitle: 'I tuoi dati restano sul tuo dispositivo',
     dataBody:
@@ -42,7 +42,11 @@ const it = {
       "AllergyVerify non usa cookie di profilazione né strumenti di analytics o pubblicità. Il localStorage descritto sopra serve solo al funzionamento dell'app (salvare profili e storico) e non richiede consenso.",
     rightsTitle: 'I tuoi diritti',
     rightsBody:
-      "Puoi cancellare tutti i tuoi dati in autonomia in qualsiasi momento, svuotando i dati del sito dalle impostazioni del browser: non serve chiedere nulla, perché non ne conserviamo copia. Per qualsiasi domanda, scrivici all'indirizzo sopra.",
+      "Puoi cancellare tutti i tuoi dati in autonomia in qualsiasi momento, svuotando i dati del sito dalle impostazioni del browser: non serve chiedere nulla, perché non ne conserviamo copia. Per qualsiasi domanda, vedi la sezione qui sotto.",
+    githubTitle: 'GitHub e contatti',
+    githubBody:
+      'Il codice sorgente e le discussioni pubbliche (issue) sono ospitati su GitHub e soggetti alla privacy policy di GitHub.',
+    contactLead: 'Per domande su questa informativa scrivi a ',
   },
   terms: {
     title: 'Termini e responsabilità',
@@ -75,12 +79,12 @@ export type LegalDict = typeof it
 const en: LegalDict = {
   privacy: {
     title: 'Privacy',
-    updated: 'Last updated: August 18, 2026',
+    updated: 'Last updated: September 15, 2026',
     intro:
       "AllergyVerify is built to not collect data: there's no account, no server that stores your information. This page explains in detail what happens to your data while you use the app.",
     controllerTitle: 'Data controller',
     controllerBody:
-      'The project is run by AllergyVerify. For any question about this notice or your data, write to ',
+      'The project is run by AllergyVerify, with no company and no data collection behind it. Contact details are in the last section of this page.',
     contactEmail: 'AllergyVerify@protonmail.com',
     dataTitle: 'Your data stays on your device',
     dataBody:
@@ -107,7 +111,11 @@ const en: LegalDict = {
       'AllergyVerify does not use profiling cookies or any analytics/advertising tools. The localStorage described above is only used to run the app (saving profiles and history) and does not require consent.',
     rightsTitle: 'Your rights',
     rightsBody:
-      "You can delete all your data at any time on your own, by clearing the site data in your browser settings: no request needed, since we don't keep a copy. For any question, write to the address above.",
+      "You can delete all your data at any time on your own, by clearing the site data in your browser settings: no request needed, since we don't keep a copy. For any question, see the section below.",
+    githubTitle: 'GitHub and contact',
+    githubBody:
+      "Our source code and public issue discussions are hosted on GitHub and covered by GitHub's privacy policy.",
+    contactLead: 'For questions about this policy, write to ',
   },
   terms: {
     title: 'Terms & Liability',

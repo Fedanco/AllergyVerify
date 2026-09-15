@@ -57,7 +57,6 @@ export interface LandingDict {
     privacy: string
     terms: string
     github: string
-    contact: string
     data: string
     made: string
   }
@@ -166,7 +165,6 @@ const it: LandingDict = {
     privacy: 'Privacy',
     terms: 'Termini e responsabilità',
     github: 'Codice su GitHub',
-    contact: 'Contatti',
     data: 'Dati dei prodotti da Open Food Facts, licenza ODbL.',
     made: 'Nessun cookie, nessun tracciamento. Fatta con carta e pennarello.',
   },
@@ -274,7 +272,6 @@ const en: LandingDict = {
     privacy: 'Privacy',
     terms: 'Terms & Liability',
     github: 'Code on GitHub',
-    contact: 'Contact',
     data: 'Product data from Open Food Facts, ODbL licence.',
     made: 'No cookies, no tracking. Made with paper and a marker.',
   },
