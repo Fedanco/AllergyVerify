@@ -24,7 +24,7 @@ export default function HistoryPage() {
               onClick={() => {
                 if (confirm(t.history.confirmClear)) clearHistory()
               }}
-              className="focus-ring flex items-center gap-1.5 rounded-xl border border-edge px-3 py-2 text-xs text-ink-dim transition-colors duration-[var(--duration-fast)] hover:border-danger/40 hover:text-danger"
+              className="focus-ring flex items-center gap-1.5 rounded-[5px] border-2 border-edge px-3 py-2 text-xs font-bold text-ink-soft transition-colors duration-[var(--duration-fast)] hover:border-red hover:text-red"
             >
               <TrashIcon className="h-4 w-4" /> {t.history.clear}
             </button>
@@ -34,10 +34,10 @@ export default function HistoryPage() {
 
       {history.length === 0 ? (
         <div className="card flex flex-col items-center px-5 py-8 text-center">
-          <span className="inset-surface flex h-14 w-14 items-center justify-center rounded-full text-ink-dim">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sheet text-ink-soft">
             <HistoryIcon className="h-6 w-6" />
           </span>
-          <p className="mt-3 text-sm text-ink-dim">{t.history.empty}</p>
+          <p className="mt-3 text-sm text-ink-soft">{t.history.empty}</p>
         </div>
       ) : (
         <ul className="flex flex-col gap-2">

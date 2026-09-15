@@ -64,7 +64,7 @@ export default function SearchPage() {
           </label>
           <SearchIcon
             aria-hidden
-            className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-dim"
+            className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-soft"
           />
           <input
             id="search-input"
@@ -73,14 +73,14 @@ export default function SearchPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.search.placeholder}
-            className="field w-full rounded-2xl py-2.5 pl-11 pr-4 text-sm outline-none transition-colors duration-[var(--duration-fast)] placeholder:text-ink-dim focus:border-accent"
+            className="field w-full py-2.5 pl-11 pr-4 text-sm outline-none transition-colors duration-[var(--duration-fast)]"
           />
         </div>
         <button
           type="submit"
           disabled={loading || !query.trim()}
           aria-busy={loading}
-          className="focus-ring rounded-2xl bg-accent px-5 text-sm font-semibold text-bg transition-[background-color,color,box-shadow,transform] duration-[var(--duration-fast)] hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-ink-dim disabled:shadow-none"
+          className="btn-primary focus-ring h-11"
         >
           {loading ? '…' : t.search.submit}
         </button>
@@ -89,7 +89,7 @@ export default function SearchPage() {
       {error && (
         <p
           role="alert"
-          className="animate-fade-up rounded-2xl border border-warn/40 bg-warn/10 px-4 py-3 text-sm text-warn"
+          className="animate-fade-up rounded-card border-2 border-warn bg-wheat-tint px-4 py-3 text-sm font-bold text-warn"
         >
           {error}
         </p>
@@ -117,10 +117,10 @@ export default function SearchPage() {
 
       {!results && !error && !loading && (
         <div className="card mt-4 flex flex-col items-center px-5 py-7 text-center">
-          <span className="inset-surface flex h-14 w-14 items-center justify-center rounded-full text-ink-dim">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sheet text-ink-soft">
             <SearchIcon className="h-6 w-6" />
           </span>
-          <p className="mt-3 text-sm text-ink-dim">
+          <p className="mt-3 text-sm text-ink-soft">
             {t.search.emptyHint1}
             <br />
             {t.search.emptyHint2}

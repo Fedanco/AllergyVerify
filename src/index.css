@@ -7,21 +7,14 @@
 @source not "./landing";
 
 @theme {
-  /* Alias transitori sui token carta: tengono in vita i nomi semantici usati
-     nel JSX (text-ink-dim, bg-surface, bg-accent…) mentre l'app passa alla
-     carta un pezzo alla volta. I file riscritti usano i nomi carta
-     (paper, sheet, ink-soft, blue, red, green); gli alias si tolgono in un
-     giro di pulizia quando non li usa più nessuno. */
-  --color-bg: var(--color-paper);
-  --color-surface: var(--color-paper-2);
-  --color-surface-2: var(--color-sheet);
-  --color-ink-dim: var(--color-ink-soft);
-  /* Colore di interazione: il blu, come sulla landing. Il grano del logo
-     non è più il colore dei bottoni: sulla carta è la tinta delle tracce. */
-  --color-accent: var(--color-blue);
+  /* I colori base (paper, sheet, ink, blue, red, green, wheat e le tinte)
+     arrivano da paper.css. Il blu è il colore di interazione, come sulla
+     landing; il grano del logo non è più il colore dei bottoni: sulla carta
+     è la tinta delle tracce, mai un colore di testo.
 
-  /* Toni semantici del verdetto e delle scale. Rosso e verde sono quelli
-     della carta; come TESTO reggono 4,5:1 solo su paper/paper-2. */
+     Toni semantici del verdetto e delle scale (LEVEL_DOTS, ScoreStrip, errori
+     di ricerca). Rosso e verde sono quelli della carta; come TESTO reggono
+     4,5:1 solo su paper/paper-2. */
   --color-danger: var(--color-red);
   --color-safe: var(--color-green);
   /* Ambra scura, leggibile come testo sul crema (5,6:1 su paper, 4,9 su
@@ -146,14 +139,6 @@
   }
 }
 
-/* Superficie "affondata" della vecchia app (miniature, dischi icona, chip
-   selezionati): sulla carta è semplicemente cartoncino. Alias transitorio,
-   da togliere quando i call site passano a `bg-sheet`/`field`. */
-@utility inset-surface {
-  background: var(--color-sheet);
-  border: 2px solid transparent;
-}
-
 /* Etichetta piccola (additivi, diete, allergeni non selezionati). */
 @utility chip {
   background: var(--color-sheet);
@@ -168,12 +153,6 @@
   background: var(--color-paper-2);
   box-shadow: var(--shadow-lg);
 }
-/* Alias transitorio del vecchio nome, finché TabBar non passa a `dock`. */
-@utility clay-dock {
-  background: var(--color-paper-2);
-  box-shadow: var(--shadow-lg);
-}
-
 /* Segnaposto di caricamento: un blocco di cartoncino che pulsa piano.
    Mostra fin da subito la forma di quello che sta per arrivare. */
 @utility skeleton {

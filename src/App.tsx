@@ -36,7 +36,7 @@ export default function App() {
               element={
                 <Suspense
                   fallback={
-                    <p className="py-10 text-center text-sm text-ink-dim">
+                    <p className="py-10 text-center text-sm text-ink-soft">
                       {t.app.loadingScanner}
                     </p>
                   }
