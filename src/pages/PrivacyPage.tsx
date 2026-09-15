@@ -1,82 +1,28 @@
 import { useNavigate } from 'react-router-dom'
 import { BackIcon } from '../components/Icons'
-import PageHeader from '../components/PageHeader'
 import { useLang } from '../i18n/useLang'
+import LegalPage from '../paper/LegalPage'
 
 /**
- * Pagina Privacy: raggiunta da Impostazioni, non fa parte della tab bar.
- * Sezioni in card separate invece di un unico blocco di testo, per restare
- * scorribile anche su schermi piccoli.
+ * Pagina Privacy: raggiunta da Info, non fa parte della tab bar. È la stessa
+ * pagina di carta del sito (src/paper/LegalPage, testi in legal.ts), con in
+ * più il bottone per tornare indietro.
  */
-const LINK = 'focus-ring rounded text-accent underline-offset-2 hover:underline'
-
 export default function PrivacyPage() {
-  const { t } = useLang()
+  const { lang, t } = useLang()
   const navigate = useNavigate()
-  const p = t.privacy
 
   return (
     <div className="animate-fade-up">
       <button
         type="button"
         onClick={() => navigate(-1)}
-        className="focus-ring mb-4 flex items-center gap-1 rounded text-sm text-ink-dim transition-colors hover:text-ink"
+        className="focus-ring mb-4 flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-ink"
       >
         <BackIcon className="h-4 w-4" /> {t.productDetail.back}
       </button>
 
-      <PageHeader title={p.title} subtitle={p.updated} />
-
-      <div className="flex flex-col gap-3">
-        <p className="text-sm leading-relaxed text-ink-dim">{p.intro}</p>
-
-        <Section title={p.controllerTitle}>
-          <p>{p.controllerBody}</p>
-        </Section>
-
-        <Section title={p.dataTitle}>
-          <p>{p.dataBody}</p>
-        </Section>
-
-        <Section title={p.thirdPartiesTitle}>
-          <p>{p.thirdPartiesIntro}</p>
-          <ul className="mt-2 flex flex-col gap-1.5">
-            {p.thirdParties.map((tp) => (
-              <li key={tp.name}>
-                <span className="font-semibold text-ink">{tp.name}</span> — {tp.body}
-              </li>
-            ))}
-          </ul>
-        </Section>
-
-        <Section title={p.cookiesTitle}>
-          <p>{p.cookiesBody}</p>
-        </Section>
-
-        <Section title={p.rightsTitle}>
-          <p>{p.rightsBody}</p>
-        </Section>
-
-        <Section title={p.githubTitle}>
-          <p>{p.githubBody}</p>
-          <p className="mt-2">
-            {p.contactLead}
-            <a href={`mailto:${p.contactEmail}`} className={LINK}>
-              {p.contactEmail}
-            </a>
-            .
-          </p>
-        </Section>
-      </div>
+      <LegalPage kind="privacy" lang={lang} warningLabel={t.settings.warningTitle} />
     </div>
-  )
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="card p-4">
-      <h2 className="mb-1.5 text-sm font-semibold">{title}</h2>
-      <div className="text-sm leading-relaxed text-ink-dim">{children}</div>
-    </section>
   )
 }

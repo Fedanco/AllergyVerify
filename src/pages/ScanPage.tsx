@@ -90,24 +90,25 @@ export default function ScanPage() {
         {(state === 'scanning' || state === 'detected') && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             {/* zona di mira bassa e larga, come un codice a barre; l'esterno viene oscurato.
-                Al rilevamento (stato "detected"): un lieve scale-up + il glow "sicuro" già
-                usato per il verdetto allergeni, per riconoscere lo stesso segnale "confermato". */}
+                Angoli e linea blu: è un segno dell'interfaccia, non un verdetto (il rosso
+                resta "contiene" e il grano "tracce"). Al rilevamento: un lieve scale-up e
+                il disco verde pieno, lo stesso verde del timbro OK. */}
             <div
               className={`relative h-2/5 w-3/4 max-w-sm rounded-xl shadow-[0_0_0_9999px_rgba(0,0,0,0.55)] transition-transform duration-[var(--duration-base)] ${
                 state === 'detected' ? 'scale-105' : ''
               }`}
             >
               {/* angoli della cornice */}
-              <div className="absolute -top-px -left-px h-5 w-5 rounded-tl-xl border-t-2 border-l-2 border-accent" />
-              <div className="absolute -top-px -right-px h-5 w-5 rounded-tr-xl border-t-2 border-r-2 border-accent" />
-              <div className="absolute -bottom-px -left-px h-5 w-5 rounded-bl-xl border-b-2 border-l-2 border-accent" />
-              <div className="absolute -bottom-px -right-px h-5 w-5 rounded-br-xl border-b-2 border-r-2 border-accent" />
+              <div className="absolute -top-px -left-px h-5 w-5 rounded-tl-xl border-t-[3px] border-l-[3px] border-blue" />
+              <div className="absolute -top-px -right-px h-5 w-5 rounded-tr-xl border-t-[3px] border-r-[3px] border-blue" />
+              <div className="absolute -bottom-px -left-px h-5 w-5 rounded-bl-xl border-b-[3px] border-l-[3px] border-blue" />
+              <div className="absolute -bottom-px -right-px h-5 w-5 rounded-br-xl border-b-[3px] border-r-[3px] border-blue" />
               {state === 'scanning' ? (
                 // linea di scansione animata
-                <div className="absolute inset-x-3 h-0.5 animate-scanline bg-accent shadow-[0_0_12px_var(--color-accent)]" />
+                <div className="absolute inset-x-3 h-0.5 animate-scanline bg-blue shadow-[0_0_10px_rgba(36,87,214,0.8)]" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="animate-icon-pop flex h-14 w-14 items-center justify-center rounded-full bg-safe/15 text-safe shadow-glow-safe">
+                  <span className="animate-icon-pop flex h-14 w-14 items-center justify-center rounded-full bg-green text-white">
                     <CheckIcon className="h-8 w-8" />
                   </span>
                 </div>
@@ -120,9 +121,9 @@ export default function ScanPage() {
           <div
             role="status"
             aria-live="polite"
-            className="absolute inset-0 flex items-center justify-center bg-surface"
+            className="absolute inset-0 flex items-center justify-center bg-paper-2"
           >
-            <p className="text-sm text-ink-dim">{t.scan.starting}</p>
+            <p className="text-sm text-ink-soft">{t.scan.starting}</p>
           </div>
         )}
 
@@ -130,9 +131,9 @@ export default function ScanPage() {
           <div
             role="status"
             aria-live="polite"
-            className="absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto bg-surface px-6 py-4 text-center"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto bg-paper-2 px-6 py-4 text-center"
           >
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-surface-3 text-ink-dim">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-sheet text-ink-soft">
               <CameraOffIcon className="h-7 w-7" />
             </span>
             <p className="text-base font-bold">
@@ -142,7 +143,7 @@ export default function ScanPage() {
                   ? t.scan.insecureTitle
                   : t.scan.unavailableTitle}
             </p>
-            <p className="text-sm text-ink-dim">
+            <p className="text-sm text-ink-soft">
               {state === 'denied'
                 ? t.scan.denied
                 : state === 'insecure'
@@ -156,12 +157,12 @@ export default function ScanPage() {
                   setState('starting')
                   setAttempt((a) => a + 1)
                 }}
-                className="focus-ring rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-bg transition-colors duration-[var(--duration-fast)]"
+                className="btn-primary focus-ring"
               >
                 {t.scan.retry}
               </button>
             )}
-            <Link to="/" className="focus-ring rounded text-sm font-medium text-accent">
+            <Link to="/" className="focus-ring text-sm font-bold text-blue underline underline-offset-4">
               {t.scan.searchInstead}
             </Link>
           </div>
@@ -173,12 +174,12 @@ export default function ScanPage() {
            piu' da solo: senza queste istruzioni "Riprova" fallirebbe sempre e
            l'utente resterebbe bloccato senza sapere perche'. */
         <div className="card mt-4 p-4 text-left">
-          <h2 className="mb-2 text-xs font-semibold text-ink-dim">{t.scan.howToTitle}</h2>
-          <p className="text-xs leading-relaxed text-ink-dim">{t.scan.howToIos}</p>
-          <p className="mt-1.5 text-xs leading-relaxed text-ink-dim">{t.scan.howToAndroid}</p>
+          <h2 className="mb-2 text-[0.7rem] font-bold tracking-[0.12em] text-ink-soft uppercase">{t.scan.howToTitle}</h2>
+          <p className="text-xs leading-relaxed text-ink-soft">{t.scan.howToIos}</p>
+          <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">{t.scan.howToAndroid}</p>
         </div>
       ) : (
-        <p className="mt-4 text-center text-xs text-ink-dim">{t.scan.hint}</p>
+        <p className="mt-4 text-center text-xs text-ink-soft">{t.scan.hint}</p>
       )}
     </div>
   )

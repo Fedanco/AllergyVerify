@@ -35,11 +35,12 @@ export default function ProfilePage() {
             return (
               <li
                 key={p.id}
-                /* Il profilo attivo si distingue per superficie, non solo per
-                   un bordo colorato: e' lo stato che decide tutti i verdetti
-                   dell'app, deve vedersi senza cercarlo. */
+                /* Il profilo attivo ha il bordo blu a pennarello (il bordo
+                   trasparente da 2px di `card` si colora senza scatti): e' lo
+                   stato che decide tutti i verdetti, deve vedersi senza
+                   cercarlo. */
                 className={`card flex items-center gap-3 p-4 transition-colors duration-[var(--duration-fast)] ${
-                  isActive ? 'border-accent/50 bg-surface-2' : ''
+                  isActive ? 'border-blue' : ''
                 }`}
               >
                 <button
@@ -52,15 +53,15 @@ export default function ProfilePage() {
                       spuntare quanti se ne vogliono, senza bisogno di una
                       modalità da attivare prima. */}
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-[background-color,border-color] duration-[var(--duration-fast)] ${
-                      isActive ? 'border-accent bg-accent text-bg' : 'border-edge'
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-[3px] border-2 transition-[background-color,border-color] duration-[var(--duration-fast)] ${
+                      isActive ? 'border-blue bg-blue text-white' : 'border-ink-soft'
                     }`}
                   >
                     {isActive && <CheckMarkIcon className="h-3.5 w-3.5" />}
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold">{p.name}</span>
-                    <span className="block truncate text-xs text-ink-dim">
+                    <span className="block truncate text-sm font-bold">{p.name}</span>
+                    <span className="block truncate text-xs text-ink-soft">
                       {p.allergens.length === 0
                         ? t.profile.noAllergens
                         : ALLERGEN_CATALOG.filter((a) => p.allergens.includes(a.tag))
@@ -72,7 +73,7 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setEditing(p)}
-                  className="focus-ring rounded-lg border border-edge px-2.5 py-1.5 text-xs text-ink-dim transition-colors hover:text-ink"
+                  className="focus-ring rounded-[5px] border-2 border-edge px-2.5 py-1.5 text-xs font-bold text-ink-soft transition-colors hover:border-ink hover:text-ink"
                 >
                   {t.profile.edit}
                 </button>
@@ -81,7 +82,7 @@ export default function ProfilePage() {
                   onClick={() => {
                     if (confirm(t.profile.confirmDelete(p.name))) deleteProfile(p.id)
                   }}
-                  className="focus-ring rounded-lg border border-edge p-1.5 text-ink-dim transition-colors hover:border-danger/40 hover:text-danger"
+                  className="focus-ring rounded-[5px] border-2 border-edge p-1.5 text-ink-soft transition-colors hover:border-red hover:text-red"
                   aria-label={t.profile.deleteAria(p.name)}
                 >
                   <TrashIcon className="h-4 w-4" />
@@ -110,12 +111,12 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setEditing('new')}
-          className="card focus-ring group flex w-full items-center gap-3 p-3 text-left transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-surface-2"
+          className="card focus-ring group flex w-full items-center gap-3 p-3 text-left transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-sheet"
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim transition-colors duration-[var(--duration-fast)] group-hover:bg-accent group-hover:text-bg">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sheet text-ink-soft transition-colors duration-[var(--duration-fast)] group-hover:bg-blue group-hover:text-white">
             <PlusIcon className="h-4 w-4" />
           </span>
-          <span className="text-sm text-ink-dim transition-colors duration-[var(--duration-fast)] group-hover:text-ink">
+          <span className="text-sm text-ink-soft transition-colors duration-[var(--duration-fast)] group-hover:text-ink">
             {t.profile.newProfile}
           </span>
         </button>
@@ -158,11 +159,11 @@ function ProfileEditor({
       }}
       className="card animate-fade-up p-4"
     >
-      <h2 className="mb-3 text-sm font-semibold">
+      <h2 className="mb-3 text-sm font-bold">
         {profile ? t.profile.editorTitleEdit(profile.name) : t.profile.editorTitleNew}
       </h2>
 
-      <label htmlFor="profile-name" className="mb-1.5 block text-xs text-ink-dim">
+      <label htmlFor="profile-name" className="mb-1.5 block text-xs text-ink-soft">
         {t.profile.nameLabel}
       </label>
       <input
@@ -171,10 +172,10 @@ function ProfileEditor({
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder={t.profile.namePlaceholder}
-        className="inset-surface mb-4 w-full rounded-xl px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-ink-dim focus:border-accent"
+        className="field mb-4 w-full px-4 py-2.5 text-sm outline-none transition-colors"
       />
 
-      <p id="allergens-label" className="mb-2 text-xs text-ink-dim">
+      <p id="allergens-label" className="mb-2 text-xs text-ink-soft">
         {t.profile.allergensLabel}
       </p>
       <div role="group" aria-labelledby="allergens-label" className="mb-4 flex flex-wrap gap-2">
@@ -185,13 +186,13 @@ function ProfileEditor({
               key={tag}
               type="button"
               onClick={() => toggle(tag)}
-              /* Selezionato = premuto: la pillola passa da superficie in
-                 rilievo a incavo. È un feedback fisico che si capisce prima
-                 di leggere, e sostituisce il vecchio ingrandimento del 3%. */
-              className={`focus-ring rounded-full px-3 py-1.5 text-xs transition-[background-color,box-shadow,color] duration-[var(--duration-fast)] ${
+              /* Selezionato = etichetta blu piena, come un timbro; le altre
+                 restano cartoncino. `chip` ha già il bordo trasparente da
+                 2px, quindi il bordo blu non sposta niente. */
+              className={`focus-ring rounded-[4px] px-3 py-1.5 text-xs font-bold transition-[background-color,border-color,color] duration-[var(--duration-fast)] ${
                 on
-                  ? 'inset-surface font-semibold text-accent'
-                  : 'chip font-medium text-ink-dim hover:text-ink'
+                  ? 'border-2 border-blue bg-blue text-white'
+                  : 'chip text-ink-soft hover:text-ink'
               }`}
               aria-pressed={on}
             >
@@ -204,7 +205,7 @@ function ProfileEditor({
       <div className="flex gap-2">
         <button
           type="submit"
-          className="focus-ring flex-1 rounded-xl bg-accent py-2.5 text-sm font-semibold text-bg transition-colors duration-[var(--duration-fast)]"
+          className="btn-primary focus-ring flex-1"
         >
           {t.profile.save}
         </button>
@@ -212,7 +213,7 @@ function ProfileEditor({
           <button
             type="button"
             onClick={onCancel}
-            className="focus-ring rounded-xl border border-edge px-4 text-sm text-ink-dim transition-colors hover:text-ink"
+            className="btn-secondary focus-ring"
           >
             {t.profile.cancel}
           </button>

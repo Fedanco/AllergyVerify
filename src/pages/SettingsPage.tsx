@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  AlertIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   DatabaseIcon,
@@ -16,6 +15,7 @@ import LogoTile from '../components/LogoTile'
 import InstallGuideModal from '../components/InstallGuideModal'
 import InstallNativeModal from '../components/InstallNativeModal'
 import PageHeader from '../components/PageHeader'
+import Stamp from '../paper/Stamp'
 import { useInstallPrompt } from '../hooks/useInstallPrompt'
 import { useLang } from '../i18n/useLang'
 import type { Lang } from '../i18n/translations'
@@ -53,14 +53,14 @@ export default function SettingsPage() {
         <LogoTile className="h-14" />
         <div className="min-w-0 flex-1">
           <p className="font-hand text-xl leading-none">AllergyVerify</p>
-          <p className="mt-0.5 text-xs text-ink-dim">{APP_VERSION}</p>
+          <p className="mt-0.5 text-xs text-ink-soft">{APP_VERSION}</p>
         </div>
         <a
           href="https://github.com/Fedanco/AllergyVerify"
           target="_blank"
           rel="noreferrer"
           aria-label={t.settings.githubLabel}
-          className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim transition-colors duration-[var(--duration-fast)] hover:text-ink"
+          className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sheet text-ink-soft transition-colors duration-[var(--duration-fast)] hover:text-ink"
         >
           <GithubIcon className="h-5 w-5" />
         </a>
@@ -74,17 +74,19 @@ export default function SettingsPage() {
           expanded={open === 'lang'}
           onClick={() => toggle('lang')}
         >
-          <div role="group" aria-label={t.settings.languageTitle} className="flex gap-2">
+          <div role="group" aria-label={t.settings.languageTitle} className="flex gap-5 px-1">
             {LANG_OPTIONS.map(({ value, label }) => (
               <button
                 key={value}
                 type="button"
                 onClick={() => setLang(value)}
                 aria-pressed={lang === value}
-                className={`focus-ring flex-1 rounded-xl px-3 py-2 text-sm transition-[background-color,box-shadow,color] duration-[var(--duration-fast)] ${
+                /* Come lo switch della landing: la lingua scelta è blu e
+                   sottolineata a pennarello, l'altra in inchiostro tenue. */
+                className={`focus-ring border-b-[3px] py-1.5 text-sm transition-colors duration-[var(--duration-fast)] ${
                   lang === value
-                    ? 'inset-surface font-semibold text-accent'
-                    : 'chip font-medium text-ink-dim hover:text-ink'
+                    ? 'border-blue font-bold text-blue'
+                    : 'border-transparent text-ink-soft hover:text-ink'
                 }`}
               >
                 {label}
@@ -110,7 +112,7 @@ export default function SettingsPage() {
             expanded={open === 'install'}
             arrow={canInstallNative || isIOS ? 'go' : 'expand'}
           >
-            <p className="text-sm leading-relaxed text-ink-dim">
+            <p className="text-sm leading-relaxed text-ink-soft">
               {t.settings.installBody1}
               <span className="text-ink">{t.settings.installIos}</span>
               {t.settings.installBody2}
@@ -128,7 +130,7 @@ export default function SettingsPage() {
           expanded={open === 'about'}
           onClick={() => toggle('about')}
         >
-          <p className="text-sm leading-relaxed text-ink-dim">{t.settings.aboutBody}</p>
+          <p className="text-sm leading-relaxed text-ink-soft">{t.settings.aboutBody}</p>
         </Row>
 
         <Row
@@ -137,13 +139,13 @@ export default function SettingsPage() {
           expanded={open === 'data'}
           onClick={() => toggle('data')}
         >
-          <p className="text-sm leading-relaxed text-ink-dim">
+          <p className="text-sm leading-relaxed text-ink-soft">
             {t.settings.dataBody1}
             <a
               href="https://world.openfoodfacts.org"
               target="_blank"
               rel="noreferrer"
-              className="focus-ring rounded text-accent underline-offset-2 hover:underline"
+              className="focus-ring font-bold text-blue underline underline-offset-4"
             >
               Open Food Facts
             </a>
@@ -155,37 +157,39 @@ export default function SettingsPage() {
             testo da leggere qui dentro. */}
         <Link
           to="/privacy"
-          className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-surface-2"
+          className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-sheet"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sheet text-ink-soft">
             <ShieldIcon className="h-5 w-5" />
           </span>
-          <span className="min-w-0 flex-1 text-sm font-semibold">
+          <span className="min-w-0 flex-1 text-sm font-bold">
             {t.settings.privacyRowTitle}
           </span>
-          <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-dim" />
+          <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-soft" />
         </Link>
         <Link
           to="/terms"
-          className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-surface-2"
+          className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-sheet"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-dim">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sheet text-ink-soft">
             <DocumentIcon className="h-5 w-5" />
           </span>
-          <span className="min-w-0 flex-1 text-sm font-semibold">
+          <span className="min-w-0 flex-1 text-sm font-bold">
             {t.settings.termsRowTitle}
           </span>
-          <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-dim" />
+          <ChevronRightIcon className="h-5 w-5 shrink-0 text-ink-soft" />
         </Link>
       </div>
 
       {/* L'unica sezione sempre aperta: è un avviso medico, nasconderlo dietro
           un tocco significherebbe che quasi nessuno lo leggerebbe. */}
-      <section className="card border-warn/30 bg-warn/5 p-4">
-        <h2 className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-warn">
-          <AlertIcon className="h-4 w-4" /> {t.settings.warningTitle}
+      <section className="card bg-wheat-tint p-4">
+        <h2>
+          <Stamp tone="red" tilt={-2} className="text-[0.7rem]">
+            {t.settings.warningTitle}
+          </Stamp>
         </h2>
-        <p className="text-sm leading-relaxed text-ink-dim">{t.settings.warningBody}</p>
+        <p className="mt-3 text-sm leading-relaxed">{t.settings.warningBody}</p>
       </section>
 
       <InstallGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
@@ -227,20 +231,20 @@ function Row({
         type="button"
         onClick={onClick}
         aria-expanded={isExpandable ? expanded : undefined}
-        className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-surface-2"
+        className="focus-ring flex w-full items-center gap-3 p-4 text-left transition-colors duration-[var(--duration-fast)] hover:bg-sheet"
       >
         <span
           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-[var(--duration-fast)] ${
-            expanded ? 'bg-accent text-bg' : 'bg-surface-2 text-ink-dim'
+            expanded ? 'bg-blue text-white' : 'bg-sheet text-ink-soft'
           }`}
         >
           <Icon className="h-5 w-5" />
         </span>
-        <span className="min-w-0 flex-1 text-sm font-semibold">{label}</span>
-        {value && <span className="shrink-0 text-sm text-ink-dim">{value}</span>}
+        <span className="min-w-0 flex-1 text-sm font-bold">{label}</span>
+        {value && <span className="shrink-0 text-sm text-ink-soft">{value}</span>}
         <span
           aria-hidden
-          className={`shrink-0 text-ink-dim transition-transform duration-[var(--duration-fast)] ${
+          className={`shrink-0 text-ink-soft transition-transform duration-[var(--duration-fast)] ${
             isExpandable && expanded ? 'rotate-180' : ''
           }`}
         >
