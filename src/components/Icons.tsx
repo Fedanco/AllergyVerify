@@ -6,14 +6,16 @@ interface IconProps {
 const base = {
   fill: 'none',
   stroke: 'currentColor',
-  strokeWidth: 1.8,
+  // Tratto un po' più pieno del solito: sulla carta le icone sono segni di
+  // pennarello, non fili. Le tab attive si ispessiscono ancora (2.6).
+  strokeWidth: 2.2,
   strokeLinecap: 'round',
   strokeLinejoin: 'round',
 } as const
 
 export function SearchIcon({ className, filled }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.4 : 1.8}>
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.6 : 2.2}>
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.5-3.5" />
     </svg>
@@ -22,7 +24,7 @@ export function SearchIcon({ className, filled }: IconProps) {
 
 export function ScanIcon({ className, filled }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.4 : 1.8}>
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.6 : 2.2}>
       <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />
       <path d="M3 12h18" />
     </svg>
@@ -31,7 +33,7 @@ export function ScanIcon({ className, filled }: IconProps) {
 
 export function HistoryIcon({ className, filled }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.4 : 1.8}>
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.6 : 2.2}>
       <path d="M3 12a9 9 0 1 0 3-6.7L3.5 7.5" />
       <path d="M3 3v4.5h4.5M12 7v5l3.5 2" />
     </svg>
@@ -40,7 +42,7 @@ export function HistoryIcon({ className, filled }: IconProps) {
 
 export function ProfileIcon({ className, filled }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.4 : 1.8}>
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.6 : 2.2}>
       <circle cx="12" cy="8" r="4" />
       <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" />
     </svg>
@@ -49,7 +51,7 @@ export function ProfileIcon({ className, filled }: IconProps) {
 
 export function SettingsIcon({ className, filled }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.4 : 1.8}>
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={filled ? 2.6 : 2.2}>
       <circle cx="12" cy="12" r="3" />
       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
     </svg>
@@ -146,7 +148,7 @@ export function ShareIcon({ className }: IconProps) {
  *  dentro un quadrato di selezione stona. */
 export function CheckMarkIcon({ className }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={2.4}>
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={2.6}>
       <path d="m5 12.5 4.5 4.5L19 7" />
     </svg>
   )

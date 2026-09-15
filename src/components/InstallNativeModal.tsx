@@ -18,12 +18,12 @@ export default function InstallNativeModal({ open, onClose, onContinue }: Props)
         <h2 id="install-native-title" className="mt-3 text-base font-bold text-ink">
           {t.installBanner.title}
         </h2>
-        <p className="mt-1 text-sm text-ink-dim">{t.installBanner.body}</p>
+        <p className="mt-1 text-sm text-ink-soft">{t.installBanner.body}</p>
       </div>
       <button
         type="button"
         onClick={onContinue}
-        className="focus-ring mt-5 w-full rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-bg transition-transform duration-[var(--duration-fast)] active:scale-[0.97]"
+        className="btn-primary focus-ring mt-5 w-full"
       >
         {t.installBanner.continueCta}
       </button>

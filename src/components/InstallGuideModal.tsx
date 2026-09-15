@@ -20,7 +20,7 @@ export default function InstallGuideModal({ open, onClose }: Props) {
         <span
           style={{ '--i': 1 } as React.CSSProperties}
           aria-hidden
-          className="animate-step-in text-ink-dim [animation-delay:calc(var(--i)*180ms)]"
+          className="animate-step-in text-ink-soft [animation-delay:calc(var(--i)*180ms)]"
         >
           <ChevronDownIcon className="h-4 w-4" />
         </span>
@@ -29,7 +29,7 @@ export default function InstallGuideModal({ open, onClose }: Props) {
       <button
         type="button"
         onClick={onClose}
-        className="focus-ring mt-5 w-full rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-bg transition-transform duration-[var(--duration-fast)] active:scale-[0.97]"
+        className="btn-primary focus-ring mt-5 w-full"
       >
         {t.installGuide.gotIt}
       </button>
@@ -51,11 +51,11 @@ function Step({
   return (
     <div
       style={{ '--i': index } as React.CSSProperties}
-      className="animate-step-in flex w-full items-center gap-3 rounded-xl border border-edge bg-surface-2 px-4 py-3 [animation-delay:calc(var(--i)*180ms)]"
+      className="chip animate-step-in flex w-full items-center gap-3 px-4 py-3 [animation-delay:calc(var(--i)*180ms)]"
     >
       <span
         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
-          highlight ? 'bg-accent/15 text-accent' : 'bg-surface text-ink-dim'
+          highlight ? 'bg-blue text-white' : 'bg-paper-2 text-ink-soft'
         }`}
       >
         <Icon className="h-5 w-5" />
