@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 
-type StampTone = 'blue' | 'red' | 'green' | 'wheat'
+export type StampTone = 'blue' | 'red' | 'green' | 'wheat'
 
 const TONE_CLASS: Record<StampTone, string> = {
   blue: 'bg-blue text-white',

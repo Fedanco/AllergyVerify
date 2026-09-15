@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import type { Lang } from '../../i18n/langStore'
 import type { LandingDict } from '../i18n'
-import Torn from '../art/Torn'
+import Torn from '../../paper/Torn'
 
 interface NavProps {
   t: LandingDict

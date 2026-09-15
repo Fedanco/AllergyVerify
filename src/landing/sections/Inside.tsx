@@ -1,8 +1,8 @@
 import type { LandingDict } from '../i18n'
-import Torn from '../art/Torn'
-import Stamp from '../art/Stamp'
+import Torn from '../../paper/Torn'
+import Stamp from '../../paper/Stamp'
 import { BarcodeWide } from '../art/Icons'
-import Sheet from '../art/Sheet'
+import Sheet from '../../paper/Sheet'
 
 interface InsideProps {
   t: LandingDict

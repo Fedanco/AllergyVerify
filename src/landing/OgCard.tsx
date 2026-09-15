@@ -1,5 +1,5 @@
 import { landingDict } from './i18n'
-import Torn from './art/Torn'
+import Torn from '../paper/Torn'
 import Underline from './art/Underline'
 import { Rays, Scribble } from './art/Crayon'
 
