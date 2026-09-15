@@ -20,7 +20,7 @@ import { useInstallPrompt } from '../hooks/useInstallPrompt'
 import { useLang } from '../i18n/useLang'
 import type { Lang } from '../i18n/translations'
 
-const APP_VERSION = 'v0.7.0'
+const APP_VERSION = 'v0.8.0'
 
 const LANG_OPTIONS: { value: Lang; label: string }[] = [
   { value: 'it', label: '🇮🇹 Italiano' },
