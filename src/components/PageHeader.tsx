@@ -12,7 +12,7 @@ export default function PageHeader({ title, subtitle, action }: Props) {
         {/* Un gradino piu' piccolo su telefono, dove la colonna e' stretta:
             Outfit ha lettere piu' larghe di Inter, quindi alla stessa misura
             in punti occupa piu' spazio e "grida" di piu'. */}
-        <h1 className="font-display text-[1.375rem] font-bold tracking-tight text-balance sm:text-2xl">
+        <h1 className="font-hand text-[clamp(1.9rem,6vw,2.4rem)] leading-[1.08] text-balance">
           {title}
         </h1>
         {subtitle && (

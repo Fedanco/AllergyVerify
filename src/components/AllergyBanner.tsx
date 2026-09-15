@@ -157,7 +157,7 @@ function MultiVerdict({
                 >
                   <Icon className="h-4 w-4" />
                 </span>
-                <p className="min-w-0 flex-1 truncate font-display text-base font-semibold text-ink">
+                <p className="min-w-0 flex-1 truncate text-base font-bold text-ink">
                   {profile.name}
                 </p>
               </div>
@@ -250,7 +250,7 @@ function Pill({
         <Icon className="h-6 w-6" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="font-display text-[1.0625rem] leading-tight font-bold sm:text-lg">
+        <p className="text-[1.0625rem] leading-tight font-bold sm:text-lg">
           {title}
         </p>
         <p className="mt-1 text-sm" style={{ color: BODY_COLOR[tone] }}>

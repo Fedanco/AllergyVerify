@@ -135,7 +135,7 @@ export default function ScanPage() {
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-surface-3 text-ink-dim">
               <CameraOffIcon className="h-7 w-7" />
             </span>
-            <p className="font-display text-base font-bold">
+            <p className="text-base font-bold">
               {state === 'denied'
                 ? t.scan.deniedTitle
                 : state === 'insecure'

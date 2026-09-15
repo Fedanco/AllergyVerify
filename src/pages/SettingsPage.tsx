@@ -52,7 +52,7 @@ export default function SettingsPage() {
       <div className="card mb-3 flex items-center gap-3.5 p-4">
         <LogoTile className="h-14" />
         <div className="min-w-0 flex-1">
-          <p className="font-display text-base font-bold">AllergyVerify</p>
+          <p className="font-hand text-xl leading-none">AllergyVerify</p>
           <p className="mt-0.5 text-xs text-ink-dim">{APP_VERSION}</p>
         </div>
         <a

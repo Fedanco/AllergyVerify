@@ -21,10 +21,13 @@ export default function App() {
           respiro sotto l'ultimo elemento. Va tenuto d'accordo con l'offset
           `bottom` della dock in TabBar.tsx. Su md la dock diventa una colonna
           staccata a sinistra (0.75 + 5 + 0.75 rem). */}
-      <div className="min-h-dvh bg-bg pt-[env(safe-area-inset-top)] pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-0 md:pl-[6.5rem]">
+      <div className="min-h-dvh bg-paper pt-[env(safe-area-inset-top)] pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-0 md:pl-[6.5rem]">
         {/* in standalone iOS la pagina si estende sotto la status bar (viewport-fit=cover):
-            questo velo evita che il contenuto scrollato si sovrapponga a orologio e notch */}
-        <div className="fixed inset-x-0 top-0 z-50 h-[env(safe-area-inset-top)] bg-bg/90 backdrop-blur-md md:hidden" />
+            questo velo evita che il contenuto scrollato si sovrapponga a orologio e notch.
+            Con la status bar `default` (carta chiara, orologio nero) l'inset in alto
+            vale 0 e il velo è alto zero: resta per chi avesse ancora la vecchia
+            configurazione in cache. */}
+        <div className="fixed inset-x-0 top-0 z-50 h-[env(safe-area-inset-top)] bg-paper/90 backdrop-blur-md md:hidden" />
         <main className="mx-auto w-full max-w-2xl px-4 pt-6 pb-8">
           <Routes>
             <Route path="/" element={<SearchPage />} />
@@ -51,6 +54,10 @@ export default function App() {
           </Routes>
         </main>
         <TabBar />
+        {/* Grana della carta: dopo la dock nel DOM, stesso z-index, quindi
+            sopra tutto ciò che è persistente; trasparente ai click. La
+            modale (z-50) le passa sopra. */}
+        <div className="grain" aria-hidden="true" />
       </div>
     </HashRouter>
   )
