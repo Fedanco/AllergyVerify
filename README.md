@@ -80,7 +80,7 @@ Gli screenshot in `docs/screenshots/` si rigenerano con `node scripts/readme-scr
 
 Il sito è pubblicato su **Vercel**: https://allergyverify.vercel.app
 
-Deploy manuale dalla cartella del progetto: `npx vercel --prod`. Con la Git integration di Vercel attiva, ogni push su `main` viene pubblicato automaticamente (dopo che la CI su GitHub Actions ha verificato lint e build).
+Deploy manuale dalla cartella del progetto: `npx vercel --prod`. Con la Git integration di Vercel attiva, ogni push su `main` viene pubblicato automaticamente. In parallelo la CI su GitHub Actions esegue lint e build: Vercel non aspetta il suo esito.
 
 ## Licenza
 
